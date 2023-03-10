@@ -1,0 +1,118 @@
+<.navbar locale={@locale} request_path="/" current_user={@current_user} show_bottom_links={false} />
+<div class="max-w-screen-xl mx-auto px-5 sm:px-10">
+  <div class="h-screen">
+    <div class="mt-5 md:mt-24 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <img
+        class="aspect-cover rounded sm:max-w-sm sm:mx-auto md:mx-0 sm:order-last"
+        src="https://ik.imagekit.io/soulgenesis/litnet/tr:w-512,h-768/main_cover1.jpg"
+      />
+      <div class="flex flex-col items-center gap-5 sm:items-start">
+        <h1 class="text-center sm:text-left text-2xl md:text-3xl lg:text-5xl xl:text-6xl font-bold">
+          <%= gettext("Create") %><br />
+          <span class="text-pink-500"><%= gettext("a professional") %></span>
+          <br />
+          <span class="text-pink-500"><%= gettext("cover") %></span> <%= gettext("for your book") %>
+        </h1>
+        <p class="text-center sm:text-left lg:text-xl xl:text-2xl text-zinc-300">
+          <%= gettext("A few simple steps, little bit of magic, and wonderful results") %>
+        </p>
+        <div class="mt-2 md:mt-4">
+          <.link navigate={"/#{@locale}/images/new"}>
+            <.button>
+              <%= gettext("Try it") %>
+            </.button>
+          </.link>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-20 md:mt-44 lg:mt-56 p-10 md:p-24 flex flex-col sm:flex-row sm:justify-between gap-20 rounded bg-gradient-to-b sm:bg-gradient-to-r from-rose-700 to-pink-600">
+      <div class="text-center">
+        <p class="text-8xl md:text-9xl font-extrabold opacity-50">01</p>
+        <p class="md:text-xl"><%= raw(gettext("Do a quick<br> registration")) %></p>
+      </div>
+      <div class="text-center">
+        <p class="text-8xl md:text-9xl font-extrabold opacity-70">02</p>
+        <p class="md:text-xl"><%= raw(gettext("Fill a form<br> about the book")) %></p>
+      </div>
+      <div class="text-center">
+        <p class="text-8xl md:text-9xl font-extrabold">03</p>
+        <p class="md:text-xl"><%= raw(gettext("Pick<br> your cover")) %></p>
+      </div>
+    </div>
+
+    <div class="mt-20 lg:mt-32">
+      <h2 class="text-2xl md:text-3xl font-bold"><%= gettext("Together we'll create") %></h2>
+
+      <div class="mt-10 grid md:grid-cols-3 gap-20 lg:gap-32">
+        <%= for i <- showcase() do %>
+          <div class="flex flex-col gap-3">
+            <img class="w-full" src={i.img} />
+            <h3 class="text-xl font-bold"><%= i.heading %></h3>
+            <p class="text-lg font-light text-zinc-400"><%= i.sub %></p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="mt-20 lg:mt-32">
+      <h2 class="text-2xl md:text-3xl font-bold"><%= gettext("All the best") %></h2>
+
+      <div class="mt-10 grid md:grid-cols-2 gap-10 md:gap-32 lg:gap-x-64">
+        <%= for i <- points() do %>
+          <div class="flex gap-5 lg:w-96">
+            <img class="w-10 h-10" src={i.icon} />
+            <div class="flex flex-col gap-3">
+              <h3 class="text-xl font-medium"><%= i.heading %></h3>
+              <p class="text-lg font-light text-zinc-400"><%= i.sub %></p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="mt-20 lg:mt-32 lg:absolute lg:-left-16 flex gap-10 overflow-x-scroll lg:overflow-hidden">
+      <%= for i <- covers() do %>
+        <img class="w-64 lg:w-72" src={i} />
+      <% end %>
+    </div>
+
+    <div class="mt-20 flex flex-col justify-center items-center gap-5 w-full lg:mt-[40rem]">
+      <h2 class="text-2xl font-bold"><%= gettext("Your cover awaits!") %></h2>
+      <div class="mt-2 md:mt-4">
+        <.link navigate={"/#{@locale}/images/new"}>
+          <.button>
+            <%= gettext("Try it") %>
+          </.button>
+        </.link>
+      </div>
+    </div>
+
+    <footer class="mt-10 md:mt-32 pb-10 border-t border-zinc-600 lg:mt-32 py-10 flex flex-col gap-5 md:flex-row md:justify-between">
+      <p>© Litcovers <%= current_year() %></p>
+      <div class="flex flex-col md:text-center">
+        <a
+          class="link"
+          href="https://sapimedia.fra1.digitaloceanspaces.com/%D0%9F%D0%94%20v_01.docx"
+        >
+          Пользовательское соглашение
+        </a>
+        <a
+          class="link"
+          href="https://sapimedia.fra1.digitaloceanspaces.com/%D0%9E%D1%84%D0%B5%D1%80%D1%82%D0%B0%20Litcovers.docx"
+        >
+          Оферта
+        </a>
+      </div>
+      <a class="flex gap-3" href="https://t.me/litcovers">
+        <svg xmlns="http://www.w3.org/2000/svg" width="23" height="19" fill="none">
+          <path
+            fill="#fff"
+            d="m22.934 1.73-3.47 16.123c-.262 1.138-.945 1.421-1.915.885l-5.29-3.839-2.551 2.418c-.283.279-.518.511-1.063.511l.38-5.305 9.802-8.725c.426-.373-.093-.581-.662-.207L6.047 11.107.831 9.5c-1.135-.35-1.155-1.118.236-1.654L21.471.1c.945-.349 1.771.207 1.463 1.63v-.002Z"
+          />
+        </svg>
+        @litcovers
+      </a>
+    </footer>
+  </div>
+</div>

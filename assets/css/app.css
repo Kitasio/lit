@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* This file is for your main application CSS */
+
+@layer components {
+  .input {
+    @apply block p-3 bg-tag-main w-full rounded-lg focus:ring-0 focus:border-accent-main border-2 border-stroke-main;
+  }
+}
+
+input[type=range] {
+  @apply h-1 bg-stroke-main appearance-none;
+  direction: rtl;
+}
+input[type='range']::-webkit-slider-thumb {
+  @apply appearance-none cursor-grab bg-gray h-4 w-4 rounded-full;
+}
