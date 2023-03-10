@@ -39,7 +39,7 @@ defmodule LitcoversWeb.UiComponents do
             </div>
           </.link>
           <.link navigate={"/#{@locale}/users/settings"}>
-            <Heroicons.user_circle class="w-10 h-10 text-accent-main hover:opacity-80" />
+            <.icon name="hero-user-circle-solid" class="w-10 h-10 text-accent-main hover:opacity-80" />
           </.link>
           <div class="hidden sm:inline">
             <.link navigate={"/#{@locale}/images/new"}>
@@ -66,7 +66,7 @@ defmodule LitcoversWeb.UiComponents do
           x-bind:class={"'#{@request_path}' == '/#{@locale}/images/new' ? 'bg-sec rounded-tr-lg border-t-2 border-r-2' : 'bg-main border-b-2'"}
         >
           <.link navigate={"/#{@locale}/images/new"} class="flex items-center gap-2 w-full px-8 py-4">
-            <Heroicons.plus solid class="w-3 h-3 text-slate-200" />
+            <.icon name="hero-plus-solid" class="w-3 h-3 text-slate-200" />
             <span x-bind:class={"'#{@request_path}' == '/#{@locale}/images/new' ? '' : 'hidden sm:inline'"}>
               <%= gettext("Create") %>
             </span>
@@ -80,7 +80,7 @@ defmodule LitcoversWeb.UiComponents do
           x-bind:class={"'#{@request_path}' == '/#{@locale}/images' ? 'bg-sec rounded-tl-lg rounded-tr-lg border-l-2 border-t-2 border-r-2' : 'bg-main border-b-2'"}
         >
           <.link navigate={"/#{@locale}/images"} class="flex items-center gap-2 w-full px-8 py-4">
-            <Heroicons.square_3_stack_3d class="w-3 h-3 text-slate-200" />
+            <.icon name="hero-square-3-stack-3d-solid" class="w-3 h-3 text-slate-200" />
             <span x-bind:class={"'#{@request_path}' == '/#{@locale}/images' ? '' : 'hidden sm:inline'"}>
               <%= gettext("My generations") %>
             </span>
@@ -97,7 +97,7 @@ defmodule LitcoversWeb.UiComponents do
           x-bind:class={"'#{@request_path}' == '/#{@locale}/covers' ? 'bg-sec rounded-tl-lg rounded-tr-lg border-l-2 border-t-2 border-r-2' : 'bg-main border-b-2'"}
         >
           <.link navigate={"/#{@locale}/covers"} class="flex items-center gap-2 w-full px-8 py-4">
-            <Heroicons.book_open class="w-3 h-3 text-slate-200" />
+            <.icon name="hero-book-open-solid" class="w-3 h-3 text-slate-200" />
             <span x-bind:class={"'#{@request_path}' == '/#{@locale}/covers' ? '' : 'hidden sm:inline'"}>
               <%= gettext("My covers") %>
             </span>
@@ -209,9 +209,9 @@ defmodule LitcoversWeb.UiComponents do
       <% end %>
       <div class="bg-sec/50 p-2.5 rounded-full">
         <%= if @favorite do %>
-          <Heroicons.heart solid class="fill-accent-main w-6 h-6 transition-all" />
+          <.icon name="hero-heart-solid" class="fill-accent-main w-6 h-6 transition-all" />
         <% else %>
-          <Heroicons.heart class="w-6 h-6 transition-all" />
+          <.icon name="hero-heart" class="w-6 h-6 transition-all" />
         <% end %>
       </div>
     </button>
@@ -231,7 +231,7 @@ defmodule LitcoversWeb.UiComponents do
         </.tooltip>
       <% end %>
       <div class="bg-sec/50 p-2.5 rounded-full">
-        <Heroicons.lock_open class="w-6 h-6 transition-all" />
+        <.icon name="hero-lock-open" class="w-6 h-6 transition-all" />
       </div>
     </button>
     """
@@ -250,7 +250,7 @@ defmodule LitcoversWeb.UiComponents do
         </.tooltip>
       <% end %>
       <div class="bg-sec/50 p-2.5 rounded-full">
-        <Heroicons.trash class="w-6 h-6 transition-all" />
+        <.icon name="hero-trash" class="w-6 h-6 transition-all" />
       </div>
     </button>
     """
@@ -269,7 +269,7 @@ defmodule LitcoversWeb.UiComponents do
         </.tooltip>
       <% end %>
       <div class="bg-sec/50 p-2.5 rounded-full" class="bg-sec/50 p-2.5 rounded-full">
-        <Heroicons.arrow_down_on_square class="w-6 h-6 transition-all" />
+        <.icon name="hero-arrow-down-on-square" class="w-6 h-6 transition-all" />
       </div>
     </a>
     """
@@ -287,7 +287,7 @@ defmodule LitcoversWeb.UiComponents do
         </.tooltip>
       <% end %>
       <div class="bg-sec/50 p-2.5 rounded-full" class="bg-sec/50 p-2.5 rounded-full">
-        <Heroicons.pencil_square class="w-6 h-6 transition-all" />
+        <.icon name="hero-pencil-square" class="w-6 h-6 transition-all" />
       </div>
     </.link>
     """
@@ -380,17 +380,13 @@ defmodule LitcoversWeb.UiComponents do
   def type_selector(assigns) do
     ~H"""
     <div class="px-2.5 flex items-center gap-3 border-2 border-stroke-sec bg-tag-sec rounded-lg">
-      <Heroicons.chevron_left
-        class="w-5 h-5 cursor-pointer hover:scale-105 transition"
-        phx-click={"prev-#{@type}-font"}
-        phx-throttle="700"
-      />
+      <span phx-click={"prev-#{@type}-font"} phx-throttle="700">
+        <.icon name="hero-chevron-left" class="w-5 h-5 cursor-pointer hover:scale-105 transition" />
+      </span>
       <span>T</span>
-      <Heroicons.chevron_right
-        class="w-5 h-5 cursor-pointer hover:scale-105 transition"
-        phx-click={"next-#{@type}-font"}
-        phx-throttle="700"
-      />
+      <span phx-click={"next-#{@type}-font"} phx-throttle="700">
+        <.icon name="hero-chevron-right" class="w-5 h-5 cursor-pointer hover:scale-105 transition" />
+      </span>
     </div>
     """
   end

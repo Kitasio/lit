@@ -17,9 +17,13 @@ defmodule Litcovers.Application do
       # Start Finch
       {Finch, name: Litcovers.Finch},
       # Start the Endpoint (http/https)
-      LitcoversWeb.Endpoint
+      LitcoversWeb.Endpoint,
       # Start a worker by calling: Litcovers.Worker.start_link(arg)
       # {Litcovers.Worker, arg}
+      CoverGen.CoverProducer,
+      CoverGen.CoverConsumerSupervisor,
+      CoverGen.Supervisor,
+      Litcovers.GenericSupervisor
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -1,0 +1,33 @@
+<div class="pt-10 max-w-screen-xl mx-auto">
+  <div>
+    <button phx-click={JS.push("toggle-dripping_machine")}>
+      <%= if @drip_machine do %>
+        Stop Dripping
+      <% else %>
+        Start Dripping
+      <% end %>
+    </button>
+  </div>
+
+  <.table id="users" rows={@users}>
+    <:col :let={user} label="ID"><%= user.id %></:col>
+    <:col :let={user} label="Name"><%= user.email %></:col>
+    <:col :let={user} label="Enabled?"><%= user.enabled %></:col>
+    <:action :let={user}>
+      <.link phx-click={JS.push("toggle-enabled", value: %{id: user.id})}>
+        Toggle enabled
+      </.link>
+    </:action>
+    <:col :let={user} label="Litcoins">
+      <div class="flex gap-3">
+        <%= user.litcoins %>
+        <button phx-click={JS.push("add-litcoin", value: %{id: user.id})}>
+          +
+        </button>
+        <button phx-click={JS.push("remove-litcoin", value: %{id: user.id})}>
+          -
+        </button>
+      </div>
+    </:col>
+  </.table>
+</div>

@@ -1,0 +1,42 @@
+<.navbar
+  covers_exist={Media.has_covers?(@current_user)}
+  images_exist={Media.has_images?(@current_user)}
+  show_pinger={Media.has_unseen_images?(@current_user)}
+  locale={@locale}
+  request_path={~p"/#{@locale}/covers"}
+  current_user={@current_user}
+/>
+<div x-data="" class="bg-sec grow px-8 py-10">
+  <div
+    id="user-images"
+    phx-update="append"
+    class="mt-7 grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-10 lg:gap-20"
+  >
+    <%= for image <- @images do %>
+      <div id={"img-#{image.id}-box"} x-data="" class="relative">
+        <.img
+          id={"#{image.id}-img"}
+          locale={@locale}
+          image_id={image.id}
+          img_url={image.url}
+          unlocked={false}
+        >
+          <.download_btn
+            image_url={"#{image.url}?ik-attachment=true"}
+            tooltip_text={gettext("Download")}
+          />
+          <.delete_img_button
+            phx-click={
+              JS.push("delete-cover", value: %{image_id: image.id})
+              |> JS.transition("scale-90", to: "#delete-#{image.id}")
+              |> hide("#img-#{image.id}-box")
+            }
+            image_id={image.id}
+            tooltip_text={gettext("Delete cover")}
+          />
+        </.img>
+      </div>
+    <% end %>
+  </div>
+  <div id="infinite-scroll-marker" phx-hook="InfiniteScroll" data-page={@page}></div>
+</div>

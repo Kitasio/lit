@@ -1,0 +1,33 @@
+<.header>
+  Placeholder <%= @placeholder.id %>
+  <:subtitle>This is a placeholder record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/en/placeholders/#{@placeholder}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit placeholder</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Author"><%= @placeholder.author %></:item>
+  <:item title="Title"><%= @placeholder.title %></:item>
+  <:item title="Description"><%= @placeholder.description %></:item>
+</.list>
+
+<.back navigate={~p"/en/placeholders"}>Back to placeholders</.back>
+
+<.modal
+  :if={@live_action == :edit}
+  id="placeholder-modal"
+  show
+  on_cancel={JS.patch(~p"/en/placeholders/#{@placeholder}")}
+>
+  <.live_component
+    module={LitcoversWeb.PlaceholderLive.FormComponent}
+    id={@placeholder.id}
+    title={@page_title}
+    action={@live_action}
+    placeholder={@placeholder}
+    navigate={~p"/en/placeholders/#{@placeholder}"}
+  />
+</.modal>

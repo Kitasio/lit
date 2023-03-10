@@ -1,0 +1,137 @@
+<script type="module">
+  import init, { create_cover } from '/wasm/pkg/litcovers_wasm.js';
+
+  async function run() {
+    await init();
+
+    function cover(base64_img, author_font_base64, title_font_base64, params) {
+      const cover = create_cover(base64_img, author_font_base64, title_font_base64, params) 
+      const image = document.getElementById("mainImage");
+      image.src = `data:image/png;charset=utf-8;base64,${cover}`
+    }
+
+    window.cover = cover;
+
+    window.addEventListener("phx:create_cover", (e) => {
+      cover(e.detail.image_base64, e.detail.author_font_base64, e.detail.title_font_base64, e.detail.params)
+    });
+  }
+
+  run();
+</script>
+
+<div class="flex flex-col h-screen lg:grid grid-cols-12">
+  <.navbar
+    current_user={@current_user}
+    locale={@locale}
+    request_path={~p"/#{@locale}/images/#{@image}/edit"}
+    images_exist={Media.has_images?(@current_user)}
+    covers_exist={Media.has_covers?(@current_user)}
+    show_cover_pinger={Media.has_unseen_covers?(@current_user)}
+    show_pinger={Media.has_unseen_images?(@current_user)}
+  />
+  <div class="lg:col-span-5">
+    <div class="py-7 bg-sec flex flex-col justify-between lg:h-full">
+      <.form
+        for={:params}
+        phx-change="create-cover"
+        phx-submit="create-cover"
+        class="px-8 space-y-5"
+      >
+        <div class="mt-5 flex flex-col gap-10">
+          <.input_overlay
+            for="author"
+            font={get_font_name(@author_current_font)}
+            placeholder={@placeholder.author}
+            value={@params.author}
+          />
+          <.input_overlay
+            for="title"
+            font={get_font_name(@title_current_font)}
+            placeholder={@placeholder.title}
+            value={@params.title}
+          />
+
+          <div class="flex flex-col gap-5">
+            <.header><%= gettext("Text size") %></.header>
+            <input
+              id="line-length-range"
+              value={@params.line_length}
+              type="range"
+              errors={[]}
+              min="8"
+              max="32"
+              name="params[line_length]"
+              phx-debounce="500"
+            />
+          </div>
+
+          <div class="flex flex-col gap-5">
+            <.header><%= gettext("Composition") %></.header>
+            <div class="flex flex-nowrap sm:gap-5 overflow-x-scroll sm:overflow-x-hidden sm:grid sm:grid-cols-3 gap-5">
+              <%= for pos <- title_position_opts() do %>
+                <%= if pos == @params.title_position do %>
+                  <div class="border-2 aspect-cover rounded-lg border-accent-main">
+                    <.title_position position={pos} />
+                  </div>
+                <% else %>
+                  <div class="border-2 aspect-cover rounded-lg border-stroke-main hover:border-accent-main transition">
+                    <.title_position position={pos} />
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </.form>
+    </div>
+  </div>
+  <div class="px-8 lg:col-start-6 lg:col-end-13 lg:py-auto">
+    <div
+      x-data={"{ 
+        showImage: false, 
+        showToolbar: false, 
+        imageUrl: 'data:image/png;charset=utf-8;base64,#{@image_base64}'
+      }"}
+      class="my-20 sticky top-20"
+    >
+      <div
+        class="relative bg-sec max-w-lg overflow-hidden rounded-lg transition-all duration-300 mx-auto"
+        x-on:mouseenter="showToolbar = true"
+        x-on:mouseleave="showToolbar = false"
+        id={"img-box-#{@image.id}"}
+      >
+        <img
+          x-ref="mainImage"
+          id="mainImage"
+          x-show="showImage"
+          x-transition.duration.300ms
+          x-bind:src="imageUrl"
+          x-on:contextmenu.prevent
+          x-on:load="showImage = true"
+          alt="Generated picture"
+          class={[
+            "w-full h-full object-cover"
+          ]}
+        />
+        <div
+          x-show="showToolbar"
+          x-transition.duration.200ms
+          class="p-5 absolute gap-5 flex justify-center z-20 bottom-0 left-0 w-full"
+        >
+          <button
+            class="group relative bg-sec/50 p-2.5 rounded-full"
+            id="create-cover-btn"
+            phx-hook="CreateCover"
+            x-on:click="$dispatch('save-to-spaces', { img: $refs.mainImage.src })"
+          >
+            <.tooltip>
+              <%= gettext("Save cover") %>
+            </.tooltip>
+            <Heroicons.bookmark class="w-6 h-6" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

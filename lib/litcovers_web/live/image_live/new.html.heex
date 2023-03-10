@@ -1,0 +1,210 @@
+<div class="flex flex-col h-screen lg:grid grid-cols-12">
+  <.navbar 
+    current_user={@current_user} 
+    show_pinger={@has_new_images} 
+    show_cover_pinger={Media.has_unseen_covers?(@current_user)}
+    covers_exist={Media.has_covers?(@current_user)} 
+    images_exist={@has_images} 
+    locale={@locale} 
+    request_path={~p"/#{@locale}/images/new"} 
+  />
+  <div class="lg:col-span-5">
+    <!-- <div class="bg-sec px-8 py-5 rounded-tr-xl"> -->
+    <!--   <div class="flex items-center gap-8"> -->
+    <!--     <.header><%= gettext("LIT AI") %></.header> -->
+    <!--     <.toggler /> -->
+    <!--   </div> -->
+    <!-- </div> -->
+    <%= if @lit_ai do %>
+      <div class="pt-7 bg-sec flex flex-col justify-between lg:h-full">
+        <.form
+          :let={f}
+          class="px-8 bg-sec flex flex-col gap-5"
+          for={@changeset}
+          phx-change="validate"
+          phx-submit="save"
+        >
+          <div class="space-y-5">
+            <.header><%= gettext("Book description") %></.header>
+            <.input
+              field={{f, :description}}
+              type="textarea"
+              placeholder={@placeholder.description}
+              rows="4"
+            />
+          </div>
+
+          <div>
+            <.header><%= gettext("Image dimensions") %></.header>
+            <div class="flex gap-3 mt-5" x-data="">
+              <div
+                class="px-4 py-2.5 cursor-pointer rounded-xl border-2 border-stroke-main bg-tag-main hover:border-accent-main transition"
+                x-bind:class={"'#{@aspect_ratio}' == 'cover' && 'border-accent-main'"}
+                phx-click="aspect-ratio-change"
+                phx-value-aspect_ratio="cover"
+              >
+                512x768
+              </div>
+              <div
+                class="px-4 py-2.5 cursor-pointer rounded-xl border-2 border-stroke-main bg-tag-main hover:border-accent-main transition"
+                x-bind:class={"'#{@aspect_ratio}' == 'square' && 'border-accent-main'"}
+                phx-click="aspect-ratio-change"
+                phx-value-aspect_ratio="square"
+              >
+                512x512
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-sec">
+            <div class="pt-5">
+              <.header><%= gettext("What are we creating?") %></.header>
+              <.stage_nav stage={@stage.id} />
+            </div>
+            <div id="stage-box" class="transition duration-300">
+              <%= if @stage.id == 0 do %>
+                <.stage_msg msg={@stage.msg} />
+                <.stage_box>
+                  <%= for t <- @types do %>
+                    <.img_box
+                      src={"https://ik.imagekit.io/soulgenesis/litnet/#{t.name}.jpg"}
+                      label={t.label}
+                      value={t.name}
+                      stage_id={@stage.id}
+                    />
+                  <% end %>
+                </.stage_box>
+              <% end %>
+
+              <%= if @stage.id == 1 do %>
+                <.stage_msg msg={@stage.msg} />
+                <%= if @type == "portrait" do %>
+                  <.gender_picker gender={@gender} />
+                <% end %>
+                <.stage_box>
+                  <%= for r <- @realms do %>
+                    <%= if @type == "portrait" do %>
+                      <.img_box
+                        src={"https://ik.imagekit.io/soulgenesis/litnet/#{@type}_#{@gender}_#{r.name}.jpg"}
+                        label={r.label}
+                        value={r.name}
+                        stage_id={@stage.id}
+                      />
+                    <% else %>
+                      <.img_box
+                        src={"https://ik.imagekit.io/soulgenesis/litnet/#{@type}_#{r.name}.jpg"}
+                        label={r.label}
+                        value={r.name}
+                        stage_id={@stage.id}
+                      />
+                    <% end %>
+                  <% end %>
+                </.stage_box>
+              <% end %>
+
+              <%= if @stage.id == 2 do %>
+                <.stage_msg msg={@stage.msg} />
+                <.stage_box>
+                  <%= for s <- @sentiments do %>
+                    <%= if @type == "portrait" do %>
+                      <.img_box
+                        src={"https://ik.imagekit.io/soulgenesis/litnet/#{@type}_#{@gender}_#{@realm}_#{s.name}.jpg"}
+                        stage_id={@stage.id}
+                        label={s.label}
+                        value={s.name}
+                      />
+                    <% else %>
+                      <.img_box
+                        src={"https://ik.imagekit.io/soulgenesis/litnet/#{@type}_#{@realm}_#{s.name}.jpg"}
+                        stage_id={@stage.id}
+                        label={s.label}
+                        value={s.name}
+                      />
+                    <% end %>
+                  <% end %>
+                </.stage_box>
+              <% end %>
+
+              <%= if @stage.id == 3 do %>
+                <.stage_msg msg={@stage.msg} />
+                <.stage_box>
+                  <%= for p <- @style_prompts do %>
+                    <%= if p.secondary_url != nil && @gender == "male" do %>
+                      <.img_box
+                        src={p.secondary_url}
+                        label={p.name}
+                        value={p.id}
+                        prompt_id={@prompt_id}
+                        stage_id={@stage.id}
+                      />
+                    <% else %>
+                      <.img_box
+                        src={p.image_url}
+                        label={p.name}
+                        value={p.id}
+                        prompt_id={@prompt_id}
+                        stage_id={@stage.id}
+                      />
+                    <% end %>
+                  <% end %>
+                </.stage_box>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="hidden">
+            <.input field={{f, :style_prompt}} value={@style_prompt} type="hidden" />
+            <.input field={{f, :prompt_id}} value={@prompt_id} type="hidden" />
+            <.input field={{f, :type}} value={@type} type="hidden" />
+            <.input field={{f, :character_gender}} value={@gender} type="hidden" />
+            <.input field={{f, :width}} value={@width} type="hidden" />
+            <.input field={{f, :height}} value={@height} type="hidden" />
+          </div>
+
+          <.generate_btn spin={@is_generating} user_id={@current_user.id} relaxed_mode={@current_user.relaxed_mode} />
+        </.form>
+      </div>
+    <% else %>
+      no lit ai
+    <% end %>
+  </div>
+  <div class="py-20 px-8 lg:col-start-6 lg:col-end-13 lg:py-auto">
+    <%= if @gen_error != nil do %>
+      <div class="my-1 flex w-full justify-center">
+        <span class="text-sm text-center"><%= @gen_error %></span>
+      </div>
+    <% end %>
+    <%= if @is_generating do %>
+      <.loader aspect_ratio={@aspect_ratio} />
+    <% else %>
+      <.img
+        locale={@locale}      
+        aspect_ratio={@aspect_ratio}
+        img_url={
+          if @image.unlocked do
+            @image.url
+          else
+            insert_image_watermark(@image)
+          end
+        }
+        image_id={@image.id}
+        unlocked={@image.unlocked}
+      >
+        <%= if @image.unlocked do %>
+          <.edit_btn url={~p"/#{@locale}/images/#{@image.id}/edit"} />
+          <.heart_button
+            phx-click={
+              JS.push("toggle-favorite", value: %{image_id: @image.id})
+              |> JS.transition("scale-90", to: "#heart-#{@image.id}")
+            }
+            favorite={@image.favorite}
+            image_id={@image.id}
+          />
+          <.download_btn image_url={"#{@image.url}?ik-attachment=true"} />
+        <% else %>
+          <.unlock_img_button phx-click={JS.push("unlock", value: %{image_id: @image.id})} image_id={@image.id} />
+        <% end %>
+      </.img>
+    <% end %>
+  </div>
+</div>

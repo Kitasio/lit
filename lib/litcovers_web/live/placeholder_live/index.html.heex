@@ -1,0 +1,48 @@
+<.header>
+  Listing Placeholders
+  <:actions>
+    <.link patch={~p"/en/placeholders/new"}>
+      <.button>New Placeholder</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="placeholders"
+  rows={@placeholders}
+  row_click={&JS.navigate(~p"/en/placeholders/#{&1}")}
+>
+  <:col :let={placeholder} label="Author"><%= placeholder.author %></:col>
+  <:col :let={placeholder} label="Title"><%= placeholder.title %></:col>
+  <:col :let={placeholder} label="Description"><%= placeholder.description %></:col>
+  <:action :let={placeholder}>
+    <div class="sr-only">
+      <.link navigate={~p"/en/placeholders/#{placeholder}"}>Show</.link>
+    </div>
+    <.link patch={~p"/en/placeholders/#{placeholder}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={placeholder}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: placeholder.id})}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="placeholder-modal"
+  show
+  on_cancel={JS.navigate(~p"/en/placeholders")}
+>
+  <.live_component
+    module={LitcoversWeb.PlaceholderLive.FormComponent}
+    id={@placeholder.id || :new}
+    title={@page_title}
+    action={@live_action}
+    placeholder={@placeholder}
+    navigate={~p"/en/placeholders"}
+  />
+</.modal>

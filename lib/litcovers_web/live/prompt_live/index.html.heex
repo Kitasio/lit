@@ -1,0 +1,45 @@
+<.header>
+  Listing Prompts
+  <:actions>
+    <.link patch={~p"/#{@locale}/prompts/new"}>
+      <.button>New Prompt</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="prompts" rows={@prompts} row_click={&JS.navigate(~p"/#{@locale}/prompts/#{&1}")}>
+  <:col :let={prompt} label="Name"><%= prompt.name %></:col>
+  <:col :let={prompt} label="Realm"><%= prompt.realm %></:col>
+  <:col :let={prompt} label="Sentiment"><%= prompt.sentiment %></:col>
+  <:col :let={prompt} label="Type"><%= prompt.type %></:col>
+  <:col :let={prompt} label="Style prompt"><%= prompt.style_prompt %></:col>
+  <:col :let={prompt} label="Image url"><%= prompt.image_url %></:col>
+  <:col :let={prompt} label="Secondary url"><%= prompt.secondary_url %></:col>
+  <:action :let={prompt}>
+    <div class="sr-only">
+      <.link navigate={~p"/#{@locale}/prompts/#{prompt}"}>Show</.link>
+    </div>
+    <.link patch={~p"/#{@locale}/prompts/#{prompt}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={prompt}>
+    <.link phx-click={JS.push("delete", value: %{id: prompt.id})} data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="prompt-modal"
+  show
+  on_cancel={JS.navigate(~p"/prompts")}
+>
+  <.live_component
+    module={LitcoversWeb.PromptLive.FormComponent}
+    id={@prompt.id || :new}
+    title={@page_title}
+    action={@live_action}
+    prompt={@prompt}
+    navigate={~p"/prompts"}
+  />
+</.modal>

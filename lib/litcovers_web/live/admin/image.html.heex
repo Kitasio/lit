@@ -1,0 +1,12 @@
+image page id: <%= @image.id %>
+<img src={@image.url} class="aspect-cover max-w-md" />
+
+<h1 class="mt-5 text-xl font-bold">Image style prompt</h1>
+<p class="mt-3"><%= @image.prompt.style_prompt %></p>
+
+<h1 class="mt-5 text-xl font-bold">Image ideas</h1>
+<div class="mt-3 space-y-2">
+  <%= for idea <- @image.ideas do %>
+    <p><%= idea.idea %></p>
+  <% end %>
+</div>
