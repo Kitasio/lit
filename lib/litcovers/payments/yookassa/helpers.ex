@@ -1,6 +1,5 @@
 defmodule Litcovers.Payments.Yookassa.Helpers do
   alias Litcovers.Payments
-  alias Litcovers.Accounts
   alias Litcovers.Payments.Yookassa
   require Logger
 

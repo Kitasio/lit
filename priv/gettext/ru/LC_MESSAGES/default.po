@@ -1,0 +1,261 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: ru\n"
+"Plural-Forms: nplurals=3\n"
+
+#: lib/litcovers_web/components/core_components.ex:476
+#, elixir-autogen, elixir-format
+msgid "Actions"
+msgstr ""
+
+#: lib/litcovers_web/components/core_components.ex:80
+#: lib/litcovers_web/components/core_components.ex:169
+#, elixir-autogen, elixir-format
+msgid "close"
+msgstr ""
+
+#: lib/litcovers_web/live/image_live/new.ex:451
+#, elixir-autogen, elixir-format
+msgid "Cover type"
+msgstr "Тип обложки"
+
+#: lib/litcovers_web/live/image_live/new.ex:412
+#, elixir-autogen, elixir-format
+msgid "Female"
+msgstr "Женский"
+
+#: lib/litcovers_web/live/image_live/new.ex:423
+#, elixir-autogen, elixir-format
+msgid "Male"
+msgstr "Мужской"
+
+#: lib/litcovers_web/live/image_live/new.ex:456
+#, elixir-autogen, elixir-format
+msgid "Style"
+msgstr "Стиль"
+
+#: lib/litcovers_web/live/image_live/new.ex:455
+#, elixir-autogen, elixir-format
+msgid "Vibe"
+msgstr "Атмосфера"
+
+#: lib/litcovers_web/live/image_live/new.ex:456
+#, elixir-autogen, elixir-format
+msgid "What style do you prefer?"
+msgstr "Какой стиль вам больше подходит?"
+
+#: lib/litcovers_web/live/image_live/new.ex:452
+#, elixir-autogen, elixir-format
+msgid "What type of cover is more suitable for your book?"
+msgstr "Какой тип обложки больше подходит для вашей книги?"
+
+#: lib/litcovers_web/live/image_live/new.ex:455
+#, elixir-autogen, elixir-format
+msgid "What vibe does your book have?"
+msgstr "Какая атмосфера у вашей книги?"
+
+#: lib/litcovers_web/live/image_live/new.ex:454
+#, elixir-autogen, elixir-format
+msgid "What world is your book set in?"
+msgstr "В каком мире разворачивается действие вашей книги?"
+
+#: lib/litcovers_web/live/image_live/new.ex:454
+#, elixir-autogen, elixir-format
+msgid "World"
+msgstr "Мир"
+
+#: lib/litcovers_web/user_auth.ex:272
+#, elixir-autogen, elixir-format
+msgid "You cannot access this page."
+msgstr "Вы не можете получить доступ к этой странице."
+
+#: lib/litcovers_web/user_auth.ex:279
+#, elixir-autogen, elixir-format
+msgid "You must log in to access this page."
+msgstr "Для доступа к этой странице вы должны войти в систему."
+
+#: lib/litcovers_web/live/image_live/new.ex:485
+#, elixir-autogen, elixir-format
+msgid "Brutal - Dark"
+msgstr "Брутальное - Тёмное"
+
+#: lib/litcovers_web/live/image_live/new.ex:469
+#, elixir-autogen, elixir-format
+msgid "Character"
+msgstr "Персонаж"
+
+#: lib/litcovers_web/components/ui_components.ex:42
+#, elixir-autogen, elixir-format
+msgid "Create cover"
+msgstr "Создать обложку"
+
+#: lib/litcovers_web/live/image_live/new.ex:475
+#, elixir-autogen, elixir-format
+msgid "Fantasy - Past"
+msgstr "Фэнтези - Прошлое"
+
+#: lib/litcovers_web/live/image_live/new.ex:477
+#, elixir-autogen, elixir-format
+msgid "Futurism - Future"
+msgstr "Футуризм - Будущее"
+
+#: lib/litcovers_web/live/image_live/new.ex:484
+#, elixir-autogen, elixir-format
+msgid "Natural - Neutral"
+msgstr "Натуральное - Нейтральное"
+
+#: lib/litcovers_web/live/image_live/new.ex:476
+#, elixir-autogen, elixir-format
+msgid "Realism - Present"
+msgstr "Реализм - Настоящее"
+
+#: lib/litcovers_web/live/image_live/new.ex:467
+#, elixir-autogen, elixir-format
+msgid "Setting"
+msgstr "Настройка"
+
+#: lib/litcovers_web/live/image_live/new.ex:483
+#, elixir-autogen, elixir-format
+msgid "Warm - Bright"
+msgstr "Теплое - Светлое"
+
+#: lib/litcovers_web/components/ui_components.ex:328
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Title"
+msgstr "Название"
+
+#: lib/litcovers_web/components/ui_components.ex:60
+#: lib/litcovers_web/components/ui_components.ex:74
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Create"
+msgstr "Создай"
+
+#: lib/litcovers_web/live/image_live/index.html.heex:11
+#, elixir-autogen, elixir-format
+msgid "All"
+msgstr "Все"
+
+#: lib/litcovers_web/live/image_live/new.html.heex:20
+#, elixir-autogen, elixir-format
+msgid "Book description"
+msgstr "Описание книги"
+
+#: lib/litcovers_web/live/image_live/show.html.heex:62
+#, elixir-autogen, elixir-format
+msgid "Composition"
+msgstr "Композиция"
+
+#: lib/litcovers_web/live/image_live/index.html.heex:21
+#, elixir-autogen, elixir-format
+msgid "Favorites"
+msgstr "Избранное"
+
+#: lib/litcovers_web/live/image_live/new.ex:298
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Generate"
+msgstr "Создать"
+
+#: lib/litcovers_web/live/image_live/new.html.heex:30
+#, elixir-autogen, elixir-format
+msgid "Image dimensions"
+msgstr "Размеры изображения"
+
+#: lib/litcovers_web/live/image_live/new.html.heex:6
+#, elixir-autogen, elixir-format
+msgid "LIT AI"
+msgstr "LIT AI"
+
+#: lib/litcovers_web/components/ui_components.ex:86
+#, elixir-autogen, elixir-format
+msgid "My generations"
+msgstr "Мои генерации"
+
+#: lib/litcovers_web/components/ui_components.ex:305
+#, elixir-autogen, elixir-format
+msgid "Name"
+msgstr "Имя"
+
+#: lib/litcovers_web/live/image_live/show.html.heex:48
+#, elixir-autogen, elixir-format
+msgid "Text size"
+msgstr "Размер текста"
+
+#: lib/litcovers_web/live/image_live/new.html.heex:53
+#, elixir-autogen, elixir-format
+msgid "What are we creating?"
+msgstr "Что мы создаем?"
+
+#: lib/litcovers_web/live/image_live/show.ex:51
+#, elixir-autogen, elixir-format
+msgid "You don't have access to this image"
+msgstr "У вас нет доступа к этому изображению"
+
+#: lib/litcovers_web/user_auth.ex:291
+#, elixir-autogen, elixir-format
+msgid "Your account is not active."
+msgstr "Ваш аккаунт не активен."
+
+#: lib/litcovers_web/live/image_live/index.html.heex:66
+#, elixir-autogen, elixir-format
+msgid "Add to favorites"
+msgstr "Добавить в избранное"
+
+#: lib/litcovers_web/live/image_live/new.ex:468
+#, elixir-autogen, elixir-format
+msgid "Couple"
+msgstr "Пара"
+
+#: lib/litcovers_web/live/image_live/index.html.heex:78
+#, elixir-autogen, elixir-format
+msgid "Delete image"
+msgstr "Удалить изображение"
+
+#: lib/litcovers_web/live/image_live/index.html.heex:70
+#, elixir-autogen, elixir-format
+msgid "Download image"
+msgstr "Скачать изображение"
+
+#: lib/litcovers_web/live/image_live/index.html.heex:57
+#, elixir-autogen, elixir-format
+msgid "Edit image"
+msgstr "Редактировать изображение"
+
+#: lib/litcovers_web/components/ui_components.ex:36
+#, elixir-autogen, elixir-format
+msgid "Litcoins"
+msgstr "Литкоины"
+
+#: lib/litcovers_web/live/image_live/index.html.heex:37
+#, elixir-autogen, elixir-format
+msgid "Locked image, dissapears after 24 hours"
+msgstr "Заблокированное изображение, исчезает через 24 часа"
+
+#: lib/litcovers_web/live/image_live/new.ex:62
+#: lib/litcovers_web/live/image_live/new.ex:68
+#: lib/litcovers_web/live/image_live/new.ex:74
+#, elixir-autogen, elixir-format
+msgid "Something went wrong"
+msgstr "Что-то пошло не так"
+
+#: lib/litcovers_web/live/image_live/new.ex:53
+#, elixir-autogen, elixir-format
+msgid "Timeout"
+msgstr "Тайм-аут"
+
+#: lib/litcovers_web/live/image_live/index.html.heex:84
+#, elixir-autogen, elixir-format
+msgid "Unlock image"
+msgstr "Разблокировать изображение"
+
+#: lib/litcovers_web/live/image_live/index.html.heex:16
+#, elixir-autogen, elixir-format
+msgid "Unlocked"
+msgstr "Разблокированные"

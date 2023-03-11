@@ -56,6 +56,21 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+config :litcovers,
+  imagekit_url: "https://ik.imagekit.io/soulgenesis",
+  bucket: "sapimedia"
+
+config :ex_aws,
+  debug_requests: true,
+  json_codec: Jason,
+  access_key_id: {:system, "SPACES_ACCESS_KEY_ID"},
+  secret_access_key: {:system, "SPACES_SECRET_ACCESS_KEY"}
+
+config :ex_aws, :s3,
+  scheme: "https://",
+  host: "fra1.digitaloceanspaces.com",
+  region: "fra1"
+
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 

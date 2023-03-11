@@ -34,7 +34,7 @@
         <%= if !image.unlocked do %>
           <div class="absolute top-5 right-5 z-20">
             <div class="relative group">
-              <Heroicons.clock class="w-6 h-6 text-orange-300" />
+              <.icon name="hero-clock" class="w-6 h-6 text-orange-300" />
               <.tooltip position="left">
                 <%= gettext("Locked image, dissapears after 24 hours") %>
               </.tooltip>

@@ -21,9 +21,94 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
+import Alpine from "../vendor/alpinejs"
+import { timer as createTimer } from "./timer.js"
+
+window.Alpine = Alpine
+Alpine.start()
+
+let Hooks = {}
+Hooks.UpdateLitcoins = {
+  mounted() {
+    this.el.addEventListener("update-litcoins", event => {
+      this.pushEvent('update-litcoins', event.detail)
+    })
+  }
+}
+Hooks.CreateCover = {
+  mounted() {
+    this.el.addEventListener("save-to-spaces", event => {
+      this.pushEvent('save-to-spaces', event.detail)
+    })
+  }
+}
+Hooks.Toggle = {
+  mounted() {
+    this.el.addEventListener("toggle-change", event => {
+      this.pushEvent('toggle-change', event.detail)
+    })
+  }
+}
+Hooks.InfiniteScroll = {
+  page() {return this.el.dataset.page;},
+  loadMore(entries) {
+    const target = entries[0];
+    if (target.isIntersecting && this.pending == this.page()) {
+      this.pending = this.page() + 1;
+      this.pushEvent("load-more", {});
+    }
+  },
+  mounted() {
+    this.pending = this.page();
+    this.observer = new IntersectionObserver(
+      (entries) => this.loadMore(entries),
+      {
+        root: null, // window by default
+        rootMargin: "400px",
+        threshold: 0.1,
+      }
+    );
+    this.observer.observe(this.el);
+  },
+  destroyed() {
+    this.observer.unobserve(this.el);
+  },
+  updated() {
+    this.pending = this.page();
+  },
+}
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+let liveSocket = new LiveSocket("/live", Socket, {
+  params: { _csrf_token: csrfToken },
+  hooks: Hooks,
+  dom: {
+    onBeforeElUpdated(from, to) {
+      if (from._x_dataStack) {
+        window.Alpine.clone(from, to)
+      }
+    }
+  }
+})
+
+window.addEventListener("phx:update-litcoins", (e) => {
+  let el = document.getElementById(e.detail.id)
+  if(el) {
+    liveSocket.execJS(el, el.getAttribute("data-update-litcoins"))
+  }
+})
+
+window.addEventListener("phx:init-relaxed-mode-timer", (e) => {
+    let el = document.getElementById(e.detail.id)
+    const relaxedTill = e.detail.relaxed_till
+    if(el && relaxedTill >= 0) {
+        let timer = createTimer(new Date().setMilliseconds(new Date().getMilliseconds() + relaxedTill))
+        setInterval(() => {
+            timer.setRemaining();
+            el.innerText = `${timer.time().minutes}:${timer.time().seconds}`
+        }, 1000);
+    }
+})
 
 // Show progress bar on live navigation and form submits
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
