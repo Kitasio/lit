@@ -1,12 +1,12 @@
 <div class="flex flex-col h-screen lg:grid grid-cols-12">
-  <.navbar 
-    current_user={@current_user} 
-    show_pinger={@has_new_images} 
+  <.navbar
+    current_user={@current_user}
+    show_pinger={@has_new_images}
     show_cover_pinger={Media.has_unseen_covers?(@current_user)}
-    covers_exist={Media.has_covers?(@current_user)} 
-    images_exist={@has_images} 
-    locale={@locale} 
-    request_path={~p"/#{@locale}/images/new"} 
+    covers_exist={Media.has_covers?(@current_user)}
+    images_exist={@has_images}
+    locale={@locale}
+    request_path={~p"/#{@locale}/images/new"}
   />
   <div class="lg:col-span-5">
     <!-- <div class="bg-sec px-8 py-5 rounded-tr-xl"> -->
@@ -161,7 +161,11 @@
             <.input field={{f, :height}} value={@height} type="hidden" />
           </div>
 
-          <.generate_btn spin={@is_generating} user_id={@current_user.id} relaxed_mode={@current_user.relaxed_mode} />
+          <.generate_btn
+            spin={@is_generating}
+            user_id={@current_user.id}
+            relaxed_mode={@current_user.relaxed_mode}
+          />
         </.form>
       </div>
     <% else %>
@@ -178,7 +182,7 @@
       <.loader aspect_ratio={@aspect_ratio} />
     <% else %>
       <.img
-        locale={@locale}      
+        locale={@locale}
         aspect_ratio={@aspect_ratio}
         img_url={
           if @image.unlocked do
@@ -202,7 +206,10 @@
           />
           <.download_btn image_url={"#{@image.url}?ik-attachment=true"} />
         <% else %>
-          <.unlock_img_button phx-click={JS.push("unlock", value: %{image_id: @image.id})} image_id={@image.id} />
+          <.unlock_img_button
+            phx-click={JS.push("unlock", value: %{image_id: @image.id})}
+            image_id={@image.id}
+          />
         <% end %>
       </.img>
     <% end %>

@@ -47,7 +47,6 @@
           image_id={image.id}
           img_url={insert_image_watermark(image)}
           unlocked={image.unlocked}
-          aspect_ratio={aspect_ratio({image.width, image.height})}
           class={
             if !image.unlocked do
               "opacity-50"
