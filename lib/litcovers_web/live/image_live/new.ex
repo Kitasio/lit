@@ -443,12 +443,12 @@ defmodule LitcoversWeb.ImageLive.New do
   def generate_btn(assigns) do
     ~H"""
     <div x-data="" class="pb-7 pt-12 flex">
-      <button
+      <.button
         type="submit"
         class="btn-small flex items-center justify-center gap-3 py-5 bg-accent-main disabled:bg-dis-btn rounded-full w-full"
-        x-bind:disabled={"#{@spin or @relaxed_mode} && true"}
+        disabled={@spin or @relaxed_mode}
       >
-        <span :if={@relaxed_mode} id={"relaxed-timer-user-#{@user_id}"}>00:00</span>
+        <span :if={@relaxed_mode} class="my-2" id={"relaxed-timer-user-#{@user_id}"}>00:00</span>
         <svg
           :if={!@relaxed_mode}
           x-bind:class={"#{@spin} && 'animate-slow-spin'"}
@@ -467,8 +467,8 @@ defmodule LitcoversWeb.ImageLive.New do
             <clipPath id="b"><path fill="#fff" d="M-.5 0h14v14h-14z" /></clipPath>
           </defs>
         </svg>
-        <span :if={!@relaxed_mode}><%= gettext("Generate") %></span>
-      </button>
+        <span :if={!@relaxed_mode} class="my-2"><%= gettext("Generate") %></span>
+      </.button>
     </div>
     """
   end

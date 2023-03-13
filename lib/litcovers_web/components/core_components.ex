@@ -8,7 +8,7 @@ defmodule LitcoversWeb.CoreComponents do
 
   Icons are provided by [heroicons](https://heroicons.com). See `icon/1` for usage.
   """
-  use Phoenix.Component
+  use Phoenix.Component, global_prefixes: ~w(x-)
 
   alias Phoenix.LiveView.JS
   import LitcoversWeb.Gettext
@@ -159,12 +159,12 @@ defmodule LitcoversWeb.CoreComponents do
         <.icon
           :if={@kind == :info}
           name="hero-check-circle-solid"
-          class="h-6 w-6 stroke-green-300 shrink-0"
+          class="h-6 w-6 bg-green-300 shrink-0"
         />
         <.icon
           :if={@kind == :error}
           name="hero-exclamation-triangle-solid"
-          class="h-6 w-6 stroke-red-300 shrink-0"
+          class="h-6 w-6 bg-red-300 shrink-0"
         />
       </div>
     </div>
@@ -253,8 +253,10 @@ defmodule LitcoversWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
+        "bg-gradient-to-r from-[#FF00E5] via-[#8F00FF] to-[#3600D0]",
+        "hover:shadow-lg hover:shadow-accent-main/50",
+        "phx-submit-loading:opacity-75 py-3 px-7 rounded-full",
+        "text-xs lg:text-sm font-semibold leading-6 text-white active:text-white/80 transition duration-500 disabled:bg-none disabled:bg-dis-btn",
         @class
       ]}
       {@rest}
@@ -599,10 +601,11 @@ defmodule LitcoversWeb.CoreComponents do
   """
   attr :name, :string, required: true
   attr :class, :string, default: nil
+  attr :rest, :global
 
   def icon(%{name: "hero-" <> _} = assigns) do
     ~H"""
-    <span class={[@name, @class]} />
+    <span class={[@name, @class]} {@rest} />
     """
   end
 

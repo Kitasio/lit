@@ -42,8 +42,8 @@ module.exports = {
         'stroke-sec': '#34313A',
         'dis-input': '#555555',
         'dis-btn': '#838383',
-        'accent-main': '#DB5598',
-        'accent-sec': '#5C2D45',
+        'accent-main': '#BD00FF',
+        'accent-sec': '#5B017A',
         'hover': '#B42E71',
         'gray': '#C6C6C6'
       },
