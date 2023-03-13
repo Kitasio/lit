@@ -1,10 +1,15 @@
 defmodule CoverGen.CoverProducer do
+  alias CoverGen.Replicate.Model
   alias Litcovers.Media.Image
   use GenStage
   require Logger
 
   def start_link(_args) do
     GenStage.start_link(__MODULE__, [], name: __MODULE__)
+  end
+
+  def start_image_gen(%Image{} = image, %Model{} = params) do
+    GenStage.cast(__MODULE__, {:start_image_gen, [{image, params}]})
   end
 
   def start_image_gen(%Image{} = image) do

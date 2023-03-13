@@ -9,12 +9,12 @@
     request_path={~p"/#{@locale}/images/new"}
   />
   <div class="lg:col-span-5">
-    <!-- <div class="bg-sec px-8 py-5 rounded-tr-xl"> -->
-    <!--   <div class="flex items-center gap-8"> -->
-    <!--     <.header><%= gettext("LIT AI") %></.header> -->
-    <!--     <.toggler /> -->
-    <!--   </div> -->
-    <!-- </div> -->
+    <div class="bg-sec px-8 py-5 rounded-tr-xl">
+      <div class="flex items-center gap-8">
+        <.header><%= gettext("LIT AI") %></.header>
+        <.toggler />
+      </div>
+    </div>
     <%= if @lit_ai do %>
       <div class="pt-7 bg-sec flex flex-col justify-between lg:h-full">
         <.form
@@ -34,27 +34,7 @@
             />
           </div>
 
-          <div>
-            <.header><%= gettext("Image dimensions") %></.header>
-            <div class="flex gap-3 mt-5" x-data="">
-              <div
-                class="px-4 py-2.5 cursor-pointer rounded-xl border-2 border-stroke-main bg-tag-main hover:border-accent-main transition"
-                x-bind:class={"'#{@aspect_ratio}' == 'cover' && 'border-accent-main'"}
-                phx-click="aspect-ratio-change"
-                phx-value-aspect_ratio="cover"
-              >
-                512x768
-              </div>
-              <div
-                class="px-4 py-2.5 cursor-pointer rounded-xl border-2 border-stroke-main bg-tag-main hover:border-accent-main transition"
-                x-bind:class={"'#{@aspect_ratio}' == 'square' && 'border-accent-main'"}
-                phx-click="aspect-ratio-change"
-                phx-value-aspect_ratio="square"
-              >
-                512x512
-              </div>
-            </div>
-          </div>
+          <.img_dimensions aspect_ratio={@aspect_ratio} />
 
           <div class="bg-sec">
             <div class="pt-5">
@@ -169,9 +149,65 @@
         </.form>
       </div>
     <% else %>
-      no lit ai
+      <.form
+        :let={f}
+        class="px-8 bg-sec flex flex-col gap-5"
+        for={@changeset}
+        phx-change="validate"
+        phx-submit="save_raw"
+      >
+        <div class="space-y-5">
+          <.header>Prompt</.header>
+          <.input
+            field={{f, :description}}
+            type="textarea"
+            placeholder="A cat drinking milk, smooth blend, modern impressionistic abstract painting, thick painting, palette knife and brush strokes, desaturated colors studio ghibli, artstation, concept art, behance, ray tracing, smooth, ethereal lighting"
+            rows="4"
+          />
+        </div>
+
+        <.img_dimensions aspect_ratio={@aspect_ratio} />
+
+        <div class="mt-3 space-y-5">
+          <.header><%= gettext("Choose a model") %></.header>
+          <.stage_box>
+            <%= for m <- @models do %>
+              <div
+                phx-click={JS.push("select-model", value: %{model: m.name})}
+                class="mr-8 aspect-cover cursor-pointer overflow-hidden rounded-xl border-2 border-stroke-main hover:border-accent-main transition inline-block min-w-[250px] sm:min-w-fit sm:mr-0"
+                x-bind:class={"'#{m.name}' == '#{@selected_model.name}' && 'border-accent-main'"}
+                x-data={"{ showImage: false, imageUrl: '#{m.img}' }"}
+              >
+                <img
+                  x-show="showImage"
+                  x-transition.duration.500ms
+                  x-bind:src="imageUrl"
+                  x-on:load="showImage = true"
+                  class="w-full h-full object-cover aspect-cover cursor-pointer transition duration-300 ease-out hover:scale-[1.02] hover:saturate-[1.3]"
+                />
+              </div>
+            <% end %>
+          </.stage_box>
+        </div>
+
+        <div class="hidden">
+          <.input field={{f, :style_prompt}} value={@style_prompt} type="hidden" />
+          <.input field={{f, :prompt_id}} value={@prompt_id} type="hidden" />
+          <.input field={{f, :type}} value={@type} type="hidden" />
+          <.input field={{f, :character_gender}} value={@gender} type="hidden" />
+          <.input field={{f, :width}} value={@width} type="hidden" />
+          <.input field={{f, :height}} value={@height} type="hidden" />
+        </div>
+
+        <.generate_btn
+          spin={@is_generating}
+          user_id={@current_user.id}
+          relaxed_mode={@current_user.relaxed_mode}
+        />
+      </.form>
     <% end %>
   </div>
+
   <div class="py-20 px-8 lg:col-start-6 lg:col-end-13 lg:py-auto">
     <%= if @gen_error != nil do %>
       <div class="my-1 flex w-full justify-center">

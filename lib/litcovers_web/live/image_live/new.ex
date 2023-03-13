@@ -1,4 +1,5 @@
 defmodule LitcoversWeb.ImageLive.New do
+  alias CoverGen.Replicate
   alias Litcovers.Metadata.Prompt
   alias Litcovers.Payments.Yookassa
   alias Litcovers.Payments
@@ -8,6 +9,7 @@ defmodule LitcoversWeb.ImageLive.New do
   alias Litcovers.Metadata
   require Elixir.Logger
   import LitcoversWeb.ImageLive.Index
+  alias Phoenix.LiveView.JS
 
   use LitcoversWeb, :live_view
 
@@ -58,7 +60,9 @@ defmodule LitcoversWeb.ImageLive.New do
        gen_error: nil,
        is_generating: socket.assigns.current_user.is_generating,
        has_images: has_images?(socket.assigns.current_user),
-       has_new_images: has_new_images?(socket.assigns.current_user)
+       has_new_images: has_new_images?(socket.assigns.current_user),
+       models: Replicate.Model.list_all(),
+       selected_model: Replicate.Model.list_all() |> List.first()
      )}
   end
 
@@ -162,6 +166,38 @@ defmodule LitcoversWeb.ImageLive.New do
     {:noreply, assign(socket, :changeset, changeset)}
   end
 
+  def handle_event("save_raw", %{"image" => image_params}, socket) do
+    unless socket.assigns.current_user.is_generating or socket.assigns.current_user.relaxed_mode do
+      %{"description" => description, "width" => width, "height" => height} = image_params
+      prompt = Replicate.Model.new(socket.assigns.selected_model.name)
+
+      prompt =
+        update_in(prompt.input, fn input ->
+          %CoverGen.Replicate.Input{
+            width: width,
+            height: height,
+            prompt: input.prompt <> description
+          }
+        end)
+
+      case Media.create_image(socket.assigns.current_user, image_params) do
+        {:ok, image} ->
+          CoverGen.CoverProducer.start_image_gen(image, prompt)
+
+          socket = socket |> assign(image: image, is_generating: true)
+
+          {:noreply, socket}
+
+        {:error, %Ecto.Changeset{} = changeset} ->
+          IO.inspect(changeset)
+          placeholder = placeholder_or_empty(Metadata.get_random_placeholder())
+          {:noreply, assign(socket, changeset: changeset, placeholder: placeholder)}
+      end
+    else
+      {:noreply, socket}
+    end
+  end
+
   def handle_event("save", %{"image" => image_params}, socket) do
     unless socket.assigns.current_user.is_generating or socket.assigns.current_user.relaxed_mode do
       %{"prompt_id" => prompt_id} = image_params
@@ -215,6 +251,12 @@ defmodule LitcoversWeb.ImageLive.New do
   def handle_event("set_stage", %{"stage" => stage}, socket) do
     stage = get_stage(stage |> String.to_integer())
     socket = assign(socket, stage: stage)
+    {:noreply, socket}
+  end
+
+  def handle_event("select-model", %{"model" => model_name}, socket) do
+    model = get_model(model_name)
+    socket = assign(socket, selected_model: model)
     {:noreply, socket}
   end
 
@@ -332,6 +374,34 @@ defmodule LitcoversWeb.ImageLive.New do
 
   defp get_width_and_height("square") do
     {512, 512}
+  end
+
+  attr :aspect_ratio, :string, default: "cover"
+
+  def img_dimensions(assigns) do
+    ~H"""
+    <div>
+      <.header><%= gettext("Image dimensions") %></.header>
+      <div class="flex gap-3 mt-5" x-data="">
+        <div
+          class="px-4 py-2.5 cursor-pointer rounded-xl border-2 border-stroke-main bg-tag-main hover:border-accent-main transition"
+          x-bind:class={"'#{@aspect_ratio}' == 'cover' && 'border-accent-main'"}
+          phx-click="aspect-ratio-change"
+          phx-value-aspect_ratio="cover"
+        >
+          512x768
+        </div>
+        <div
+          class="px-4 py-2.5 cursor-pointer rounded-xl border-2 border-stroke-main bg-tag-main hover:border-accent-main transition"
+          x-bind:class={"'#{@aspect_ratio}' == 'square' && 'border-accent-main'"}
+          phx-click="aspect-ratio-change"
+          phx-value-aspect_ratio="square"
+        >
+          512x512
+        </div>
+      </div>
+    </div>
+    """
   end
 
   def toggler(assigns) do
@@ -562,6 +632,10 @@ defmodule LitcoversWeb.ImageLive.New do
 
   defp get_stage(id) do
     Enum.find(stages(), fn stage -> stage.id == id end)
+  end
+
+  defp get_model(name) do
+    Enum.find(Replicate.Model.list_all(), fn model -> model.name == name end)
   end
 
   def types() do

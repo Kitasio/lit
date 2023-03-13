@@ -272,6 +272,13 @@ defmodule Litcovers.Media do
       {:error, %Ecto.Changeset{}}
 
   """
+  def create_image(%Accounts.User{} = user, attrs) do
+    %Image{}
+    |> Image.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:user, user)
+    |> Repo.insert()
+  end
+
   def create_image(%Accounts.User{} = user, %Metadata.Prompt{} = prompt, attrs \\ %{}) do
     %Image{}
     |> Image.changeset(attrs)
