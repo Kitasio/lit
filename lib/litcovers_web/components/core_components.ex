@@ -149,26 +149,24 @@ defmodule LitcoversWeb.CoreComponents do
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
       class={[
-        "fixed hidden top-2 right-2 w-80 sm:w-96 z-50 rounded-lg p-3 shadow-md shadow-zinc-900/5 ring-1",
-        @kind == :info && "bg-emerald-50 text-emerald-800 ring-emerald-500 fill-cyan-900",
-        @kind == :error && "bg-rose-50 p-3 text-rose-900 shadow-md ring-rose-500 fill-rose-900"
+        "fixed cursor-pointer hidden top-5 right-5 w-80 sm:w-96 z-50 rounded-lg p-5 shadow-md shadow-zinc-900/5 ring-1",
+        "bg-sec/50 backdrop-blur ring-stroke-main"
       ]}
       {@rest}
     >
-      <p :if={@title} class="flex items-center gap-1.5 text-[0.8125rem] font-semibold leading-6">
-        <.icon :if={@kind == :info} name="hero-information-circle-mini" class="w-4 h-4" />
-        <.icon :if={@kind == :error} name="hero-exclamation-circle-mini" class="w-4 h-4" />
-        <%= @title %>
-      </p>
-      <p class="mt-2 text-[0.8125rem] leading-5"><%= msg %></p>
-      <button
-        :if={@close}
-        type="button"
-        class="group absolute top-2 right-1 p-2"
-        aria-label={gettext("close")}
-      >
-        <.icon name="hero-x-mark-solid" class="w-5 h-5 opacity-40 group-hover:opacity-70" />
-      </button>
+      <div class="flex justify-between items-center">
+        <p class="text-[0.8125rem] leading-5"><%= msg %></p>
+        <.icon
+          :if={@kind == :info}
+          name="hero-check-circle-solid"
+          class="h-6 w-6 stroke-green-300 shrink-0"
+        />
+        <.icon
+          :if={@kind == :error}
+          name="hero-exclamation-triangle-solid"
+          class="h-6 w-6 stroke-red-300 shrink-0"
+        />
+      </div>
     </div>
     """
   end
