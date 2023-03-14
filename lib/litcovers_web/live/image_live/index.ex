@@ -13,8 +13,6 @@ defmodule LitcoversWeb.ImageLive.Index do
 
     socket = assign(socket, locale: locale, page: 0)
 
-    # on initial load it'll return false,
-    # then true on the next.
     if connected?(socket) do
       get_images(socket)
     else
@@ -106,7 +104,6 @@ defmodule LitcoversWeb.ImageLive.Index do
 
   @impl true
   def handle_info({:update_image, image}, socket) do
-    IO.puts("running update image")
     {:noreply, update(socket, :images, fn images -> [image | images] end)}
   end
 
