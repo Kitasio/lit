@@ -445,7 +445,7 @@ defmodule LitcoversWeb.ImageLive.New do
     <div x-data="" class="pb-7 pt-12 flex">
       <.button
         type="submit"
-        class="btn-small flex items-center justify-center gap-3 py-5 bg-accent-main disabled:bg-dis-btn rounded-full w-full"
+        class="btn-small flex items-center justify-center gap-3 py-3 bg-accent-main disabled:bg-dis-btn rounded-full w-full"
         disabled={@spin or @relaxed_mode}
       >
         <span :if={@relaxed_mode} class="my-2" id={"relaxed-timer-user-#{@user_id}"}>00:00</span>
@@ -537,7 +537,7 @@ defmodule LitcoversWeb.ImageLive.New do
       ~H"""
       <div
         id={"#{@src}"}
-        class="mr-8 aspect-cover overflow-hidden rounded-xl border-2 border-stroke-main hover:border-accent-main transition inline-block min-w-[250px] sm:min-w-fit sm:mr-0"
+        class="mr-8  overflow-hidden rounded-xl border-2 border-stroke-main hover:border-accent-main transition inline-block min-w-[150px] sm:min-w-fit sm:mr-0"
         x-bind:class={"'#{@value}' == '#{@prompt_id}' && 'border-accent-main'"}
         x-data={"{ showImage: false, imageUrl: '#{@src}' }"}
         phx-click={next_stage_push_anim(@stage_id)}
@@ -549,7 +549,7 @@ defmodule LitcoversWeb.ImageLive.New do
           x-bind:src="imageUrl"
           x-on:load="showImage = true"
           alt={assigns.label}
-          class="w-full h-full object-cover aspect-cover cursor-pointer transition duration-300 ease-out hover:scale-[1.02] hover:saturate-[1.3]"
+          class="w-full h-full object-cover cursor-pointer transition duration-300 ease-out hover:scale-[1.02] hover:saturate-[1.3]"
         />
       </div>
       """
@@ -600,7 +600,7 @@ defmodule LitcoversWeb.ImageLive.New do
 
   def stage_box(assigns) do
     ~H"""
-    <div class="min-h-[400px] sm:min-h-full flex flex-nowrap sm:gap-5 overflow-x-scroll sm:overflow-x-hidden hide-scroll-bar sm:grid sm:grid-cols-3">
+    <div class="min-h-[250px] sm:min-h-full flex flex-nowrap sm:gap-5 overflow-x-scroll sm:overflow-x-hidden hide-scroll-bar sm:grid sm:grid-cols-3">
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -609,7 +609,7 @@ defmodule LitcoversWeb.ImageLive.New do
   def stage_msg(assigns) do
     ~H"""
     <div class="mt-5 mb-4">
-      <h1 class="text-base font-light">
+      <h1 class="text-sm sm:text-base font-light">
         <%= assigns.msg %>
       </h1>
     </div>

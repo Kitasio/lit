@@ -67,7 +67,10 @@ defmodule LitcoversWeb.UiComponents do
         >
           <.link navigate={"/#{@locale}/images/new"} class="flex items-center gap-2 w-full px-8 py-4">
             <.icon name="hero-plus-solid" class="w-3 h-3 text-slate-200" />
-            <span x-bind:class={"'#{@request_path}' == '/#{@locale}/images/new' ? '' : 'hidden sm:inline'"}>
+            <span
+              class="text-sm sm:text-base"
+              x-bind:class={"'#{@request_path}' == '/#{@locale}/images/new' ? '' : 'hidden sm:inline'"}
+            >
               <%= gettext("Create") %>
             </span>
           </.link>
@@ -81,7 +84,10 @@ defmodule LitcoversWeb.UiComponents do
         >
           <.link navigate={"/#{@locale}/images"} class="flex items-center gap-2 w-full px-8 py-4">
             <.icon name="hero-square-3-stack-3d-solid" class="w-3 h-3 text-slate-200" />
-            <span x-bind:class={"'#{@request_path}' == '/#{@locale}/images' ? '' : 'hidden sm:inline'"}>
+            <span
+              class="text-sm sm:text-base"
+              x-bind:class={"'#{@request_path}' == '/#{@locale}/images' ? '' : 'hidden sm:inline'"}
+            >
               <%= gettext("My generations") %>
             </span>
           </.link>
@@ -98,7 +104,10 @@ defmodule LitcoversWeb.UiComponents do
         >
           <.link navigate={"/#{@locale}/covers"} class="flex items-center gap-2 w-full px-8 py-4">
             <.icon name="hero-book-open-solid" class="w-3 h-3 text-slate-200" />
-            <span x-bind:class={"'#{@request_path}' == '/#{@locale}/covers' ? '' : 'hidden sm:inline'"}>
+            <span
+              class="text-sm sm:text-base"
+              x-bind:class={"'#{@request_path}' == '/#{@locale}/covers' ? '' : 'hidden sm:inline'"}
+            >
               <%= gettext("My covers") %>
             </span>
           </.link>

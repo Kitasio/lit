@@ -360,7 +360,7 @@ defmodule LitcoversWeb.CoreComponents do
         class={[
           input_border(@errors),
           "bg-sec mt-2 block min-h-[6rem] w-full rounded-lg border-2 border-stroke-main py-[7px] px-[11px]",
-          "text-slate-200 focus:border-accent-main focus:outline-none focus:ring-4 focus:ring-zinc-800/5 sm:text-sm sm:leading-6",
+          "text-slate-200 focus:border-accent-main focus:outline-none focus:ring-4 focus:ring-zinc-800/5 text-xs sm:text-sm sm:leading-6",
           "phx-no-feedback:border-stroke-main phx-no-feedback:focus:border-accent-main phx-no-feedback:focus:ring-zinc-800/5"
         ]}
         {@rest}
@@ -440,7 +440,7 @@ defmodule LitcoversWeb.CoreComponents do
     ~H"""
     <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
-        <h1 class="text-slate-200 text-lg font-semibold leading-8">
+        <h1 class="text-slate-200 text-md sm:text-lg font-semibold leading-8">
           <%= render_slot(@inner_block) %>
         </h1>
         <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-slate-300">
