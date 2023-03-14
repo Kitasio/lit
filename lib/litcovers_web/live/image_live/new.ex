@@ -442,7 +442,11 @@ defmodule LitcoversWeb.ImageLive.New do
 
   def generate_btn(assigns) do
     ~H"""
-    <div x-data="" class="pb-7 pt-12 flex">
+    <div
+      x-data=""
+      onclick="window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })"
+      class="pb-7 pt-12 flex"
+    >
       <.button
         type="submit"
         class="btn-small flex items-center justify-center gap-3 py-3 bg-accent-main disabled:bg-dis-btn rounded-full w-full"
