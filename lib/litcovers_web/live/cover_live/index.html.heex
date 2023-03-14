@@ -21,19 +21,26 @@
           img_url={image.url}
           unlocked={false}
         >
-          <.download_btn
-            image_url={"#{image.url}?ik-attachment=true"}
-            tooltip_text={gettext("Download")}
-          />
-          <.delete_img_button
-            phx-click={
-              JS.push("delete-cover", value: %{image_id: image.id})
-              |> JS.transition("scale-90", to: "#delete-#{image.id}")
-              |> hide("#img-#{image.id}-box")
-            }
-            image_id={image.id}
-            tooltip_text={gettext("Delete cover")}
-          />
+          <:bottom>
+            <div class="flex gap-3">
+              <.link class="w-full" href="#{image.url}?ik-attachment=true" target="_blank">
+                <.button
+                  class="w-full"
+                  phx-click={JS.push("unlock", value: %{image_id: image.id})}
+                >
+                  <%= gettext("Download") %>
+                </.button>
+              </.link>
+              <.delete_img_button
+                phx-click={
+                  JS.push("delete-cover", value: %{image_id: image.id})
+                  |> JS.transition("scale-90", to: "#delete-#{image.id}")
+                  |> hide("#img-#{image.id}-box")
+                }
+                image_id={image.id}
+              />
+            </div>
+          </:bottom>
         </.img>
       </div>
     <% end %>

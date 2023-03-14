@@ -119,7 +119,8 @@ defmodule LitcoversWeb.UiComponents do
   attr :class, :string, default: nil
   attr :unlocked, :boolean, default: false
 
-  slot :inner_block
+  slot :top
+  slot :bottom
 
   def img(assigns) do
     if assigns.img_url do
@@ -151,12 +152,19 @@ defmodule LitcoversWeb.UiComponents do
         >
         </.link>
         <div :if={!@unlocked} class="w-full h-full absolute top-0 z-10" />
-        <div
-          x-show="showToolbar"
-          x-transition.duration.200ms
-          class="p-5 absolute gap-5 flex justify-center z-20 bottom-0 left-0 w-full"
-        >
-          <%= render_slot(@inner_block) %>
+        <div class="z-20 top-0 left-0 w-full absolute p-3">
+          <div
+            x-show="showToolbar"
+            x-transition.duration.200ms
+            class="rounded-full bg-sec/30 backdrop-blur gap-5 flex justify-center"
+          >
+            <%= render_slot(@top) %>
+          </div>
+        </div>
+        <div class="z-20 bottom-0 left-0 w-full absolute p-3">
+          <div x-show="showToolbar" x-transition.duration.200ms>
+            <%= render_slot(@bottom) %>
+          </div>
         </div>
       </div>
       """
@@ -171,6 +179,17 @@ defmodule LitcoversWeb.UiComponents do
   attr :class, :string, default: nil
 
   slot :inner_block
+
+  def tooltip(%{position: "bottom"} = assigns) do
+    ~H"""
+    <div class={[
+      "hidden z-20 group-hover:flex absolute p-3 w-32 top-1 -left-1 translate-y-full -translate-x-10 bg-stroke-sec bg-opacity-70 rounded-xl",
+      @class
+    ]}>
+      <span class="text-center text-xs w-full"><%= render_slot(@inner_block) %></span>
+    </div>
+    """
+  end
 
   def tooltip(%{position: "top"} = assigns) do
     ~H"""
@@ -203,7 +222,7 @@ defmodule LitcoversWeb.UiComponents do
     ~H"""
     <button id={"heart-#{@image_id}"} class="group relative transition duration-150 ease-out" {@rest}>
       <%= if @tooltip_text do %>
-        <.tooltip>
+        <.tooltip position="bottom">
           <%= @tooltip_text %>
         </.tooltip>
       <% end %>
@@ -226,7 +245,7 @@ defmodule LitcoversWeb.UiComponents do
     ~H"""
     <button id={"unlock-#{@image_id}"} class="group relative transition duration-150 ease-out" {@rest}>
       <%= if @tooltip_text do %>
-        <.tooltip>
+        <.tooltip position="bottom">
           <%= @tooltip_text %>
         </.tooltip>
       <% end %>
@@ -245,7 +264,7 @@ defmodule LitcoversWeb.UiComponents do
     ~H"""
     <button id={"delete-#{@image_id}"} class="group relative transition duration-150 ease-out" {@rest}>
       <%= if @tooltip_text do %>
-        <.tooltip>
+        <.tooltip position="bottom">
           <%= @tooltip_text %>
         </.tooltip>
       <% end %>
@@ -264,7 +283,7 @@ defmodule LitcoversWeb.UiComponents do
     ~H"""
     <a class="group relative" target="_blank" download={@download} href={@image_url}>
       <%= if @tooltip_text do %>
-        <.tooltip>
+        <.tooltip position="bottom">
           <%= @tooltip_text %>
         </.tooltip>
       <% end %>
@@ -282,7 +301,7 @@ defmodule LitcoversWeb.UiComponents do
     ~H"""
     <.link class="group relative" href={@url}>
       <%= if @tooltip_text do %>
-        <.tooltip>
+        <.tooltip position="bottom">
           <%= @tooltip_text %>
         </.tooltip>
       <% end %>

@@ -120,15 +120,17 @@
           class="p-5 absolute gap-5 flex justify-center z-20 bottom-0 left-0 w-full"
         >
           <button
-            class="group relative bg-sec/50 p-2.5 rounded-full"
+            class={[
+              "bg-gradient-to-r from-[#FF00E5] via-[#8F00FF] to-[#3600D0]",
+              "hover:shadow-lg hover:shadow-accent-main/50",
+              "phx-submit-loading:opacity-75 py-3 px-7 rounded-full",
+              "w-full text-xs lg:text-sm font-semibold leading-6 text-white active:text-white/80 transition duration-500 disabled:bg-none disabled:bg-dis-btn"
+            ]}
             id="create-cover-btn"
             phx-hook="CreateCover"
             x-on:click="$dispatch('save-to-spaces', { img: $refs.mainImage.src })"
           >
-            <.tooltip>
-              <%= gettext("Save cover") %>
-            </.tooltip>
-            <.icon name="hero-bookmark" class="w-6 h-6" />
+            <%= gettext("Save") %>
           </button>
         </div>
       </div>

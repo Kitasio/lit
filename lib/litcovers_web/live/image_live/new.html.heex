@@ -211,7 +211,7 @@
   <div class="py-20 px-8 lg:col-start-6 lg:col-end-13 lg:py-auto">
     <%= if @gen_error != nil do %>
       <div class="my-1 flex w-full justify-center">
-        <span class="text-sm text-center"><%= @gen_error %></span>
+        <span class="text-sm text-center text-pink-600"><%= @gen_error %></span>
       </div>
     <% end %>
     <%= if @is_generating do %>
@@ -230,23 +230,13 @@
         image_id={@image.id}
         unlocked={@image.unlocked}
       >
-        <%= if @image.unlocked do %>
-          <.edit_btn url={~p"/#{@locale}/images/#{@image.id}/edit"} />
-          <.heart_button
-            phx-click={
-              JS.push("toggle-favorite", value: %{image_id: @image.id})
-              |> JS.transition("scale-90", to: "#heart-#{@image.id}")
-            }
-            favorite={@image.favorite}
-            image_id={@image.id}
-          />
-          <.download_btn image_url={"#{@image.url}?ik-attachment=true"} />
-        <% else %>
-          <.unlock_img_button
-            phx-click={JS.push("unlock", value: %{image_id: @image.id})}
-            image_id={@image.id}
-          />
-        <% end %>
+        <:bottom :if={!@image.unlocked}>
+          <div class="flex gap-3">
+            <.button class="w-full" phx-click={JS.push("unlock", value: %{image_id: @image.id})}>
+              <%= gettext("Unlock") %>
+            </.button>
+          </div>
+        </:bottom>
       </.img>
     <% end %>
   </div>

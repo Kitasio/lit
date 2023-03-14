@@ -53,40 +53,56 @@
             end
           }
         >
-          <%= if image.unlocked do %>
-            <.edit_btn
-              url={~p"/#{@locale}/images/#{image.id}/edit"}
-              tooltip_text={gettext("Edit image")}
-            />
-            <.heart_button
-              phx-click={
-                JS.push("toggle-favorite", value: %{image_id: image.id})
-                |> JS.transition("scale-90", to: "#heart-#{image.id}")
-              }
-              favorite={image.favorite}
-              image_id={image.id}
-              tooltip_text={gettext("Add to favorites")}
-            />
-            <.download_btn
-              image_url={"#{image.url}?ik-attachment=true"}
-              tooltip_text={gettext("Download image")}
-            />
-            <.delete_img_button
-              phx-click={
-                JS.push("delete-image", value: %{image_id: image.id})
-                |> JS.transition("scale-90", to: "#delete-#{image.id}")
-                |> hide("#img-#{image.id}-box")
-              }
-              image_id={image.id}
-              tooltip_text={gettext("Delete image")}
-            />
-          <% else %>
-            <.unlock_img_button
-              phx-click={JS.push("unlock", value: %{image_id: image.id})}
-              image_id={image.id}
-              tooltip_text={gettext("Unlock image")}
-            />
-          <% end %>
+          <:top :if={image.unlocked}>
+            <div class="p-2.5 flex justify-around w-full">
+              <.heart_button
+                phx-click={
+                  JS.push("toggle-favorite", value: %{image_id: image.id})
+                  |> JS.transition("scale-90", to: "#heart-#{image.id}")
+                }
+                favorite={image.favorite}
+                image_id={image.id}
+                tooltip_text={gettext("Add to favorites")}
+              />
+              <.download_btn
+                image_url={"#{image.url}?ik-attachment=true"}
+                tooltip_text={gettext("Download image")}
+              />
+              <.delete_img_button
+                phx-click={
+                  JS.push("delete-image", value: %{image_id: image.id})
+                  |> JS.transition("scale-90", to: "#delete-#{image.id}")
+                  |> hide("#img-#{image.id}-box")
+                }
+                image_id={image.id}
+                tooltip_text={gettext("Delete image")}
+              />
+            </div>
+          </:top>
+          <:bottom :if={image.unlocked}>
+            <div class="flex gap-3">
+              <.link class="w-full" navigate={~p"/#{@locale}/images/#{image.id}/edit"}>
+                <.button class="w-full">
+                  <%= gettext("Edit") %>
+                </.button>
+              </.link>
+            </div>
+          </:bottom>
+          <:bottom :if={!image.unlocked}>
+            <div class="flex gap-3">
+              <.button class="w-full" phx-click={JS.push("unlock", value: %{image_id: image.id})}>
+                <%= gettext("Unlock") %>
+              </.button>
+              <.delete_img_button
+                phx-click={
+                  JS.push("delete-image", value: %{image_id: image.id})
+                  |> JS.transition("scale-90", to: "#delete-#{image.id}")
+                  |> hide("#img-#{image.id}-box")
+                }
+                image_id={image.id}
+              />
+            </div>
+          </:bottom>
         </.img>
       </div>
     <% end %>
