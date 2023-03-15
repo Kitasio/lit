@@ -67,6 +67,85 @@ defmodule LitcoversWeb.ImageLive.New do
   end
 
   @impl true
+  def handle_params(params, _url, socket) do
+    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+  end
+
+  defp apply_action(socket, :index, _params) do
+    socket
+  end
+
+  defp apply_action(socket, :redo, params) do
+    %{"image_id" => image_id} = params
+    image = Media.get_image_preload_all!(image_id)
+
+    unless socket.assigns.current_user.is_generating or socket.assigns.current_user.relaxed_mode or
+             image.ideas == [] do
+      prompt =
+        if image.prompt != nil do
+          case Metadata.get_prompt(image.prompt.id) do
+            nil ->
+              list_style_prompts() |> List.first()
+
+            prompt ->
+              prompt
+          end
+        else
+          list_style_prompts() |> List.first()
+        end
+
+      style_prompts = Metadata.list_all_where(prompt.realm, prompt.sentiment, prompt.type)
+
+      model_prompt =
+        CoverGen.Helpers.create_prompt(
+          image.ideas |> Enum.random() |> Map.fetch!(:idea),
+          image.prompt.style_prompt,
+          image.character_gender,
+          image.prompt.type
+        )
+
+      model_params = Replicate.Model.new(image.model_name)
+
+      model_params =
+        update_in(model_params.input, fn _input ->
+          %CoverGen.Replicate.Input{
+            width: image.width,
+            height: image.height,
+            prompt: model_prompt
+          }
+        end)
+
+      image_params = %{
+        description: image.description,
+        width: image.width,
+        height: image.height,
+        character_gender: image.character_gender
+      }
+
+      {:ok, image} = Media.create_image(socket.assigns.current_user, image_params)
+      CoverGen.CoverProducer.start_image_gen(image, model_params)
+
+      socket
+      |> assign(
+        image: image,
+        stage: get_stage(3),
+        prompt: prompt,
+        gender: image.character_gender,
+        style_prompt: prompt.style_prompt,
+        style_prompts: style_prompts,
+        prompt_id: prompt.id,
+        realm: prompt.realm,
+        sentiment: prompt.sentiment,
+        type: prompt.type,
+        aspect_ratio: get_aspect_ratio({image.width, image.height}),
+        is_generating: true
+      )
+    else
+      redirect(socket, to: ~p"/#{socket.assigns.locale}/images/new")
+    end
+  end
+
+  @impl true
   def handle_info({:gen_timeout, _image_id}, socket) do
     socket =
       assign(socket,
@@ -389,6 +468,14 @@ defmodule LitcoversWeb.ImageLive.New do
 
   defp get_width_and_height("square") do
     {512, 512}
+  end
+
+  defp get_aspect_ratio({512, 768}) do
+    "cover"
+  end
+
+  defp get_aspect_ratio({512, 512}) do
+    "square"
   end
 
   attr :aspect_ratio, :string, default: "cover"

@@ -265,6 +265,25 @@ defmodule LitcoversWeb.UiComponents do
     """
   end
 
+  attr :url, :string, required: true
+  attr :rest, :global
+  attr :tooltip_text, :string, default: nil
+
+  def regenerate_btn(assigns) do
+    ~H"""
+    <.link navigate={@url} class="group relative transition duration-150 ease-out" {@rest}>
+      <%= if @tooltip_text do %>
+        <.tooltip position="bottom">
+          <%= @tooltip_text %>
+        </.tooltip>
+      <% end %>
+      <div class="bg-sec/50 p-2.5 rounded-full">
+        <.icon name="hero-arrow-path" class="w-6 h-6 transition-all" />
+      </div>
+    </.link>
+    """
+  end
+
   attr :image_id, :string, required: true
   attr :rest, :global
   attr :tooltip_text, :string, default: nil

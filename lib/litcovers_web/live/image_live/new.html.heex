@@ -28,6 +28,7 @@
             <.header><%= gettext("Book description") %></.header>
             <.input
               field={{f, :description}}
+              value={@image.description}
               type="textarea"
               placeholder={@placeholder.description}
               rows="4"

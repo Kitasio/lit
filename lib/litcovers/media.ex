@@ -167,6 +167,7 @@ defmodule Litcovers.Media do
     |> limit_query(limit)
     |> offset_query(offset)
     |> Repo.all()
+    |> Repo.preload(:ideas)
   end
 
   def list_user_favorite_images(%Accounts.User{} = user) do
@@ -177,6 +178,7 @@ defmodule Litcovers.Media do
     |> unlocked_query()
     |> favorite_query()
     |> Repo.all()
+    |> Repo.preload(:ideas)
   end
 
   def list_user_favorite_images(%Accounts.User{} = user, limit, offset) do
@@ -189,6 +191,7 @@ defmodule Litcovers.Media do
     |> limit_query(limit)
     |> offset_query(offset)
     |> Repo.all()
+    |> Repo.preload(:ideas)
   end
 
   # defp limit_query(query, limit) do

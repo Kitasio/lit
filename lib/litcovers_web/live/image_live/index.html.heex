@@ -55,6 +55,11 @@
         >
           <:top :if={image.unlocked}>
             <div class="p-2.5 flex justify-around w-full">
+              <.regenerate_btn
+                :if={image.ideas != []}
+                url={~p"/#{@locale}/images/new/#{image.id}/redo"}
+                tooltip_text={gettext("Recreate")}
+              />
               <.heart_button
                 phx-click={
                   JS.push("toggle-favorite", value: %{image_id: image.id})
@@ -93,6 +98,10 @@
               <.button class="w-full" phx-click={JS.push("unlock", value: %{image_id: image.id})}>
                 <%= gettext("Unlock") %>
               </.button>
+              <.regenerate_btn
+                :if={image.ideas != []}
+                url={~p"/#{@locale}/images/new/#{image.id}/redo"}
+              />
               <.delete_img_button
                 phx-click={
                   JS.push("delete-image", value: %{image_id: image.id})

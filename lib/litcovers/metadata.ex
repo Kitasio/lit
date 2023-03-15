@@ -68,6 +68,8 @@ defmodule Litcovers.Metadata do
   """
   def get_prompt!(id), do: Repo.get!(Prompt, id)
 
+  def get_prompt(id), do: Repo.get(Prompt, id)
+
   @doc """
   Creates a prompt.
 

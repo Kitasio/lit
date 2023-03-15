@@ -93,7 +93,8 @@ defmodule LitcoversWeb.Router do
 
     live_session :enabled_user,
       on_mount: [{LitcoversWeb.UserAuth, :enabled_user}] do
-      live "/images/new", ImageLive.New
+      live "/images/new", ImageLive.New, :index
+      live "/images/new/:image_id/redo", ImageLive.New, :redo
 
       live "/images", ImageLive.Index, :index
       live "/images/unlocked", ImageLive.Index, :unlocked
