@@ -6,20 +6,19 @@ defmodule CoverGen.Create do
   alias Litcovers.Media.Image
 
   alias CoverGen.OAI
-  alias CoverGen.SD
   alias CoverGen.Helpers
   alias CoverGen.Spaces
 
   require Elixir.Logger
 
-  def new(%Image{} = image, %Model{} = sd_params) do
+  def new(%Image{} = image, %Model{} = params) do
     with _ <- lock_user(image.user_id),
-         {:ok, sd_res} <-
-           SD.diffuse(
-             sd_params,
+         {:ok, res} <-
+           Model.diffuse(
+             params,
              System.get_env("REPLICATE_TOKEN")
            ) do
-      %{"output" => image_list} = sd_res
+      %{"output" => image_list} = res
 
       case Spaces.save_to_spaces(image_list) do
         {:error, reason} ->
@@ -74,21 +73,19 @@ defmodule CoverGen.Create do
              image.character_gender,
              image.prompt.type
            ),
-         sd_params <-
-           SD.get_sd_params(
+         params <-
+           Model.get_params(
+             image.model_name,
              prompt,
-             image.character_gender,
-             image.prompt.type,
-             1,
              image.width,
              image.height
            ),
-         {:ok, sd_res} <-
-           SD.diffuse(
-             sd_params,
+         {:ok, res} <-
+           Model.diffuse(
+             params,
              System.get_env("REPLICATE_TOKEN")
            ) do
-      %{"output" => image_list} = sd_res
+      %{"output" => image_list} = res
 
       case Spaces.save_to_spaces(image_list) do
         {:error, reason} ->

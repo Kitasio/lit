@@ -139,6 +139,7 @@
             <.input field={{f, :character_gender}} value={@gender} type="hidden" />
             <.input field={{f, :width}} value={@width} type="hidden" />
             <.input field={{f, :height}} value={@height} type="hidden" />
+            <.input field={{f, :model_name}} value={@selected_model.name} type="hidden" />
           </div>
 
           <.generate_btn
@@ -197,6 +198,7 @@
           <.input field={{f, :character_gender}} value={@gender} type="hidden" />
           <.input field={{f, :width}} value={@width} type="hidden" />
           <.input field={{f, :height}} value={@height} type="hidden" />
+          <.input field={{f, :model_name}} value={@selected_model.name} type="hidden" />
         </div>
 
         <.generate_btn

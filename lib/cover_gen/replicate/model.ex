@@ -1,18 +1,72 @@
 defmodule CoverGen.Replicate.Model do
   alias CoverGen.Replicate.Model
   alias CoverGen.Replicate.Input
+  alias HTTPoison.Response
+  require Elixir.Logger
 
   @derive Jason.Encoder
   defstruct version: "9936c2001faa2194a261c01381f90e65261879985476014a0a37a334593a05eb",
             input: %Input{}
 
-  def new("stable-diffusion") do
-    %Model{
-      version: "8abccf52e7cba9f6e82317253f4a3549082e966db5584e92c808ece132037776",
-      input: %Input{
-        prompt: ""
+  # Returns a list of image links
+  def diffuse(_params, nil),
+    do: raise("REPLICATE_TOKEN was not set\nVisit https://replicate.com/account to get it")
+
+  def diffuse(params, replicate_token) do
+    body = Jason.encode!(params)
+    headers = [Authorization: "Token #{replicate_token}", "Content-Type": "application/json"]
+    options = [timeout: 50_000, recv_timeout: 165_000]
+
+    endpoint = "https://api.replicate.com/v1/predictions"
+
+    Logger.info("Generating images")
+
+    {:ok, %Response{body: res_body}} = HTTPoison.post(endpoint, body, headers, options)
+    %{"urls" => %{"get" => generation_url}} = Jason.decode!(res_body)
+    check_for_output(generation_url, headers, options)
+  end
+
+  defp check_for_output(generation_url, headers, options) do
+    %Response{body: res} = HTTPoison.get!(generation_url, headers, options)
+    res = res |> Jason.decode!()
+
+    case res["error"] do
+      nil ->
+        case res["status"] do
+          "starting" ->
+            Logger.debug("Starting")
+            :timer.seconds(2) |> Process.sleep()
+            check_for_output(generation_url, headers, options)
+
+          "processing" ->
+            Logger.debug("Processing")
+            :timer.seconds(1) |> Process.sleep()
+            check_for_output(generation_url, headers, options)
+
+          "succeeded" ->
+            Logger.debug("Succeeded")
+            {:ok, res}
+
+          "failed" ->
+            Logger.debug("Failed")
+            {:error, :sd_failed, "Generation failed, try again"}
+        end
+
+      error ->
+        {:error, :sd_failed, error}
+    end
+  end
+
+  def get_params(model_name, prompt, width, height) do
+    model = Model.new(model_name)
+
+    update_in(model.input, fn _input ->
+      %Input{
+        width: width,
+        height: height,
+        prompt: prompt
       }
-    }
+    end)
   end
 
   def new("couple5") do
@@ -38,6 +92,25 @@ defmodule CoverGen.Replicate.Model do
       version: "9936c2001faa2194a261c01381f90e65261879985476014a0a37a334593a05eb",
       input: %Input{
         prompt: "mdjrny-v4 style "
+      }
+    }
+  end
+
+  def new("stable-diffusion") do
+    %Model{
+      version: "8abccf52e7cba9f6e82317253f4a3549082e966db5584e92c808ece132037776",
+      input: %Input{
+        prompt: ""
+      }
+    }
+  end
+
+  # Default is stable-diffusion
+  def new(nil) do
+    %Model{
+      version: "8abccf52e7cba9f6e82317253f4a3549082e966db5584e92c808ece132037776",
+      input: %Input{
+        prompt: ""
       }
     }
   end

@@ -12,6 +12,7 @@ defmodule Litcovers.Media.Image do
     field :favorite, :boolean, default: false
     field :unlocked, :boolean, default: false
     field :seen, :boolean, default: false
+    field :model_name, :string
 
     belongs_to :user, Litcovers.Accounts.User
     belongs_to :prompt, Litcovers.Metadata.Prompt
@@ -33,7 +34,8 @@ defmodule Litcovers.Media.Image do
       :height,
       :character_gender,
       :favorite,
-      :seen
+      :seen,
+      :model_name
     ])
     |> validate_required([
       :description,
@@ -46,7 +48,7 @@ defmodule Litcovers.Media.Image do
 
   def ai_changeset(image, attrs) do
     image
-    |> cast(attrs, [:completed, :url])
+    |> cast(attrs, [:completed, :url, :model_name])
   end
 
   def unlocked_changeset(image, attrs) do

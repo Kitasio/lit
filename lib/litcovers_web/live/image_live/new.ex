@@ -169,7 +169,9 @@ defmodule LitcoversWeb.ImageLive.New do
   def handle_event("save_raw", %{"image" => image_params}, socket) do
     unless socket.assigns.current_user.is_generating or socket.assigns.current_user.relaxed_mode do
       %{"description" => description, "width" => width, "height" => height} = image_params
-      prompt = Replicate.Model.new(socket.assigns.selected_model.name)
+      model_name = socket.assigns.selected_model.name
+      image_params = %{image_params | "model_name" => model_name}
+      prompt = Replicate.Model.new(model_name)
 
       prompt =
         update_in(prompt.input, fn input ->
@@ -201,6 +203,8 @@ defmodule LitcoversWeb.ImageLive.New do
   def handle_event("save", %{"image" => image_params}, socket) do
     unless socket.assigns.current_user.is_generating or socket.assigns.current_user.relaxed_mode do
       %{"prompt_id" => prompt_id} = image_params
+      model_name = socket.assigns.selected_model.name
+      image_params = %{image_params | "model_name" => model_name}
       prompt = Metadata.get_prompt!(prompt_id)
 
       case Media.create_image(socket.assigns.current_user, prompt, image_params) do
@@ -312,9 +316,20 @@ defmodule LitcoversWeb.ImageLive.New do
       3 ->
         prompt = Metadata.get_prompt!(value)
 
+        model =
+          if socket.assigns.type == "setting" do
+            get_model("stable-diffusion")
+          else
+            get_model("couple5")
+          end
+
         socket =
           socket
-          |> assign(style_prompt: prompt.style_prompt, prompt_id: prompt.id)
+          |> assign(
+            style_prompt: prompt.style_prompt,
+            prompt_id: prompt.id,
+            selected_model: model
+          )
 
         {:noreply, socket}
 
