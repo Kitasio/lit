@@ -21,9 +21,9 @@ defmodule LitcoversWeb.UiComponents do
       <div class="flex items-center gap-5">
         <%= if @current_user do %>
           <.link navigate={"/#{@locale}/payment_options"}>
-            <div class="group relative text-accent-main font-bold border-l-2 rounded-full border-accent-sec px-3 p-1">
+            <div class="group relative">
               <span
-                class="transition-all inline-block"
+                class="transition-all inline-block flex items-center gap-2"
                 data-update-litcoins={
                   JS.transition(
                     {"ease-out duration-300", "opacity-50 -translate-y-1/3", "opacity-100"}
@@ -31,7 +31,8 @@ defmodule LitcoversWeb.UiComponents do
                 }
                 id={"litcoins-of-user-#{@current_user.id}"}
               >
-                <%= @current_user.litcoins %>
+                <span><.icon name="hero-book-open" class="w-6 h-6" /></span>
+                <span><%= @current_user.litcoins %></span>
               </span>
               <.tooltip class="mt-1" position="left">
                 <span class="text-xs font-normal text-slate-200"><%= gettext("Litcoins") %></span>
@@ -350,23 +351,7 @@ defmodule LitcoversWeb.UiComponents do
       "rounded-lg aspect-#{@aspect_ratio} transition-all duration-300 mx-auto",
       @class
     ]}>
-      <svg
-        class="animate-slow-spin"
-        xmlns="http://www.w3.org/2000/svg"
-        width="14"
-        height="14"
-        fill="none"
-      >
-        <g clip-path="url(#a)">
-          <g stroke="#fff" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#b)">
-            <path d="M7 1.167V3.5M7 10.5v2.333M2.876 2.876l1.65 1.65M9.473 9.473l1.651 1.651M1.167 7H3.5M10.5 7h2.333M2.876 11.124l1.65-1.65M9.473 4.527l1.651-1.651" />
-          </g>
-        </g>
-        <defs>
-          <clipPath><path fill="#fff" d="M0 0h14v14H0z" /></clipPath>
-          <clipPath><path fill="#fff" d="M0 0h14v14H0z" /></clipPath>
-        </defs>
-      </svg>
+      <.circle_loader />
     </div>
     """
   end
@@ -525,6 +510,23 @@ defmodule LitcoversWeb.UiComponents do
         />
       </svg>
     </.link>
+    """
+  end
+
+  def circle_loader(assigns) do
+    ~H"""
+    <div class="loader">
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+    </div>
     """
   end
 end
