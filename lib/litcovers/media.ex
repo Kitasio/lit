@@ -122,6 +122,7 @@ defmodule Litcovers.Media do
     |> completed_query()
     |> unlocked_query()
     |> Repo.all()
+    |> Repo.preload(:ideas)
   end
 
   def list_unlocked_user_images(%Accounts.User{} = user, limit, offset) do
@@ -133,6 +134,7 @@ defmodule Litcovers.Media do
     |> limit_query(limit)
     |> offset_query(offset)
     |> Repo.all()
+    |> Repo.preload(:ideas)
   end
 
   def list_user_images(%Accounts.User{} = user) do
@@ -141,6 +143,7 @@ defmodule Litcovers.Media do
     |> order_by_date_insert()
     |> completed_query()
     |> Repo.all()
+    |> Repo.preload(:ideas)
   end
 
   def list_user_covers(%Accounts.User{} = user) do
