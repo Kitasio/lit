@@ -251,6 +251,12 @@ defmodule Litcovers.Media do
   """
   def get_image!(id), do: Repo.get!(Image, id)
 
+  def get_image_preload_ideas!(id) do
+    Image
+    |> Repo.get!(id)
+    |> Repo.preload(:ideas)
+  end
+
   def get_image_preload!(id) do
     Image
     |> Repo.get!(id)

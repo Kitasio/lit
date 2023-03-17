@@ -90,7 +90,7 @@ defmodule LitcoversWeb.ImageLive.Index do
 
   @impl true
   def handle_event("toggle-favorite", %{"image_id" => image_id}, socket) do
-    image = Media.get_image!(image_id)
+    image = Media.get_image_preload_ideas!(image_id)
 
     case Media.update_image(image, %{favorite: !image.favorite}) do
       {:ok, image} ->

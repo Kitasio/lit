@@ -166,15 +166,17 @@ defmodule LitcoversWeb.UiComponents do
           <div
             x-show="showToolbar"
             x-transition.duration.200ms
-            class="rounded-full bg-sec/30 backdrop-blur gap-5 flex justify-center"
+            class="rounded-full gap-5 flex justify-end"
           >
             <%= render_slot(@top) %>
           </div>
         </div>
-        <div class="z-20 bottom-0 left-0 w-full absolute p-3">
-          <div x-show="showToolbar" x-transition.duration.200ms>
-            <%= render_slot(@bottom) %>
-          </div>
+        <div
+          x-show="showToolbar"
+          x-transition.duration.200ms
+          class="z-20 bottom-0 bg-sec/30 backdrop-blur left-0 w-full absolute p-5"
+        >
+          <%= render_slot(@bottom) %>
         </div>
       </div>
       """

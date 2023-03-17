@@ -31,16 +31,14 @@
   >
     <%= for image <- @images do %>
       <div id={"img-#{image.id}-box"} x-data="" class="relative">
-        <%= if !image.unlocked do %>
-          <div class="absolute top-5 right-5 z-20">
-            <div class="relative group">
-              <.icon name="hero-clock" class="w-6 h-6 text-orange-300" />
-              <.tooltip position="left">
-                <%= gettext("Locked image, dissapears after 24 hours") %>
-              </.tooltip>
-            </div>
+        <div :if={!image.unlocked} class="absolute top-5 left-5 z-30">
+          <div class="relative group">
+            <.icon name="hero-clock" class="w-6 h-6 text-orange-300" />
+            <.tooltip position="bottom">
+              <%= gettext("Locked image, dissapears after 24 hours") %>
+            </.tooltip>
           </div>
-        <% end %>
+        </div>
         <.img
           id={"#{image.id}-img"}
           locale={@locale}
@@ -53,26 +51,8 @@
             end
           }
         >
-          <:top :if={image.unlocked}>
-            <div class="p-2.5 flex justify-around w-full">
-              <.regenerate_btn
-                :if={image.ideas != []}
-                url={~p"/#{@locale}/images/new/#{image.id}/redo"}
-                tooltip_text={gettext("Recreate")}
-              />
-              <.heart_button
-                phx-click={
-                  JS.push("toggle-favorite", value: %{image_id: image.id})
-                  |> JS.transition("scale-90", to: "#heart-#{image.id}")
-                }
-                favorite={image.favorite}
-                image_id={image.id}
-                tooltip_text={gettext("Add to favorites")}
-              />
-              <.download_btn
-                image_url={"#{image.url}?ik-attachment=true"}
-                tooltip_text={gettext("Download image")}
-              />
+          <:top>
+            <div class="p-2.5 flex justify-end w-full">
               <.delete_img_button
                 phx-click={
                   JS.push("delete-image", value: %{image_id: image.id})
@@ -80,7 +60,6 @@
                   |> hide("#img-#{image.id}-box")
                 }
                 image_id={image.id}
-                tooltip_text={gettext("Delete image")}
               />
             </div>
           </:top>
@@ -91,6 +70,19 @@
                   <%= gettext("Edit") %>
                 </.button>
               </.link>
+              <.regenerate_btn
+                :if={!Enum.empty?(image.ideas)}
+                url={~p"/#{@locale}/images/new/#{image.id}/redo"}
+              />
+              <.heart_button
+                phx-click={
+                  JS.push("toggle-favorite", value: %{image_id: image.id})
+                  |> JS.transition("scale-90", to: "#heart-#{image.id}")
+                }
+                favorite={image.favorite}
+                image_id={image.id}
+              />
+              <.download_btn image_url={"#{image.url}?ik-attachment=true"} />
             </div>
           </:bottom>
           <:bottom :if={!image.unlocked}>
@@ -99,16 +91,8 @@
                 <%= gettext("Unlock") %>
               </.button>
               <.regenerate_btn
-                :if={image.ideas != []}
+                :if={!Enum.empty?(image.ideas)}
                 url={~p"/#{@locale}/images/new/#{image.id}/redo"}
-              />
-              <.delete_img_button
-                phx-click={
-                  JS.push("delete-image", value: %{image_id: image.id})
-                  |> JS.transition("scale-90", to: "#delete-#{image.id}")
-                  |> hide("#img-#{image.id}-box")
-                }
-                image_id={image.id}
               />
             </div>
           </:bottom>
