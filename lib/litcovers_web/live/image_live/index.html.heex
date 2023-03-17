@@ -6,7 +6,7 @@
   current_user={@current_user}
   show_cover_pinger={Media.has_unseen_covers?(@current_user)}
 />
-<div x-data="" class="bg-sec grow px-8 py-10">
+<div x-data="" class="grow px-8 py-10">
   <div class="flex gap-10 text-sm">
     <.link navigate={~p"/#{@locale}/images/all"}>
       <span x-bind:class={"'#{@live_action}' == 'all' && 'text-accent-main'"}>

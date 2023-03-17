@@ -15,7 +15,7 @@ defmodule LitcoversWeb.UiComponents do
 
   def navbar(assigns) do
     ~H"""
-    <div class="col-span-12 py-7 px-8 flex justify-between items-center relative">
+    <div class="bg-black/20 backdrop-blur-sm col-span-12 py-7 px-8 flex justify-between items-center relative">
       <.logo />
 
       <div class="flex items-center gap-5">
@@ -60,13 +60,13 @@ defmodule LitcoversWeb.UiComponents do
     </div>
 
     <%= if @current_user != nil and @show_bottom_links do %>
-      <div class="col-span-12 flex border-b-2 border-accent-sec">
-        <div
-          x-data=""
-          class="flex items-center bg-main -mb-0.5 border-accent-sec"
-          x-bind:class={"'#{@request_path}' == '/#{@locale}/images/new' ? 'bg-sec rounded-tr-lg border-t-2 border-r-2' : 'bg-main border-b-2'"}
-        >
-          <.link navigate={"/#{@locale}/images/new"} class="flex items-center gap-2 w-full px-8 py-4">
+      <div class="bg-black/20 backdrop-blur-sm col-span-12 flex">
+        <div x-data="" class="flex items-center border-accent-main">
+          <.link
+            navigate={"/#{@locale}/images/new"}
+            class="flex items-center gap-2 ml-8 mr-4 pr-4 py-4"
+            x-bind:class={"'#{@request_path}' == '/#{@locale}/images/new' ? 'border-accent-main border-b-2' : 'bg-transparent'"}
+          >
             <.icon name="hero-plus-solid" class="w-3 h-3 text-slate-200" />
             <span
               class="text-sm sm:text-base"
@@ -77,13 +77,12 @@ defmodule LitcoversWeb.UiComponents do
           </.link>
         </div>
 
-        <div
-          :if={@images_exist}
-          class="relative flex items-center -mb-0.5 border-accent-sec"
-          x-data=""
-          x-bind:class={"'#{@request_path}' == '/#{@locale}/images' ? 'bg-sec rounded-tl-lg rounded-tr-lg border-l-2 border-t-2 border-r-2' : 'bg-main border-b-2'"}
-        >
-          <.link navigate={"/#{@locale}/images"} class="flex items-center gap-2 w-full px-8 py-4">
+        <div :if={@images_exist} class="relative flex items-center border-accent-main" x-data="">
+          <.link
+            navigate={"/#{@locale}/images"}
+            class="flex items-center gap-2 mx-4 pr-2 py-4"
+            x-bind:class={"'#{@request_path}' == '/#{@locale}/images' ? 'border-accent-main border-b-2' : ''"}
+          >
             <.icon name="hero-square-3-stack-3d-solid" class="w-3 h-3 text-slate-200" />
             <span
               class="text-sm sm:text-base"
@@ -97,13 +96,12 @@ defmodule LitcoversWeb.UiComponents do
           <% end %>
         </div>
 
-        <div
-          :if={@covers_exist}
-          class="relative flex items-center -mb-0.5 border-accent-sec"
-          x-data=""
-          x-bind:class={"'#{@request_path}' == '/#{@locale}/covers' ? 'bg-sec rounded-tl-lg rounded-tr-lg border-l-2 border-t-2 border-r-2' : 'bg-main border-b-2'"}
-        >
-          <.link navigate={"/#{@locale}/covers"} class="flex items-center gap-2 w-full px-8 py-4">
+        <div :if={@covers_exist} class="relative flex items-center border-accent-sec" x-data="">
+          <.link
+            navigate={"/#{@locale}/covers"}
+            class="flex items-center gap-2 mx-4 pr-2 py-4"
+            x-bind:class={"'#{@request_path}' == '/#{@locale}/covers' ? 'border-accent-main border-b-2' : ''"}
+          >
             <.icon name="hero-book-open-solid" class="w-3 h-3 text-slate-200" />
             <span
               class="text-sm sm:text-base"
