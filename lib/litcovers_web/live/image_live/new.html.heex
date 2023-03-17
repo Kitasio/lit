@@ -28,9 +28,14 @@
             <.header><%= gettext("Book description") %></.header>
             <.input
               field={{f, :description}}
-              value={@image.description}
               type="textarea"
-              placeholder={@placeholder.description}
+              placeholder={
+                if @live_action == :index do
+                  @placeholder.description
+                else
+                  @image.description
+                end
+              }
               rows="4"
             />
           </div>
