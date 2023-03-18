@@ -30,4 +30,21 @@ defmodule CoverGen.Helpers do
         "woman"
     end
   end
+
+  def hight_quality_transform(link) do
+    uri = link |> URI.parse()
+    %URI{host: host, path: path} = uri
+
+    case host do
+      "ik.imagekit.io" ->
+        vinyetta = "tr:q-100,f-jpg"
+        {filename, list} = path |> String.split("/") |> List.pop_at(-1)
+        bucket = list |> List.last()
+
+        Path.join(["https://", host, bucket, vinyetta, filename])
+
+      _ ->
+        link
+    end
+  end
 end

@@ -23,11 +23,12 @@
         >
           <:bottom>
             <div class="flex gap-3">
-              <.link class="w-full" href={"#{image.url}?ik-attachment=true"} target="_blank">
-                <.button
-                  class="w-full"
-                  phx-click={JS.push("unlock", value: %{image_id: image.id})}
-                >
+              <.link
+                class="w-full"
+                href={"#{image.url |> CoverGen.Helpers.hight_quality_transform()}?ik-attachment=true"}
+                target="_blank"
+              >
+                <.button class="w-full">
                   <%= gettext("Download") %>
                 </.button>
               </.link>

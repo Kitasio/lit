@@ -10,7 +10,7 @@ defmodule LitcoversWeb.ImageLive.Show do
   def mount(%{"locale" => locale, "id" => id}, _session, socket) do
     Gettext.put_locale(locale)
     image = Media.get_image!(id)
-    image_base64 = image.url |> CoverGen.Overlay.insert_vinyetta() |> img_url_to_base64()
+    image_base64 = image.url |> img_url_to_base64()
 
     author_current_font = fonts_list() |> List.first()
     author_font_base64 = author_current_font |> redis_get_or_set_font()

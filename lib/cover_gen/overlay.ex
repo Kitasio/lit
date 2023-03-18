@@ -72,7 +72,7 @@ defmodule CoverGen.Overlay do
 
     case host do
       "ik.imagekit.io" ->
-        vinyetta = "tr:w-512,h-768,oi-vin.png,ow-512,oh-768"
+        vinyetta = "tr:w-512,h-768,oi-vin.png,ow-512,oh-768,q-100,f-jpg"
         {filename, list} = path |> String.split("/") |> List.pop_at(-1)
         bucket = list |> List.last()
 
