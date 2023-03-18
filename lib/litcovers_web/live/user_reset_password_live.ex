@@ -6,7 +6,7 @@ defmodule LitcoversWeb.UserResetPasswordLive do
   def render(assigns) do
     ~H"""
     <.navbar locale={@locale} request_path={"/#{@locale}/users/reset_password"} />
-    <div class="p-10 pt-2 sm:my-5 lg:my-20 mx-auto w-full max-w-md rounded-lg sm:border-2 border-stroke-main">
+    <div class="bg-main p-10 pt-2 sm:my-5 lg:my-20 mx-auto w-full max-w-md rounded-lg sm:border-2 border-stroke-main">
       <.header class="text-center pt-5"><%= gettext("Reset Password") %></.header>
 
       <.simple_form
@@ -36,8 +36,7 @@ defmodule LitcoversWeb.UserResetPasswordLive do
 
       <p class="text-center mt-4">
         <.link href={~p"/#{@locale}/users/register"}><%= gettext("Register") %></.link>
-        |
-        <.link href={~p"/#{@locale}/users/log_in"}><%= gettext("Log in") %></.link>
+        | <.link href={~p"/#{@locale}/users/log_in"}><%= gettext("Log in") %></.link>
       </p>
     </div>
     """

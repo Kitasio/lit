@@ -5,19 +5,19 @@ defmodule LitcoversWeb.UserSettingsLive do
 
   def render(assigns) do
     ~H"""
-    <.navbar 
-      locale={@locale} 
+    <.navbar
+      locale={@locale}
       request_path={"/#{@locale}/users/settings"}
       current_user={@current_user}
       show_bottom_links={false}
     />
 
-    <div 
-      x-data={"{
+    <div
+      x-data="{
         changeEmail: false,
         changePassword: false
-      }"}
-      class="px-7 w-96 max-w-md mx-auto"
+      }"
+      class="bg-main my-10 rounded-xl px-7 w-96 max-w-md mx-auto"
     >
       <.simple_form
         :let={f}
@@ -79,8 +79,10 @@ defmodule LitcoversWeb.UserSettingsLive do
           <.button phx-disable-with="Changing...">Change Password</.button>
         </:actions>
       </.simple_form>
-      <div class="mt-5">
-        <.link href={~p"/#{@locale}/users/log_out"} method="delete">Log out</.link>
+      <div class="my-10 w-full flex justify-center">
+        <.link href={~p"/#{@locale}/users/log_out"} method="delete">
+          Log out
+        </.link>
       </div>
     </div>
     """
@@ -88,6 +90,7 @@ defmodule LitcoversWeb.UserSettingsLive do
 
   def mount(%{"token" => token, "locale" => locale}, _session, socket) do
     Gettext.put_locale(locale)
+
     socket =
       case Accounts.update_user_email(socket.assigns.current_user, token) do
         :ok ->

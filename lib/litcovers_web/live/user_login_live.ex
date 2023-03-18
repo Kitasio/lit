@@ -10,7 +10,7 @@ defmodule LitcoversWeb.UserLoginLive do
   def render(assigns) do
     ~H"""
     <.navbar locale={@locale} request_path={"/#{@locale}/users/log_in"} />
-    <div class="p-10 sm:my-5 lg:my-20 mx-auto max-w-md rounded-lg sm:border-2 border-stroke-main">
+    <div class="bg-main p-10 sm:my-5 lg:my-20 mx-auto max-w-md rounded-lg sm:border-2 border-stroke-main">
       <.header class="text-center">
         <%= gettext("Sign in to account") %>
         <:subtitle>

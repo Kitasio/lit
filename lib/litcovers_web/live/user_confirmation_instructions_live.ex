@@ -40,7 +40,7 @@ defmodule LitcoversWeb.UserConfirmationInstructionsLive do
         <%= gettext("We sent confirmation instructions to your email address") %>
       </h1>
     </div>
-    <div class="p-10 my-5 lg:my-20 mx-auto max-w-md rounded-lg sm:border-2 border-stroke-main">
+    <div class="bg-main p-10 my-5 lg:my-20 mx-auto max-w-md rounded-lg sm:border-2 border-stroke-main">
       <.header><%= gettext("Resend confirmation instructions") %></.header>
 
       <.simple_form :let={f} for={:user} id="resend_confirmation_form" phx-submit="send_instructions">
@@ -54,8 +54,7 @@ defmodule LitcoversWeb.UserConfirmationInstructionsLive do
 
       <p class="mt-5 text-center">
         <.link href={~p"/#{@locale}/users/register"}><%= gettext("Register") %></.link>
-        |
-        <.link href={~p"/#{@locale}/users/log_in"}><%= gettext("Log in") %></.link>
+        | <.link href={~p"/#{@locale}/users/log_in"}><%= gettext("Log in") %></.link>
       </p>
     </div>
     """
