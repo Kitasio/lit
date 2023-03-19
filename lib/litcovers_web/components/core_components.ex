@@ -154,8 +154,11 @@ defmodule LitcoversWeb.CoreComponents do
       ]}
       {@rest}
     >
-      <div class="flex justify-between items-center">
-        <p class="text-[0.8125rem] leading-5"><%= msg %></p>
+      <.icon
+        name="hero-x-mark-mini"
+        class="absolute w-5 h-5 top-2 right-2 bg-slate-200 hover:bg-slate-400 transition"
+      />
+      <div class="relative flex gap-3 items-center">
         <.icon
           :if={@kind == :info}
           name="hero-check-circle-solid"
@@ -166,6 +169,7 @@ defmodule LitcoversWeb.CoreComponents do
           name="hero-exclamation-triangle-solid"
           class="h-6 w-6 bg-red-300 shrink-0"
         />
+        <p class="text-[0.8125rem] leading-5"><%= msg %></p>
       </div>
     </div>
     """

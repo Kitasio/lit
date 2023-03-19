@@ -31,7 +31,7 @@ defmodule CoverGen.Helpers do
     end
   end
 
-  def hight_quality_transform(link) do
+  def high_quality_transform(link) do
     uri = link |> URI.parse()
     %URI{host: host, path: path} = uri
 
