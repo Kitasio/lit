@@ -47,6 +47,7 @@ defmodule Litcovers.Media do
   def has_unseen_images?(%Accounts.User{} = user) do
     Image
     |> user_images_query(user)
+    |> completed_query()
     |> all_unseen_images_query()
     |> Repo.aggregate(:count) > 0
   end
