@@ -453,6 +453,7 @@ defmodule LitcoversWeb.ImageLive.New do
             Logger.info("Adding #{litcoins} litcoins to user #{socket.assigns.current_user.id}")
             {:ok, user} = Accounts.add_litcoins(socket.assigns.current_user, litcoins)
             send(caller, {:update_user, user})
+            send(caller, {:end_relax, user})
 
           {:error, reason} ->
             Logger.error(
