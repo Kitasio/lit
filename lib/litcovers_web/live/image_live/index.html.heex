@@ -25,6 +25,17 @@
     </.link>
   </div>
   <div
+    :if={@images == []}
+    class="mt-7 grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-10 lg:gap-20"
+  >
+    <.link
+      navigate={~p"/#{@locale}/images/new"}
+      class="aspect-cover bg-sec/70 rounded-xl border-2 border-sec text-slate-300 flex items-center justify-center"
+    >
+      <%= gettext("Nothing here so far") %>
+    </.link>
+  </div>
+  <div
     id="user-images"
     phx-update="append"
     class="mt-7 grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-10 lg:gap-20"
