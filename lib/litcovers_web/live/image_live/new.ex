@@ -451,9 +451,10 @@ defmodule LitcoversWeb.ImageLive.New do
         case Yookassa.Helpers.check_transaction(transaction) do
           {:ok, {:succeeded, litcoins}} ->
             Logger.info("Adding #{litcoins} litcoins to user #{socket.assigns.current_user.id}")
+            params = %{relaxed_mode: false, recent_generations: 0}
+            {:ok, _user} = Accounts.update_relaxed_mode(socket.assigns.current_user, params)
             {:ok, user} = Accounts.add_litcoins(socket.assigns.current_user, litcoins)
             send(caller, {:update_user, user})
-            send(caller, {:end_relax, user})
 
           {:error, reason} ->
             Logger.error(

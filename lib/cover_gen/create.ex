@@ -34,7 +34,7 @@ defmodule CoverGen.Create do
           {:ok, user} = release_user(image.user_id)
           {:ok, user} = Accounts.inc_recent_generations(user)
 
-          if user.recent_generations >= user.litcoins * 10 + 10 do
+          if user.recent_generations >= user.litcoins * 1 + 1 do
             broadcast(image.user_id, image.id, :relaxed_mode)
           else
             broadcast(image.user_id, image.id, :gen_complete)
