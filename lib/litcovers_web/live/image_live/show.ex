@@ -5,12 +5,19 @@ defmodule LitcoversWeb.ImageLive.Show do
 
   alias Litcovers.Metadata
   alias Litcovers.Media
+  alias CoverGen.Imagekit
 
   @impl true
   def mount(%{"locale" => locale, "id" => id}, _session, socket) do
     Gettext.put_locale(locale)
     image = Media.get_image!(id)
-    image_base64 = image.url |> img_url_to_base64()
+
+    image_base64 =
+      image.url
+      |> Imagekit.transform("oi-vin-top.png,oy-0")
+      |> Imagekit.transform("oi-vin-bot.png,oy-N0")
+      |> Imagekit.transform("q-100,f-jpg")
+      |> img_url_to_base64()
 
     author_current_font = fonts_list() |> List.first()
     author_font_base64 = author_current_font |> redis_get_or_set_font()
