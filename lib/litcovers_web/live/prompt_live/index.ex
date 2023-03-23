@@ -42,6 +42,27 @@ defmodule LitcoversWeb.PromptLive.Index do
   end
 
   defp list_prompts do
-    Metadata.list_prompts()
+    prompts = Metadata.list_prompts()
+
+    prompt_name_as_integers(prompts)
+    |> sort_by(:name)
+  end
+
+  defp sort_by(prompts, value) do
+    Enum.sort_by(prompts, &Map.fetch(&1, value))
+  end
+
+  defp prompt_name_as_integers(prompts) when is_list(prompts) do
+    Stream.map(prompts, fn prompt ->
+      Map.update!(prompt, :name, fn x ->
+        case Integer.parse(x) do
+          {integer, _remainder} ->
+            integer
+
+          :error ->
+            x
+        end
+      end)
+    end)
   end
 end

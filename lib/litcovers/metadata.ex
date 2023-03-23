@@ -119,7 +119,10 @@ defmodule Litcovers.Metadata do
 
   """
   def delete_prompt(%Prompt{} = prompt) do
-    Repo.delete(prompt)
+    prompt
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.no_assoc_constraint(:images)
+    |> Repo.delete()
   end
 
   @doc """

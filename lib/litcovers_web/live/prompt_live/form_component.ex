@@ -6,7 +6,7 @@ defmodule LitcoversWeb.PromptLive.FormComponent do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
+    <div class="bg-sec">
       <.header>
         <%= @title %>
         <:subtitle>Use this form to manage prompt records in your database.</:subtitle>

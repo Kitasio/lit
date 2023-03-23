@@ -11,6 +11,8 @@ defmodule Litcovers.Metadata.Prompt do
     field :type, Ecto.Enum, values: [:setting, :portrait, :couple]
     field :secondary_url, :string, default: nil
 
+    has_many :images, Litcovers.Media.Image
+
     timestamps()
   end
 
