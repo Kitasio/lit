@@ -22,6 +22,8 @@ defmodule LitcoversWeb.ImageLive.Show do
     author_current_font = fonts_list() |> List.first()
     author_font_base64 = author_current_font |> redis_get_or_set_font()
 
+    socket = push_event(socket, "init-wasm", %{})
+
     {:ok,
      assign(socket,
        locale: locale,
