@@ -23,6 +23,21 @@
 </div>
 
 <div class={[
+  "py-14 px-5 sm:px-8 h-screen max-w-screen-lg mx-auto",
+  "flex flex-col lg:flex-row lg:items-center"
+]}>
+  <div class="lg:flex-1 lg:w-1/2 space-y-5">
+    <.h1><%= gettext("Whate are we doing?") %></.h1>
+    <.p><%= gettext("lorem ipsum dolor sit amet") %></.p>
+    <.p><%= gettext("lorem ipsum dolor sit amet") %></.p>
+  </div>
+  <img
+    class="lg:flex-1 lg:w-1/2 object-cover"
+    src={"https://ik.imagekit.io/soulgenesis/landing_phone_#{@locale}.png"}
+  />
+</div>
+
+<div class={[
   "px-5 sm:px-8 h-screen",
   "bg-center bg-cover lg:bg-[url('https://ik.imagekit.io/soulgenesis/tr:f-jpg,q-100/landing_stage_1.jpg')]",
   "flex lg:items-center lg:justify-end"

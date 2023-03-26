@@ -478,6 +478,24 @@ defmodule LitcoversWeb.CoreComponents do
     """
   end
 
+  @doc """
+  Renders an p tag.
+  """
+  attr :class, :string, default: nil
+
+  slot :inner_block, required: true
+
+  def p(assigns) do
+    ~H"""
+    <p class={[
+      "text-slate-200 font-light lg:text-xl",
+      @class
+    ]}>
+      <%= render_slot(@inner_block) %>
+    </p>
+    """
+  end
+
   @doc ~S"""
   Renders a table with generic styling.
 

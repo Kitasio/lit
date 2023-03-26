@@ -548,7 +548,7 @@ defmodule LitcoversWeb.UiComponents do
     <div class="mt-10 flex flex-col gap-7 lg:gap-14">
       <div :for={entry <- @entries} class="flex gap-5 items-center">
         <.icon name={entry.icon} class="flex-none w-10 h-10" />
-        <p class="max-w-md font-light lg:text-xl"><%= entry.text %></p>
+        <.p class="max-w-md"><%= entry.text %></.p>
       </div>
     </div>
     """

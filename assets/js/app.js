@@ -110,6 +110,13 @@ window.addEventListener("phx:init-wasm", (_) => {
   run()
 })
 
+window.addEventListener("phx:update-description-input", (e) => {
+  let el = document.getElementById("description-input")
+  if (el) {
+    el.value = e.detail.description
+  }
+})
+
 window.addEventListener("phx:update-litcoins", (e) => {
   let el = document.getElementById(e.detail.id)
   if(el) {

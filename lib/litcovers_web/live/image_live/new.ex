@@ -131,6 +131,8 @@ defmodule LitcoversWeb.ImageLive.New do
         Media.create_idea(new_image, %{idea: i.idea})
       end
 
+      socket = push_event(socket, "update-description-input", %{description: image.description})
+
       socket
       |> assign(
         image: new_image,
@@ -183,6 +185,8 @@ defmodule LitcoversWeb.ImageLive.New do
   @impl true
   def handle_info({:gen_complete, image_id}, socket) do
     image = Media.get_image_preload!(image_id)
+
+    socket = push_event(socket, "update-description-input", %{description: image.description})
 
     {:noreply,
      socket
