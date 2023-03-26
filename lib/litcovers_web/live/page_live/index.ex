@@ -15,6 +15,33 @@ defmodule LitcoversWeb.PageLive.Index do
     {:ok, assign(socket, locale: locale, current_user: current_user)}
   end
 
+  def stage_one_steps do
+    [
+      %{
+        icon: "hero-user-circle",
+        text: gettext("Fast, non-binding registration.")
+      },
+      %{
+        icon: "hero-cog-solid",
+        text:
+          gettext(
+            "Simple settings. You only need to choose the image format and the style in which it will be executed."
+          )
+      },
+      %{
+        icon: "hero-pencil",
+        text:
+          gettext(
+            "Enter a brief description of your book or an approximate image of what should be in the image."
+          )
+      },
+      %{
+        icon: "hero-play-circle",
+        text: gettext("You are ready to start - now you can start generating images.")
+      }
+    ]
+  end
+
   def showcase do
     [
       %{

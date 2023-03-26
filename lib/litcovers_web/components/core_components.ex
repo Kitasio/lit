@@ -460,6 +460,24 @@ defmodule LitcoversWeb.CoreComponents do
     """
   end
 
+  @doc """
+  Renders an h1 header.
+  """
+  attr :class, :string, default: nil
+
+  slot :inner_block, required: true
+
+  def h1(assigns) do
+    ~H"""
+    <h1 class={[
+      "text-slate-200 font-semibold text-2xl lg:text-3xl",
+      @class
+    ]}>
+      <%= render_slot(@inner_block) %>
+    </h1>
+    """
+  end
+
   @doc ~S"""
   Renders a table with generic styling.
 
