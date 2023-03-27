@@ -74,7 +74,7 @@
       class="my-14 sticky top-20"
     >
       <div
-        class="relative max-w-lg overflow-hidden rounded-lg transition-all duration-300 mx-auto"
+        class="relative max-w-md overflow-hidden transition-all duration-300 mx-auto"
         x-on:mouseenter="showToolbar = true"
         x-on:mouseleave="showToolbar = false"
         id={"img-box-#{@image.id}"}
@@ -89,7 +89,7 @@
           x-on:load="showImage = true"
           alt="Generated picture"
           class={[
-            "w-full h-full object-cover"
+            "w-full h-full object-cover rounded-lg"
           ]}
         />
         <button
