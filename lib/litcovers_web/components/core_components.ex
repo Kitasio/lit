@@ -488,7 +488,7 @@ defmodule LitcoversWeb.CoreComponents do
   def p(assigns) do
     ~H"""
     <p class={[
-      "text-slate-200 font-light lg:text-xl",
+      "text-slate-200 lg:leading-relaxed font-light lg:text-lg",
       @class
     ]}>
       <%= render_slot(@inner_block) %>

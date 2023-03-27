@@ -23,27 +23,128 @@
 </div>
 
 <div class={[
-  "py-14 px-5 sm:px-8 h-screen max-w-screen-lg mx-auto",
-  "flex flex-col lg:flex-row lg:items-center"
+  "lg:h-screen",
+  "bg-center bg-cover lg:bg-[url('https://ik.imagekit.io/soulgenesis/tr:q-70/flying_books_landing.png')]",
+  "lg:flex lg:items-center"
 ]}>
-  <div class="lg:flex-1 lg:w-1/2 space-y-5">
-    <.h1><%= gettext("Whate are we doing?") %></.h1>
-    <.p><%= gettext("lorem ipsum dolor sit amet") %></.p>
-    <.p><%= gettext("lorem ipsum dolor sit amet") %></.p>
+  <div class={[
+    "py-14 px-5 sm:px-8 max-w-screen-lg mx-auto",
+    "flex flex-col lg:flex-row lg:items-center"
+  ]}>
+    <div class="lg:flex-1 lg:w-1/2 space-y-5 lg:space-y-14">
+      <.h1><%= gettext("Welcome to Litcovers") %></.h1>
+      <.p>
+        <%= gettext(
+          "The ultimate platform for creating eye-catching covers, posters, and more, quickly and easily. Our cutting-edge technology utilizes advanced artificial intelligence, along with intuitive text overlay tools, to help you craft professional-looking designs in no time."
+        ) %>
+      </.p>
+      <.p>
+        <%= gettext(
+          "Whether you're promoting your latest book, advertising an event, or simply looking to spruce up your social media profile, Litcovers has you covered. Get started today and unleash your creativity!"
+        ) %>
+      </.p>
+    </div>
+    <img
+      class="lg:flex-1 lg:w-1/2 object-cover"
+      loading="lazy"
+      src={"https://ik.imagekit.io/soulgenesis/landing_phone_#{@locale}.png"}
+    />
   </div>
-  <img
-    class="lg:flex-1 lg:w-1/2 object-cover"
-    src={"https://ik.imagekit.io/soulgenesis/landing_phone_#{@locale}.png"}
-  />
 </div>
 
 <div class={[
-  "px-5 sm:px-8 h-screen",
-  "bg-center bg-cover lg:bg-[url('https://ik.imagekit.io/soulgenesis/tr:f-jpg,q-100/landing_stage_1.jpg')]",
+  "px-5 sm:px-8 lg:h-screen",
+  "bg-center bg-cover lg:bg-[url('https://ik.imagekit.io/soulgenesis/tr:f-jpg,pr-true,q-100/landing_stage_1.jpg')]",
   "flex lg:items-center lg:justify-end"
 ]}>
   <div class="mt-10 lg:mt-0 lg:pr-36 xl:pr-48 2xl:pr-56">
     <.steps header={gettext("Stage one")} entries={stage_one_steps()} />
+  </div>
+</div>
+
+<div class={[
+  "mt-10 lg:mt-0 px-5 sm:px-8 lg:h-screen",
+  "bg-center bg-cover lg:bg-[url('https://ik.imagekit.io/soulgenesis/tr:f-jpg,pr-true,q-100/landing_stage_2.jpg')]",
+  "flex lg:items-center"
+]}>
+  <div class={[
+    "mt-10 lg:mt-0 w-full",
+    "lg:px-20",
+    "flex flex-col lg:flex-row gap-10 justify-between"
+  ]}>
+    <div class="space-y-5 lg:space-y-14 max-w-md">
+      <.p>
+        <%= gettext(
+          "With our system, you can easily and conveniently create images in unlimited quantities – pay for the result only when you get it."
+        ) %>
+      </.p>
+      <.p>
+        <%= gettext(
+          "You can change the image styles at any time, and adjust the description by removing, adding and changing the details you need."
+        ) %>
+      </.p>
+      <.p><%= gettext("Try it") %></.p>
+    </div>
+    <.steps header={gettext("Stage two")} entries={stage_two_steps()} />
+  </div>
+</div>
+
+<div class={[
+  "mt-10 lg:mt-0 px-5 sm:px-8",
+  "lg:h-screen max-w-screen-lg mx-auto",
+  "flex items-center"
+]}>
+  <div>
+    <.h1><%= gettext("Examples of generated images:") %></.h1>
+    <img
+      class="mt-10 w-full object-cover lg:hidden"
+      loading="lazy"
+      src="https://ik.imagekit.io/soulgenesis/image_examples_mobile.png"
+    />
+    <img
+      class="hidden mt-10 w-full object-cover lg:inline"
+      loading="lazy"
+      src="https://ik.imagekit.io/soulgenesis/image_examples_desktop.png"
+    />
+  </div>
+</div>
+
+<div class={[
+  "mt-10 lg:mt-0 px-5 sm:px-8 lg:h-screen",
+  "bg-center bg-cover lg:bg-[url('https://ik.imagekit.io/soulgenesis/tr:f-jpg,pr-true,q-100/landing_stage_3.jpg')]",
+  "flex lg:items-center"
+]}>
+  <div class={[
+    "mt-10 lg:mt-0 w-full",
+    "lg:px-20",
+    "flex flex-col lg:flex-row gap-10 justify-between"
+  ]}>
+    <.steps header={gettext("Stage three")} entries={stage_three_steps()} />
+  </div>
+</div>
+
+<div class={[
+  "mt-10 lg:mt-0 px-5 sm:px-8",
+  "lg:h-screen max-w-screen-lg mx-auto",
+  "flex items-center"
+]}>
+  <div>
+    <.h1><%= gettext("Examples of created covers:") %></.h1>
+    <img
+      class="mt-10 w-full object-cover lg:hidden"
+      loading="lazy"
+      src={"https://ik.imagekit.io/soulgenesis/cover_examples_mobile_#{@locale}.png"}
+    />
+    <img
+      class="hidden mt-10 w-full object-cover lg:inline"
+      loading="lazy"
+      src={"https://ik.imagekit.io/soulgenesis/cover_examples_desktop_#{@locale}.png"}
+    />
+    <div class="mt-5 flex items-center justify-end">
+      <.button>
+        <.link navigate={~p"/#{@locale}/images/new"}><%= gettext("Try it yourself") %></.link>
+      </.button>
+    </div>
   </div>
 </div>
 

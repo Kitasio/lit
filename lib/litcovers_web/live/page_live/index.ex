@@ -42,6 +42,52 @@ defmodule LitcoversWeb.PageLive.Index do
     ]
   end
 
+  def stage_two_steps do
+    [
+      %{
+        icon: "hero-arrow-path",
+        text: gettext("Unlimited generation – the result is guaranteed.")
+      },
+      %{
+        icon: "hero-adjustments-horizontal",
+        text: gettext("Adjust the settings – improve the result.")
+      },
+      %{
+        icon: "hero-pencil-square",
+        text: gettext("Change the description – leave only the right one.")
+      },
+      %{
+        icon: "hero-check-badge",
+        text: gettext("Find the perfect result.")
+      }
+    ]
+  end
+
+  def stage_three_steps do
+    [
+      %{
+        icon: "hero-arrows-pointing-out",
+        text: gettext("Increase the image quality to the maximum.")
+      },
+      %{
+        icon: "hero-bars-3-bottom-left",
+        text:
+          gettext("Work with a convenient text overlay tool and turn your image into a layout")
+      },
+      %{
+        icon: "hero-book-open",
+        text:
+          gettext(
+            "Refine the layout to the level of a finished cover, ready for web publishing or printing."
+          )
+      },
+      %{
+        icon: "hero-arrow-down-on-square",
+        text: gettext("Download the finished result and start publishing.")
+      }
+    ]
+  end
+
   def showcase do
     [
       %{
