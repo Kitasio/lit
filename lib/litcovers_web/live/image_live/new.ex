@@ -498,20 +498,23 @@ defmodule LitcoversWeb.ImageLive.New do
       <.header><%= gettext("Image dimensions") %></.header>
       <div class="flex gap-3 mt-5" x-data="">
         <div
-          class="px-4 py-2.5 cursor-pointer rounded-xl border-2 border-stroke-main bg-tag-main hover:border-accent-main transition"
+          class="w-32 text-center px-4 py-2.5 cursor-pointer rounded-xl border-2 border-stroke-main bg-tag-main hover:border-accent-main transition"
           x-bind:class={"'#{@aspect_ratio}' == 'cover' && 'border-accent-main'"}
           phx-click="aspect-ratio-change"
           phx-value-aspect_ratio="cover"
         >
-          512x768
+          2:3
         </div>
         <div
-          class="px-4 py-2.5 cursor-pointer rounded-xl border-2 border-stroke-main bg-tag-main hover:border-accent-main transition"
+          class="w-32 text-center px-4 py-2.5 cursor-pointer rounded-xl border-2 border-stroke-main bg-tag-main hover:border-accent-main transition"
           x-bind:class={"'#{@aspect_ratio}' == 'square' && 'border-accent-main'"}
           phx-click="aspect-ratio-change"
           phx-value-aspect_ratio="square"
         >
-          512x512
+          1:1
+        </div>
+        <div class="w-32 flex items-center justify-center gap-1 px-4 py-2.5 cursor-pointer rounded-xl border-2 border-stroke-main bg-tag-main">
+          <.icon name="hero-lock-closed" class="w-5 h-5" /> <span>3:2</span>
         </div>
       </div>
     </div>
