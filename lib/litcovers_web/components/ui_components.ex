@@ -57,7 +57,7 @@ defmodule LitcoversWeb.UiComponents do
             class="hover:underline hover:text-accent-main"
             navigate={"/#{@locale}/users/register"}
           >
-            <%= gettext("Register") %>
+            <span class="text-sm lg:text-base"><%= gettext("Register") %></span>
           </.link>
           <.link navigate={"/#{@locale}/users/log_in"}>
             <.button>
