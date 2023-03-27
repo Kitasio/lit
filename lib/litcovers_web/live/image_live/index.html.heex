@@ -93,7 +93,9 @@
                 favorite={image.favorite}
                 image_id={image.id}
               />
-              <.download_btn image_url={"#{image.url}?ik-attachment=true"} />
+              <.download_btn image_url={
+                "#{image.url}?ik-attachment=true" |> Imagekit.transform("q-100,f-jpg")
+              } />
             </div>
           </:bottom>
           <:bottom :if={!image.unlocked}>

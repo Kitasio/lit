@@ -5,6 +5,7 @@ defmodule LitcoversWeb.ImageLive.Index do
   alias Litcovers.Media
   alias Litcovers.Media.Image
   alias Litcovers.Accounts
+  alias CoverGen.Imagekit
 
   @impl true
   def mount(%{"locale" => locale}, _session, socket) do
