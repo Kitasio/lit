@@ -16,7 +16,7 @@ defmodule LitcoversWeb.UiComponents do
   def navbar(assigns) do
     ~H"""
     <div class="z-10 bg-black/20 backdrop-blur-sm col-span-12 py-7 px-8 flex justify-between items-center relative">
-      <.link class="w-44" navigate="/">
+      <.link class="sm:w-44" navigate="/">
         <.logo class="hidden sm:inline w-2/3 sm:w-full" />
         <.logo_small class="sm:hidden h-8" />
       </.link>
@@ -53,6 +53,12 @@ defmodule LitcoversWeb.UiComponents do
             </.link>
           </div>
         <% else %>
+          <.link
+            class="hover:underline hover:text-accent-main"
+            navigate={"/#{@locale}/users/register"}
+          >
+            <%= gettext("Register") %>
+          </.link>
           <.link navigate={"/#{@locale}/users/log_in"}>
             <.button>
               <%= gettext("Login") %>
