@@ -641,6 +641,9 @@ defmodule LitcoversWeb.ImageLive.New do
     end
   end
 
+  attr :label, :string, default: nil
+  attr :disabled, :boolean, default: false
+
   def img_box(assigns) do
     assigns = assign_new(assigns, :prompt_id, fn -> nil end)
     assigns = assign_new(assigns, :value, fn -> nil end)
@@ -658,30 +661,44 @@ defmodule LitcoversWeb.ImageLive.New do
       ~H"""
       <div
         id={"#{@src}"}
-        class="mr-8  overflow-hidden rounded-xl border-2 border-stroke-main hover:border-accent-main transition inline-block min-w-[150px] sm:min-w-fit sm:mr-0"
-        x-bind:class={"'#{@value}' == '#{@prompt_id}' && 'border-accent-main'"}
+        class="relative group flex items-center justify-center mr-8 overflow-hidden rounded-xl border-2 border-stroke-main transition inline-block min-w-[150px] sm:min-w-fit sm:mr-0"
+        x-bind:class={"{'border-accent-main': #{@value == @prompt_id}, 'hover:border-accent-main': #{!@disabled}, 'brightness-75': #{@value != @prompt_id and @stage_id > 2}}"}
         x-data={"{ showImage: false, imageUrl: '#{@src}' }"}
-        phx-click={next_stage_push_anim(@stage_id)}
+        phx-click={next_stage_push_anim(@stage_id, @disabled)}
         phx-value-value={assigns.value}
       >
+        <span
+          :if={@stage_id < 3}
+          x-bind:class={"'#{@disabled}' == 'true' ? 'inline-flex': 'hidden cursor-pointer'"}
+          class={[
+            "px-4 text-xs text-slate-200 absolute z-10",
+            "group-hover:flex flex-col gap-2 items-center"
+          ]}
+        >
+          <.icon :if={@disabled} name="hero-lock-closed-solid" class="w-7 h-7" />
+          <span><%= @label %></span>
+        </span>
         <img
           x-show="showImage"
           x-transition.duration.500ms
           x-bind:src="imageUrl"
           x-on:load="showImage = true"
           alt={assigns.label}
-          class="w-full h-full object-cover cursor-pointer transition duration-300 ease-out hover:scale-[1.02] hover:saturate-[1.3]"
+          x-bind:class={"'#{@disabled}' == 'true' ? 'brightness-75': 'cursor-pointer transition duration-300 ease-out hover:scale-[1.02]'"}
+          class="w-full group-hover:brightness-75 h-full object-cover"
         />
       </div>
       """
     end
   end
 
-  defp next_stage_push_anim(stage_id) do
-    if stage_id >= 3 do
-      JS.push("next")
-    else
-      JS.push("next") |> JS.transition("opacity-0 translate-y-6", to: "#stage-box")
+  defp next_stage_push_anim(stage_id, disabled) do
+    unless disabled do
+      if stage_id >= 3 do
+        JS.push("next")
+      else
+        JS.push("next") |> JS.transition("opacity-0 translate-y-6", to: "#stage-box")
+      end
     end
   end
 
@@ -761,9 +778,12 @@ defmodule LitcoversWeb.ImageLive.New do
 
   def types() do
     [
-      %{name: :setting, label: gettext("Setting")},
-      %{name: :couple, label: gettext("Couple")},
-      %{name: :portrait, label: gettext("Character")}
+      %{disabled: false, name: :setting, label: gettext("Setting")},
+      %{disabled: false, name: :couple, label: gettext("Couple")},
+      %{disabled: false, name: :portrait, label: gettext("Character")},
+      %{disabled: true, name: :attribute, label: gettext("Attribute")},
+      %{disabled: true, name: :abstract, label: gettext("Abstract")},
+      %{disabled: true, name: :third_person, label: gettext("Third person")}
     ]
   end
 

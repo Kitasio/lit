@@ -55,6 +55,7 @@
                   <%= for t <- @types do %>
                     <.img_box
                       src={"https://ik.imagekit.io/soulgenesis/litnet/#{t.name}.jpg"}
+                      disabled={t.disabled}
                       label={t.label}
                       value={t.name}
                       stage_id={@stage.id}
