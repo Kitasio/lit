@@ -1,6 +1,6 @@
-<.navbar 
-  locale={@locale} 
-  request_path={"/#{@locale}/payment_options"} 
+<.navbar
+  locale={@locale}
+  request_path={"/#{@locale}/payment_options"}
   current_user={@current_user}
   show_bottom_links={false}
 />
@@ -9,18 +9,29 @@
 
   <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-7 lg:gap-14">
     <%= for opt <- @pay_options do %>
-      <div class="p-7 rounded-xl flex flex-col justify-between w-full h-80 bg-sec">
+      <div
+        class={[
+          "p-7 rounded-3xl flex flex-col justify-between w-full h-80 bg-sec",
+          "bg-center bg-cover"
+        ]}
+        style={"background-image: url('#{opt.bg}')"}
+      >
+        <h1 class="text-xl xl:text-2xl font-semibold"><%= opt.name %></h1>
         <div>
-          <h1 class="text-2xl xl:text-3xl font-semibold"><%= opt.name %></h1>
           <div class="mt-3 flex items-center gap-3">
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2.5">
               <p class="text-5xl xl:text-6xl font-extrabold tracking-tighter">
-                <%= opt.litcoins %> 
+                <%= opt.litcoins %>
               </p>
-              <p class="pb-1.5 xl:pb-3 text-5xl xl:text-6xl font-extrabold text-accent-main">+</p>
-              <p class="text-5xl xl:text-6xl font-extrabold text-accent-main"><%= opt.bonus %></p>
+              <p class="text-5xl xl:text-6xl font-extrabold text-accent-main">
+                + <%= opt.bonus %>
+              </p>
             </div>
-            <p class="text-slate-400 text-xs xl:text-sm"><%= gettext("Package of ") <> "#{opt.litcoins + opt.bonus}" %><br><%= gettext("covers") %></p>
+            <p class="text-slate-400 text-xs xl:text-sm">
+              <%= gettext("Package of ") <> "#{opt.litcoins + opt.bonus}" %><br /><%= gettext(
+                "covers"
+              ) %>
+            </p>
           </div>
           <div class="mt-2 flex items-center gap-5">
             <p class="text-2xl xl:text-4xl font-medium"><%= gettext("For") %> <%= opt.label %></p>
@@ -30,8 +41,10 @@
               <p><%= gettext("cheaper") %></p>
             </div>
           </div>
+          <.button class="mt-5 px-10" phx-click="make-payment" phx-value-amount={opt.value}>
+            Pay
+          </.button>
         </div>
-        <.button phx-click="make-payment" phx-value-amount={opt.value}>Pay</.button>
       </div>
     <% end %>
   </div>
