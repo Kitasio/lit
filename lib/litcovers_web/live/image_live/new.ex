@@ -662,7 +662,7 @@ defmodule LitcoversWeb.ImageLive.New do
       ~H"""
       <div
         id={"#{@src}"}
-        class="relative group flex items-center justify-center mr-8 overflow-hidden rounded-xl border-2 border-stroke-main transition inline-block min-w-[150px] sm:min-w-fit sm:mr-0"
+        class="aspect-cover relative group flex items-center justify-center mr-8 overflow-hidden rounded-xl border-2 border-stroke-main transition inline-block min-w-[150px] sm:min-w-fit sm:mr-0"
         x-bind:class={"{'border-accent-main': #{@value == @prompt_id}, 'hover:border-accent-main': #{!@disabled}, 'brightness-50 hover:brightness-100': #{@value != @prompt_id and @stage_id > 2}}"}
         x-data={"{ showImage: false, imageUrl: '#{@src}' }"}
         phx-click={next_stage_push_anim(@stage_id, @disabled)}
