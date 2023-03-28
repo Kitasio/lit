@@ -11,6 +11,9 @@ defmodule LitcoversWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
+  end
+
+  pipeline :apply_discount do
     plug LitcoversWeb.Plugs.GetReferer
   end
 
@@ -70,7 +73,7 @@ defmodule LitcoversWeb.Router do
   end
 
   scope "/:locale", LitcoversWeb do
-    pipe_through [:browser, :set_locale, :redirect_if_user_is_authenticated]
+    pipe_through [:browser, :set_locale, :redirect_if_user_is_authenticated, :apply_discount]
 
     live_session :redirect_if_user_is_authenticated,
       on_mount: [{LitcoversWeb.UserAuth, :redirect_if_user_is_authenticated}] do

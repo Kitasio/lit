@@ -4,16 +4,29 @@ defmodule LitcoversWeb.UserRegistrationLive do
   alias Litcovers.Accounts
   alias Litcovers.Accounts.User
 
-  def mount(%{"locale" => locale}, _session, socket) do
+  def mount(%{"locale" => locale}, session, socket) do
     Gettext.put_locale(locale)
     changeset = Accounts.change_user_registration(%User{})
-    socket = assign(socket, changeset: changeset, trigger_submit: false, locale: locale)
+
+    socket =
+      assign(socket,
+        changeset: changeset,
+        trigger_submit: false,
+        locale: locale,
+        referer: session["referer"]
+      )
+
     {:ok, socket, temporary_assigns: [changeset: nil]}
   end
 
   def handle_event("save", %{"user" => user_params}, socket) do
-    # TODO: add discount and referer based on referer plug
-    # user_params = Map.put_new(user_params, "discount", 0.8) |> Map.put_new("referer", "https://somereferer.com")
+    user_params =
+      if socket.assigns.referer do
+        %{host: host, discount: discount} = socket.assigns.referer
+        Map.put_new(user_params, "discount", discount) |> Map.put_new("referer", host)
+      else
+        user_params
+      end
 
     case Accounts.register_user(user_params) do
       {:ok, user} ->
@@ -40,6 +53,10 @@ defmodule LitcoversWeb.UserRegistrationLive do
     ~H"""
     <.navbar locale={@locale} request_path={"/#{@locale}/users/register"} />
     <div class="bg-main p-10 sm:my-5 lg:my-20 mx-auto max-w-md rounded-lg sm:border-2 border-stroke-main">
+      <p :if={@referer} class="mb-2 text-xs text-slate-300 text-center w-full">
+        <%= gettext("Bonuses applied from ") %>
+        <span class="text-slate-100 font-semibold"><%= @referer.host %></span>
+      </p>
       <.header class="text-center">
         <%= gettext("Register for an account") %>
         <:subtitle>
