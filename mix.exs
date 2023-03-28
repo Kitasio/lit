@@ -60,7 +60,9 @@ defmodule Litcovers.MixProject do
       {:redix, "~> 1.1"},
       {:castore, ">= 0.0.0"},
       {:hackney, "~> 1.18"},
-      {:bcrypt_elixir, "~> 3.0"}
+      {:bcrypt_elixir, "~> 3.0"},
+      {:vega_lite, "~> 0.1.7"},
+      {:kino, "~> 0.9.0"}
     ]
   end
 
