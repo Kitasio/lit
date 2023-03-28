@@ -180,7 +180,7 @@ defmodule LitcoversWeb.ImageLive.Index do
 
     {filename, list} = path |> String.split("/") |> List.pop_at(-1)
     bucket = list |> List.last()
-    transformation = "tr:oi-litmark.png,ow-#{image.width},oh-#{image.height}"
+    transformation = "tr:oi-litwatermark.png,ow-#{image.width},oh-#{image.height}"
 
     case host do
       "ik.imagekit.io" ->
