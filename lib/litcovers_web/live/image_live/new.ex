@@ -663,7 +663,7 @@ defmodule LitcoversWeb.ImageLive.New do
       <div
         id={"#{@src}"}
         class="relative group flex items-center justify-center mr-8 overflow-hidden rounded-xl border-2 border-stroke-main transition inline-block min-w-[150px] sm:min-w-fit sm:mr-0"
-        x-bind:class={"{'border-accent-main': #{@value == @prompt_id}, 'hover:border-accent-main': #{!@disabled}, 'brightness-50': #{@value != @prompt_id and @stage_id > 2}}"}
+        x-bind:class={"{'border-accent-main': #{@value == @prompt_id}, 'hover:border-accent-main': #{!@disabled}, 'brightness-50 hover:brightness-100': #{@value != @prompt_id and @stage_id > 2}}"}
         x-data={"{ showImage: false, imageUrl: '#{@src}' }"}
         phx-click={next_stage_push_anim(@stage_id, @disabled)}
         phx-value-value={assigns.value}
@@ -685,8 +685,8 @@ defmodule LitcoversWeb.ImageLive.New do
           x-bind:src="imageUrl"
           x-on:load="showImage = true"
           alt={assigns.label}
-          x-bind:class={"'#{@disabled}' == 'true' ? 'brightness-50': 'cursor-pointer transition duration-300 ease-out hover:scale-[1.02]'"}
-          class="w-full group-hover:brightness-50 h-full object-cover"
+          x-bind:class={"{'brightness-50': #{@disabled}, 'cursor-pointer hover:scale-[1.02]': #{!@disabled}, 'group-hover:brightness-50': #{@stage_id < 3}}"}
+          class="w-full h-full transition duration-300 ease-out object-cover"
         />
       </div>
       """
