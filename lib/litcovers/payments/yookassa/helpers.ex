@@ -25,8 +25,9 @@ defmodule Litcovers.Payments.Yookassa.Helpers do
     }
   end
 
-  def calculate_litcoins(amount) when is_integer(amount) do
+  def calculate_litcoins(amount, discount) when is_integer(amount) and is_integer(discount) do
     price = 390
+    amount = amount + discount
 
     cond do
       amount >= 7800 ->
@@ -67,7 +68,7 @@ defmodule Litcovers.Payments.Yookassa.Helpers do
         Logger.info("Transaction #{transaction.id} succeeded")
         {:ok, _tnx} = Payments.update_transaction(transaction, %{status: status, paid: paid})
         # calculate litcoins based on transaction amount
-        litcoins = calculate_litcoins(transaction.amount)
+        litcoins = calculate_litcoins(transaction.amount, transaction.discount)
         {:succeeded, litcoins}
 
       "canceled" ->
