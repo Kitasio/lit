@@ -12,8 +12,8 @@ defmodule LitcoversWeb.UserRegistrationLive do
   end
 
   def handle_event("save", %{"user" => user_params}, socket) do
-    # TODO: add discount based on referer plug
-    # user_params = Map.put_new(user_params, "discount", 0.8)
+    # TODO: add discount and referer based on referer plug
+    # user_params = Map.put_new(user_params, "discount", 0.8) |> Map.put_new("referer", "https://somereferer.com")
 
     case Accounts.register_user(user_params) do
       {:ok, user} ->
