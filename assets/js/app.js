@@ -22,7 +22,6 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import Alpine from "../vendor/alpinejs"
-import init, { create_cover } from '../vendor/wasm/pkg/litcovers_wasm.js';
 import { timer as createTimer } from "./timer.js"
 
 window.Alpine = Alpine
@@ -90,24 +89,6 @@ let liveSocket = new LiveSocket("/live", Socket, {
       }
     }
   }
-})
-
-async function run() {
-  await init('/wasm/pkg/litcovers_wasm_bg.wasm');
-
-  function cover(base64_img, author_font_base64, title_font_base64, params) {
-    const cover = create_cover(base64_img, author_font_base64, title_font_base64, params) 
-    const image = document.getElementById("mainImage");
-    image.src = `data:image/png;charset=utf-8;base64,${cover}`
-  }
-
-  window.addEventListener("phx:create_cover", (e) => {
-    cover(e.detail.image_base64, e.detail.author_font_base64, e.detail.title_font_base64, e.detail.params)
-  });
-}
-
-window.addEventListener("phx:init-wasm", (_) => {
-  run()
 })
 
 window.addEventListener("phx:update-description-input", (e) => {
