@@ -12,6 +12,7 @@ processes = []
 [env]
   PHX_HOST = "litcovers.com"
   PORT = "8080"
+  RELEASE_COOKIE = "litcovers-cookie"
 
 [experimental]
   auto_rollback = true
