@@ -75,6 +75,7 @@ defmodule LitcoversWeb.ImageLive.New do
     socket
   end
 
+  # TODO: refactor it
   defp apply_action(socket, :redo, params) do
     %{"image_id" => image_id} = params
     image = Media.get_image_preload_all!(image_id)
