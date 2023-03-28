@@ -14,6 +14,7 @@ defmodule Litcovers.Accounts.User do
     field :relaxed_mode, :boolean, default: false
     field :recent_generations, :integer, default: 0
     field :relaxed_mode_till, :naive_datetime
+    field :discount, :float, default: 1.0
 
     has_many :images, Litcovers.Media.Image
     has_many :covers, Litcovers.Media.Cover
@@ -46,7 +47,7 @@ defmodule Litcovers.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :password, :discount])
     |> validate_email(opts)
     |> validate_password(opts)
   end
