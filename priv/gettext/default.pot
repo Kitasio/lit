@@ -10,251 +10,734 @@
 msgid ""
 msgstr ""
 
-#: lib/litcovers_web/components/core_components.ex:476
+#: lib/litcovers_web/components/core_components.ex:536
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
 
-#: lib/litcovers_web/components/core_components.ex:80
-#: lib/litcovers_web/components/core_components.ex:169
+#: lib/litcovers_web/components/core_components.ex:83
 #, elixir-autogen, elixir-format
 msgid "close"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:451
+#: lib/litcovers_web/live/image_live/new.ex:762
 #, elixir-autogen, elixir-format
 msgid "Cover type"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:412
+#: lib/litcovers_web/live/image_live/new.ex:723
 #, elixir-autogen, elixir-format
 msgid "Female"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:423
+#: lib/litcovers_web/live/image_live/new.ex:734
 #, elixir-autogen, elixir-format
 msgid "Male"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:456
+#: lib/litcovers_web/live/image_live/new.ex:767
 #, elixir-autogen, elixir-format
 msgid "Style"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:455
+#: lib/litcovers_web/live/image_live/new.ex:766
 #, elixir-autogen, elixir-format
 msgid "Vibe"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:456
+#: lib/litcovers_web/live/image_live/new.ex:767
 #, elixir-autogen, elixir-format
 msgid "What style do you prefer?"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:452
+#: lib/litcovers_web/live/image_live/new.ex:763
 #, elixir-autogen, elixir-format
 msgid "What type of cover is more suitable for your book?"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:455
+#: lib/litcovers_web/live/image_live/new.ex:766
 #, elixir-autogen, elixir-format
 msgid "What vibe does your book have?"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:454
+#: lib/litcovers_web/live/image_live/new.ex:765
 #, elixir-autogen, elixir-format
 msgid "What world is your book set in?"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:454
+#: lib/litcovers_web/live/image_live/new.ex:765
 #, elixir-autogen, elixir-format
 msgid "World"
 msgstr ""
 
-#: lib/litcovers_web/user_auth.ex:272
+#: lib/litcovers_web/user_auth.ex:290
 #, elixir-autogen, elixir-format
 msgid "You cannot access this page."
 msgstr ""
 
-#: lib/litcovers_web/user_auth.ex:279
+#: lib/litcovers_web/user_auth.ex:277
+#: lib/litcovers_web/user_auth.ex:297
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:485
+#: lib/litcovers_web/live/image_live/new.ex:803
 #, elixir-autogen, elixir-format
 msgid "Brutal - Dark"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:469
+#: lib/litcovers_web/live/image_live/new.ex:784
 #, elixir-autogen, elixir-format
 msgid "Character"
 msgstr ""
 
-#: lib/litcovers_web/components/ui_components.ex:42
-#, elixir-autogen, elixir-format
-msgid "Create cover"
-msgstr ""
-
-#: lib/litcovers_web/live/image_live/new.ex:475
+#: lib/litcovers_web/live/image_live/new.ex:793
 #, elixir-autogen, elixir-format
 msgid "Fantasy - Past"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:477
+#: lib/litcovers_web/live/image_live/new.ex:795
 #, elixir-autogen, elixir-format
 msgid "Futurism - Future"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:484
+#: lib/litcovers_web/live/image_live/new.ex:802
 #, elixir-autogen, elixir-format
 msgid "Natural - Neutral"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:476
+#: lib/litcovers_web/live/image_live/new.ex:794
 #, elixir-autogen, elixir-format
 msgid "Realism - Present"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:467
+#: lib/litcovers_web/live/image_live/new.ex:782
 #, elixir-autogen, elixir-format
 msgid "Setting"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:483
+#: lib/litcovers_web/live/image_live/new.ex:801
 #, elixir-autogen, elixir-format
 msgid "Warm - Bright"
 msgstr ""
 
-#: lib/litcovers_web/components/ui_components.ex:328
+#: lib/litcovers_web/components/ui_components.ex:411
 #, elixir-autogen, elixir-format
 msgid "Title"
 msgstr ""
 
-#: lib/litcovers_web/components/ui_components.ex:60
-#: lib/litcovers_web/components/ui_components.ex:74
+#: lib/litcovers_web/components/ui_components.ex:51
+#: lib/litcovers_web/components/ui_components.ex:84
 #, elixir-autogen, elixir-format
 msgid "Create"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/index.html.heex:11
+#: lib/litcovers_web/live/image_live/index.html.heex:13
 #, elixir-autogen, elixir-format
 msgid "All"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.html.heex:20
+#: lib/litcovers_web/live/image_live/new.html.heex:28
 #, elixir-autogen, elixir-format
 msgid "Book description"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/show.html.heex:62
+#: lib/litcovers_web/live/image_live/show.html.heex:65
 #, elixir-autogen, elixir-format
 msgid "Composition"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/index.html.heex:21
+#: lib/litcovers_web/live/image_live/index.html.heex:23
 #, elixir-autogen, elixir-format
 msgid "Favorites"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:298
+#: lib/litcovers_web/live/image_live/new.ex:592
 #, elixir-autogen, elixir-format
 msgid "Generate"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.html.heex:30
+#: lib/litcovers_web/live/image_live/new.ex:499
 #, elixir-autogen, elixir-format
 msgid "Image dimensions"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.html.heex:6
+#: lib/litcovers_web/live/image_live/new.html.heex:14
 #, elixir-autogen, elixir-format
 msgid "LIT AI"
 msgstr ""
 
-#: lib/litcovers_web/components/ui_components.ex:86
+#: lib/litcovers_web/components/ui_components.ex:100
 #, elixir-autogen, elixir-format
 msgid "My generations"
 msgstr ""
 
-#: lib/litcovers_web/components/ui_components.ex:305
+#: lib/litcovers_web/components/ui_components.ex:388
 #, elixir-autogen, elixir-format
 msgid "Name"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/show.html.heex:48
+#: lib/litcovers_web/live/image_live/show.html.heex:51
 #, elixir-autogen, elixir-format
 msgid "Text size"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.html.heex:53
+#: lib/litcovers_web/live/image_live/new.html.heex:48
 #, elixir-autogen, elixir-format
 msgid "What are we creating?"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/show.ex:51
+#: lib/litcovers_web/live/image_live/show.ex:59
 #, elixir-autogen, elixir-format
 msgid "You don't have access to this image"
 msgstr ""
 
-#: lib/litcovers_web/user_auth.ex:291
+#: lib/litcovers_web/user_auth.ex:309
 #, elixir-autogen, elixir-format
 msgid "Your account is not active."
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/index.html.heex:66
-#, elixir-autogen, elixir-format
-msgid "Add to favorites"
-msgstr ""
-
-#: lib/litcovers_web/live/image_live/new.ex:468
+#: lib/litcovers_web/live/image_live/new.ex:783
 #, elixir-autogen, elixir-format
 msgid "Couple"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/index.html.heex:78
-#, elixir-autogen, elixir-format
-msgid "Delete image"
-msgstr ""
-
-#: lib/litcovers_web/live/image_live/index.html.heex:70
-#, elixir-autogen, elixir-format
-msgid "Download image"
-msgstr ""
-
-#: lib/litcovers_web/live/image_live/index.html.heex:57
-#, elixir-autogen, elixir-format
-msgid "Edit image"
-msgstr ""
-
-#: lib/litcovers_web/components/ui_components.ex:36
+#: lib/litcovers_web/components/ui_components.ex:41
 #, elixir-autogen, elixir-format
 msgid "Litcoins"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/index.html.heex:37
+#: lib/litcovers_web/live/image_live/index.html.heex:50
 #, elixir-autogen, elixir-format
 msgid "Locked image, dissapears after 24 hours"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:62
-#: lib/litcovers_web/live/image_live/new.ex:68
-#: lib/litcovers_web/live/image_live/new.ex:74
+#: lib/litcovers_web/live/image_live/new.ex:170
+#: lib/litcovers_web/live/image_live/new.ex:176
+#: lib/litcovers_web/live/image_live/new.ex:182
 #, elixir-autogen, elixir-format
 msgid "Something went wrong"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:53
+#: lib/litcovers_web/live/image_live/new.ex:161
 #, elixir-autogen, elixir-format
 msgid "Timeout"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/index.html.heex:84
-#, elixir-autogen, elixir-format
-msgid "Unlock image"
-msgstr ""
-
-#: lib/litcovers_web/live/image_live/index.html.heex:16
+#: lib/litcovers_web/live/image_live/index.html.heex:18
 #, elixir-autogen, elixir-format
 msgid "Unlocked"
+msgstr ""
+
+#: lib/litcovers_web/live/image_live/new.ex:786
+#, elixir-autogen, elixir-format
+msgid "Abstract"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:53
+#, elixir-autogen, elixir-format
+msgid "Adjust the settings – improve the result."
+msgstr ""
+
+#: lib/litcovers_web/live/user_registration_live.ex:43
+#, elixir-autogen, elixir-format
+msgid "Already registered?"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:101
+#, elixir-autogen, elixir-format
+msgid "Amazing in its atmosphere and fullness"
+msgstr ""
+
+#: lib/litcovers_web/live/image_live/new.ex:785
+#, elixir-autogen, elixir-format
+msgid "Attribute"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:105
+#, elixir-autogen, elixir-format
+msgid "Attributes"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:57
+#, elixir-autogen, elixir-format
+msgid "Change the description – leave only the right one."
+msgstr ""
+
+#: lib/litcovers_web/live/image_live/new.html.heex:181
+#, elixir-autogen, elixir-format
+msgid "Choose a model"
+msgstr ""
+
+#: lib/litcovers_web/live/user_confirmation_live.ex:14
+#, elixir-autogen, elixir-format
+msgid "Confirm my account"
+msgstr ""
+
+#: lib/litcovers_web/live/user_reset_password_live.ex:27
+#, elixir-autogen, elixir-format
+msgid "Confirm new password"
+msgstr ""
+
+#: lib/litcovers_web/live/user_confirmation_live.ex:13
+#, elixir-autogen, elixir-format
+msgid "Confirming..."
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.html.heex:20
+#, elixir-autogen, elixir-format
+msgid "Create a cover for your next bestseller in minutes"
+msgstr ""
+
+#: lib/litcovers_web/live/user_registration_live.ex:74
+#, elixir-autogen, elixir-format
+msgid "Create an account"
+msgstr ""
+
+#: lib/litcovers_web/live/user_registration_live.ex:73
+#, elixir-autogen, elixir-format
+msgid "Creating account..."
+msgstr ""
+
+#: lib/litcovers_web/live/transaction_live/index.ex:33
+#, elixir-autogen, elixir-format
+msgid "Creative duo"
+msgstr ""
+
+#: lib/litcovers_web/live/user_confirmation_instructions_live.ex:47
+#, elixir-autogen, elixir-format
+msgid "Didn't receive the Email?"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:125
+#, elixir-autogen, elixir-format
+msgid "Digital versions and files for printing. All in one place, neatly folded for you"
+msgstr ""
+
+#: lib/litcovers_web/live/user_login_live.ex:17
+#, elixir-autogen, elixir-format
+msgid "Don't have an account?"
+msgstr ""
+
+#: lib/litcovers_web/live/cover_live/index.html.heex:32
+#, elixir-autogen, elixir-format
+msgid "Download"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:86
+#, elixir-autogen, elixir-format
+msgid "Download the finished result and start publishing."
+msgstr ""
+
+#: lib/litcovers_web/live/image_live/index.html.heex:82
+#, elixir-autogen, elixir-format
+msgid "Edit"
+msgstr ""
+
+#: lib/litcovers_web/live/user_confirmation_instructions_live.ex:62
+#: lib/litcovers_web/live/user_login_live.ex:36
+#: lib/litcovers_web/live/user_registration_live.ex:69
+#, elixir-autogen, elixir-format
+msgid "Email"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:34
+#, elixir-autogen, elixir-format
+msgid "Enter a brief description of your book or an approximate image of what should be in the image."
+msgstr ""
+
+#: lib/litcovers_web/live/image_live/show.ex:105
+#, elixir-autogen, elixir-format
+msgid "Error saving your cover"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.html.heex:132
+#, elixir-autogen, elixir-format
+msgid "Examples of created covers:"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.html.heex:98
+#, elixir-autogen, elixir-format
+msgid "Examples of generated images:"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:22
+#, elixir-autogen, elixir-format
+msgid "Fast, non-binding registration."
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:61
+#, elixir-autogen, elixir-format
+msgid "Find the perfect result."
+msgstr ""
+
+#: lib/litcovers_web/live/transaction_live/index.html.heex:37
+#, elixir-autogen, elixir-format
+msgid "For"
+msgstr ""
+
+#: lib/litcovers_web/live/user_forgot_password_live.ex:11
+#: lib/litcovers_web/live/user_login_live.ex:42
+#, elixir-autogen, elixir-format
+msgid "Forgot your password?"
+msgstr ""
+
+#: lib/litcovers_web/live/user_confirmation_instructions_live.ex:20
+#, elixir-autogen, elixir-format
+msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+msgstr ""
+
+#: lib/litcovers_web/live/user_forgot_password_live.ex:45
+#, elixir-autogen, elixir-format
+msgid "If your email is in our system, you will receive instructions to reset your password shortly."
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:70
+#, elixir-autogen, elixir-format
+msgid "Increase the image quality to the maximum."
+msgstr ""
+
+#: lib/litcovers_web/live/transaction_live/index.ex:65
+#, elixir-autogen, elixir-format
+msgid "Legendary Gallery"
+msgstr ""
+
+#: lib/litcovers_web/live/user_forgot_password_live.ex:25
+#: lib/litcovers_web/live/user_reset_password_live.ex:39
+#, elixir-autogen, elixir-format
+msgid "Log in"
+msgstr ""
+
+#: lib/litcovers_web/components/ui_components.ex:64
+#, elixir-autogen, elixir-format
+msgid "Login"
+msgstr ""
+
+#: lib/litcovers_web/live/transaction_live/index.ex:25
+#, elixir-autogen, elixir-format
+msgid "Lonely pixel"
+msgstr ""
+
+#: lib/litcovers_web/live/transaction_live/index.ex:57
+#, elixir-autogen, elixir-format
+msgid "Masterpiece creator"
+msgstr ""
+
+#: lib/litcovers_web/components/ui_components.ex:119
+#, elixir-autogen, elixir-format
+msgid "My covers"
+msgstr ""
+
+#: lib/litcovers_web/live/user_reset_password_live.ex:23
+#, elixir-autogen, elixir-format
+msgid "New password"
+msgstr ""
+
+#: lib/litcovers_web/live/image_live/index.html.heex:36
+#, elixir-autogen, elixir-format
+msgid "Nothing here so far"
+msgstr ""
+
+#: lib/litcovers_web/live/transaction_live/index.ex:41
+#, elixir-autogen, elixir-format
+msgid "Novice collector"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:96
+#, elixir-autogen, elixir-format
+msgid "Of characters from your book"
+msgstr ""
+
+#: lib/litcovers_web/live/user_registration_live.ex:66
+#: lib/litcovers_web/live/user_reset_password_live.ex:20
+#, elixir-autogen, elixir-format
+msgid "Oops, something went wrong! Please check the errors below."
+msgstr ""
+
+#: lib/litcovers_web/live/transaction_live/index.html.heex:31
+#, elixir-autogen, elixir-format
+msgid "Package of "
+msgstr ""
+
+#: lib/litcovers_web/live/transaction_live/index.html.heex:8
+#, elixir-autogen, elixir-format
+msgid "Packages"
+msgstr ""
+
+#: lib/litcovers_web/live/transaction_live/index.ex:49
+#, elixir-autogen, elixir-format
+msgid "Paint Party"
+msgstr ""
+
+#: lib/litcovers_web/live/user_login_live.ex:37
+#: lib/litcovers_web/live/user_registration_live.ex:70
+#, elixir-autogen, elixir-format
+msgid "Password"
+msgstr ""
+
+#: lib/litcovers_web/live/user_reset_password_live.ex:70
+#, elixir-autogen, elixir-format
+msgid "Password reset successfully."
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:95
+#, elixir-autogen, elixir-format
+msgid "Portraits"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:131
+#, elixir-autogen, elixir-format
+msgid "Quick results and a choice"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:80
+#, elixir-autogen, elixir-format
+msgid "Refine the layout to the level of a finished cover, ready for web publishing or printing."
+msgstr ""
+
+#: lib/litcovers_web/components/ui_components.ex:60
+#: lib/litcovers_web/live/user_forgot_password_live.ex:24
+#: lib/litcovers_web/live/user_reset_password_live.ex:38
+#, elixir-autogen, elixir-format
+msgid "Register"
+msgstr ""
+
+#: lib/litcovers_web/live/user_registration_live.ex:41
+#, elixir-autogen, elixir-format
+msgid "Register for an account"
+msgstr ""
+
+#: lib/litcovers_web/live/user_login_live.ex:40
+#, elixir-autogen, elixir-format
+msgid "Remember me"
+msgstr ""
+
+#: lib/litcovers_web/live/user_confirmation_instructions_live.ex:54
+#, elixir-autogen, elixir-format
+msgid "Resend confirmation instructions"
+msgstr ""
+
+#: lib/litcovers_web/live/user_reset_password_live.ex:10
+#: lib/litcovers_web/live/user_reset_password_live.ex:32
+#, elixir-autogen, elixir-format
+msgid "Reset Password"
+msgstr ""
+
+#: lib/litcovers_web/live/user_reset_password_live.ex:88
+#, elixir-autogen, elixir-format
+msgid "Reset password link is invalid or it has expired."
+msgstr ""
+
+#: lib/litcovers_web/live/user_reset_password_live.ex:31
+#, elixir-autogen, elixir-format
+msgid "Resetting..."
+msgstr ""
+
+#: lib/litcovers_web/live/image_live/show.html.heex:123
+#, elixir-autogen, elixir-format
+msgid "Save"
+msgstr ""
+
+#: lib/litcovers_web/live/user_confirmation_instructions_live.ex:65
+#, elixir-autogen, elixir-format
+msgid "Send"
+msgstr ""
+
+#: lib/litcovers_web/live/user_forgot_password_live.ex:19
+#, elixir-autogen, elixir-format
+msgid "Send password reset instructions"
+msgstr ""
+
+#: lib/litcovers_web/live/user_confirmation_instructions_live.ex:64
+#: lib/litcovers_web/live/user_forgot_password_live.ex:18
+#, elixir-autogen, elixir-format
+msgid "Sending..."
+msgstr ""
+
+#: lib/litcovers_web/live/user_login_live.ex:47
+#: lib/litcovers_web/live/user_registration_live.ex:48
+#, elixir-autogen, elixir-format
+msgid "Sign in"
+msgstr ""
+
+#: lib/litcovers_web/live/user_login_live.ex:15
+#, elixir-autogen, elixir-format
+msgid "Sign in to account"
+msgstr ""
+
+#: lib/litcovers_web/live/user_login_live.ex:22
+#, elixir-autogen, elixir-format
+msgid "Sign up"
+msgstr ""
+
+#: lib/litcovers_web/live/user_login_live.ex:46
+#, elixir-autogen, elixir-format
+msgid "Signing in..."
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:139
+#, elixir-autogen, elixir-format
+msgid "Simple and convenient system"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:27
+#, elixir-autogen, elixir-format
+msgid "Simple settings. You only need to choose the image format and the style in which it will be executed."
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:123
+#, elixir-autogen, elixir-format
+msgid "Source files in high resolution"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.html.heex:61
+#, elixir-autogen, elixir-format
+msgid "Stage one"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.html.heex:122
+#, elixir-autogen, elixir-format
+msgid "Stage three"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.html.heex:88
+#, elixir-autogen, elixir-format
+msgid "Stage two"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.html.heex:37
+#, elixir-autogen, elixir-format
+msgid "The ultimate platform for creating eye-catching covers, posters, and more, quickly and easily. Our cutting-edge technology utilizes advanced artificial intelligence, along with intuitive text overlay tools, to help you craft professional-looking designs in no time."
+msgstr ""
+
+#: lib/litcovers_web/live/image_live/new.ex:787
+#, elixir-autogen, elixir-format
+msgid "Third person"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.html.heex:86
+#, elixir-autogen, elixir-format
+msgid "Try it"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.html.heex:145
+#, elixir-autogen, elixir-format
+msgid "Try it yourself"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:106
+#: lib/litcovers_web/live/page_live/index.ex:115
+#, elixir-autogen, elixir-format
+msgid "Unique artifacts and items from your worlds"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:49
+#, elixir-autogen, elixir-format
+msgid "Unlimited generation – the result is guaranteed."
+msgstr ""
+
+#: lib/litcovers_web/live/image_live/index.html.heex:105
+#: lib/litcovers_web/live/image_live/new.html.heex:247
+#, elixir-autogen, elixir-format
+msgid "Unlock"
+msgstr ""
+
+#: lib/litcovers_web/live/user_confirmation_live.ex:51
+#, elixir-autogen, elixir-format
+msgid "User confirmation link is invalid or it has expired."
+msgstr ""
+
+#: lib/litcovers_web/live/user_confirmation_live.ex:36
+#, elixir-autogen, elixir-format
+msgid "User confirmed successfully."
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:133
+#, elixir-autogen, elixir-format
+msgid "We appreciate your time and know for sure that several options are better than one"
+msgstr ""
+
+#: lib/litcovers_web/live/user_confirmation_instructions_live.ex:41
+#, elixir-autogen, elixir-format
+msgid "We sent confirmation instructions to your email address"
+msgstr ""
+
+#: lib/litcovers_web/controllers/user_session_controller.ex:11
+#, elixir-autogen, elixir-format
+msgid "We sent you an email to confirm your account. Please check your inbox."
+msgstr ""
+
+#: lib/litcovers_web/live/user_forgot_password_live.ex:12
+#, elixir-autogen, elixir-format
+msgid "We'll send a password reset link to your inbox"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.html.heex:35
+#, elixir-autogen, elixir-format
+msgid "Welcome to Litcovers"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.html.heex:42
+#, elixir-autogen, elixir-format
+msgid "Whether you're promoting your latest book, advertising an event, or simply looking to spruce up your social media profile, Litcovers has you covered. Get started today and unleash your creativity!"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.html.heex:77
+#, elixir-autogen, elixir-format
+msgid "With our system, you can easily and conveniently create images in unlimited quantities – pay for the result only when you get it."
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:140
+#, elixir-autogen, elixir-format
+msgid "Without the brain-crushing and incomprehensible. Just try it yourself!"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:75
+#, elixir-autogen, elixir-format
+msgid "Work with a convenient text overlay tool and turn your image into a layout"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:100
+#, elixir-autogen, elixir-format
+msgid "Worlds"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:40
+#, elixir-autogen, elixir-format
+msgid "You are ready to start - now you can start generating images."
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.html.heex:82
+#, elixir-autogen, elixir-format
+msgid "You can change the image styles at any time, and adjust the description by removing, adding and changing the details you need."
+msgstr ""
+
+#: lib/litcovers_web/live/image_live/show.ex:95
+#, elixir-autogen, elixir-format
+msgid "Your cover is saved"
+msgstr ""
+
+#: lib/litcovers_web/live/page_live/index.ex:117
+#, elixir-autogen, elixir-format
+msgid "Your new cover is a symbiosis of our many years of experience in the field of design and technology and AI"
+msgstr ""
+
+#: lib/litcovers_web/live/transaction_live/index.html.heex:41
+#, elixir-autogen, elixir-format
+msgid "cheaper"
+msgstr ""
+
+#: lib/litcovers_web/live/transaction_live/index.html.heex:31
+#, elixir-autogen, elixir-format
+msgid "covers"
+msgstr ""
+
+#: lib/litcovers_web/live/user_login_live.ex:24
+#, elixir-autogen, elixir-format
+msgid "for an account now."
+msgstr ""
+
+#: lib/litcovers_web/live/user_registration_live.ex:50
+#, elixir-autogen, elixir-format
+msgid "to your account now."
 msgstr ""
