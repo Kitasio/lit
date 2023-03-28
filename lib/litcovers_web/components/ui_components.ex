@@ -202,10 +202,10 @@ defmodule LitcoversWeb.UiComponents do
   def tooltip(%{position: "bottom"} = assigns) do
     ~H"""
     <div class={[
-      "hidden z-20 group-hover:flex absolute p-3 w-32 top-1 -left-1 translate-y-full -translate-x-10 bg-stroke-sec bg-opacity-70 rounded-xl",
+      "hidden z-20 group-hover:flex absolute p-3 w-36 top-1 -left-1 translate-y-full -translate-x-10 bg-stroke-sec bg-opacity-70 rounded-xl",
       @class
     ]}>
-      <span class="text-center text-xs w-full"><%= render_slot(@inner_block) %></span>
+      <span class="text-center font-light text-xs w-full"><%= render_slot(@inner_block) %></span>
     </div>
     """
   end
@@ -213,10 +213,10 @@ defmodule LitcoversWeb.UiComponents do
   def tooltip(%{position: "top"} = assigns) do
     ~H"""
     <div class={[
-      "hidden group-hover:flex absolute p-3 w-32 -top-2 -left-1 -translate-y-full -translate-x-10 bg-stroke-sec bg-opacity-70 rounded-xl",
+      "hidden group-hover:flex absolute p-3 w-36 -top-2 -left-1 -translate-y-full -translate-x-10 bg-stroke-sec bg-opacity-70 rounded-xl",
       @class
     ]}>
-      <span class="text-center text-xs w-full"><%= render_slot(@inner_block) %></span>
+      <span class="text-center font-light text-xs w-full"><%= render_slot(@inner_block) %></span>
     </div>
     """
   end
@@ -224,10 +224,21 @@ defmodule LitcoversWeb.UiComponents do
   def tooltip(%{position: "left"} = assigns) do
     ~H"""
     <div class={[
-      "hidden group-hover:flex absolute p-3 w-32 top-0 -left-2 -translate-y-1/4 -translate-x-full bg-stroke-sec bg-opacity-70 rounded-xl",
+      "hidden group-hover:flex absolute p-3 w-36 top-0 -left-2 -translate-y-1/4 -translate-x-full bg-stroke-sec bg-opacity-70 rounded-xl",
       @class
     ]}>
-      <span class="text-center text-xs w-full"><%= render_slot(@inner_block) %></span>
+      <span class="text-center font-light text-xs w-full"><%= render_slot(@inner_block) %></span>
+    </div>
+    """
+  end
+
+  def tooltip(%{position: "right"} = assigns) do
+    ~H"""
+    <div class={[
+      "hidden group-hover:flex absolute p-3 w-36 top-0 -right-2 -translate-y-1/4 -translate-x-full bg-stroke-sec bg-opacity-70 rounded-xl",
+      @class
+    ]}>
+      <span class="text-center font-light text-xs w-full"><%= render_slot(@inner_block) %></span>
     </div>
     """
   end

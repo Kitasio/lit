@@ -45,8 +45,8 @@
       <div id={"img-#{image.id}-box"} x-data="" class="relative">
         <div :if={!image.unlocked} class="absolute top-5 left-5 z-30">
           <div class="relative group">
-            <.icon name="hero-clock" class="w-6 h-6 text-orange-300" />
-            <.tooltip position="bottom">
+            <.icon name="hero-clock" class="cursor-pointer w-6 h-6 text-orange-300" />
+            <.tooltip position="top">
               <%= gettext("Locked image, dissapears after 24 hours") %>
             </.tooltip>
           </div>
