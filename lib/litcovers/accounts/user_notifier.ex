@@ -8,7 +8,7 @@ defmodule Litcovers.Accounts.UserNotifier do
     email =
       new()
       |> to(recipient)
-      |> from({"Litcovers", "contact@example.com"})
+      |> from({"Litcovers", "kit@litcovers.com"})
       |> subject(subject)
       |> text_body(body)
 
@@ -20,7 +20,20 @@ defmodule Litcovers.Accounts.UserNotifier do
   @doc """
   Deliver instructions to confirm account.
   """
-  def deliver_confirmation_instructions(user, url) do
+  def deliver_confirmation_instructions(user, "ru", url) do
+    deliver(user.email, "Confirmation instructions", """
+
+    Получилось!
+
+    Первый шаг на пути к обложкам и иллюстрациям для ваших бестселлеров пройден! 
+
+    Теперь просто подтвердите свой аккаунт по ссылке ниже и вместе мы приступим к созданию
+
+    #{url}
+    """)
+  end
+
+  def deliver_confirmation_instructions(user, _locale, url) do
     deliver(user.email, "Confirmation instructions", """
 
     ==============================
@@ -40,7 +53,19 @@ defmodule Litcovers.Accounts.UserNotifier do
   @doc """
   Deliver instructions to reset a user password.
   """
-  def deliver_reset_password_instructions(user, url) do
+  def deliver_reset_password_instructions(user, "ru", url) do
+    deliver(user.email, "Reset password instructions", """
+
+    Не паролем едины
+
+    Да, так бывает, пароли забываются! Вот мы и отправили Вам ссылку, чтобы создать новый, красивый и незабываемый
+
+    #{url}
+
+    """)
+  end
+
+  def deliver_reset_password_instructions(user, _locale, url) do
     deliver(user.email, "Reset password instructions", """
 
     ==============================
@@ -60,7 +85,17 @@ defmodule Litcovers.Accounts.UserNotifier do
   @doc """
   Deliver instructions to update a user email.
   """
-  def deliver_update_email_instructions(user, url) do
+  def deliver_update_email_instructions(user, "ru", url) do
+    deliver(user.email, "Update email instructions", """
+
+    Иногда почтовый ящик хочется сменить, мы это понимаем. Поэтому немедленно сгенерировали ссылку, чтобы сделать это 
+
+    #{url}
+
+    """)
+  end
+
+  def deliver_update_email_instructions(user, _locale, url) do
     deliver(user.email, "Update email instructions", """
 
     ==============================

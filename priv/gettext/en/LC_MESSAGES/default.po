@@ -240,7 +240,7 @@ msgstr ""
 msgid "Adjust the settings – improve the result."
 msgstr ""
 
-#: lib/litcovers_web/live/user_registration_live.ex:43
+#: lib/litcovers_web/live/user_registration_live.ex:64
 #, elixir-autogen, elixir-format
 msgid "Already registered?"
 msgstr ""
@@ -276,6 +276,7 @@ msgid "Confirm my account"
 msgstr ""
 
 #: lib/litcovers_web/live/user_reset_password_live.ex:27
+#: lib/litcovers_web/live/user_settings_live.ex:71
 #, elixir-autogen, elixir-format
 msgid "Confirm new password"
 msgstr ""
@@ -290,22 +291,22 @@ msgstr ""
 msgid "Create a cover for your next bestseller in minutes"
 msgstr ""
 
-#: lib/litcovers_web/live/user_registration_live.ex:74
+#: lib/litcovers_web/live/user_registration_live.ex:95
 #, elixir-autogen, elixir-format
 msgid "Create an account"
 msgstr ""
 
-#: lib/litcovers_web/live/user_registration_live.ex:73
+#: lib/litcovers_web/live/user_registration_live.ex:94
 #, elixir-autogen, elixir-format
 msgid "Creating account..."
 msgstr ""
 
-#: lib/litcovers_web/live/transaction_live/index.ex:33
+#: lib/litcovers_web/live/transaction_live/index.ex:54
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Creative duo"
 msgstr ""
 
-#: lib/litcovers_web/live/user_confirmation_instructions_live.ex:47
+#: lib/litcovers_web/live/user_confirmation_instructions_live.ex:48
 #, elixir-autogen, elixir-format
 msgid "Didn't receive the Email?"
 msgstr ""
@@ -335,9 +336,9 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: lib/litcovers_web/live/user_confirmation_instructions_live.ex:62
+#: lib/litcovers_web/live/user_confirmation_instructions_live.ex:63
 #: lib/litcovers_web/live/user_login_live.ex:36
-#: lib/litcovers_web/live/user_registration_live.ex:69
+#: lib/litcovers_web/live/user_registration_live.ex:90
 #, elixir-autogen, elixir-format
 msgid "Email"
 msgstr ""
@@ -372,7 +373,7 @@ msgstr ""
 msgid "Find the perfect result."
 msgstr ""
 
-#: lib/litcovers_web/live/transaction_live/index.html.heex:37
+#: lib/litcovers_web/live/transaction_live/index.html.heex:44
 #, elixir-autogen, elixir-format
 msgid "For"
 msgstr ""
@@ -383,12 +384,12 @@ msgstr ""
 msgid "Forgot your password?"
 msgstr ""
 
-#: lib/litcovers_web/live/user_confirmation_instructions_live.ex:20
+#: lib/litcovers_web/live/user_confirmation_instructions_live.ex:21
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
 msgstr ""
 
-#: lib/litcovers_web/live/user_forgot_password_live.ex:45
+#: lib/litcovers_web/live/user_forgot_password_live.ex:46
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system, you will receive instructions to reset your password shortly."
 msgstr ""
@@ -398,7 +399,7 @@ msgstr ""
 msgid "Increase the image quality to the maximum."
 msgstr ""
 
-#: lib/litcovers_web/live/transaction_live/index.ex:65
+#: lib/litcovers_web/live/transaction_live/index.ex:86
 #, elixir-autogen, elixir-format
 msgid "Legendary Gallery"
 msgstr ""
@@ -414,12 +415,12 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#: lib/litcovers_web/live/transaction_live/index.ex:25
+#: lib/litcovers_web/live/transaction_live/index.ex:46
 #, elixir-autogen, elixir-format
 msgid "Lonely pixel"
 msgstr ""
 
-#: lib/litcovers_web/live/transaction_live/index.ex:57
+#: lib/litcovers_web/live/transaction_live/index.ex:78
 #, elixir-autogen, elixir-format
 msgid "Masterpiece creator"
 msgstr ""
@@ -430,6 +431,7 @@ msgid "My covers"
 msgstr ""
 
 #: lib/litcovers_web/live/user_reset_password_live.ex:23
+#: lib/litcovers_web/live/user_settings_live.ex:67
 #, elixir-autogen, elixir-format
 msgid "New password"
 msgstr ""
@@ -439,7 +441,7 @@ msgstr ""
 msgid "Nothing here so far"
 msgstr ""
 
-#: lib/litcovers_web/live/transaction_live/index.ex:41
+#: lib/litcovers_web/live/transaction_live/index.ex:62
 #, elixir-autogen, elixir-format
 msgid "Novice collector"
 msgstr ""
@@ -449,8 +451,10 @@ msgstr ""
 msgid "Of characters from your book"
 msgstr ""
 
-#: lib/litcovers_web/live/user_registration_live.ex:66
+#: lib/litcovers_web/live/user_registration_live.ex:87
 #: lib/litcovers_web/live/user_reset_password_live.ex:20
+#: lib/litcovers_web/live/user_settings_live.ex:30
+#: lib/litcovers_web/live/user_settings_live.ex:62
 #, elixir-autogen, elixir-format
 msgid "Oops, something went wrong! Please check the errors below."
 msgstr ""
@@ -465,13 +469,13 @@ msgstr ""
 msgid "Packages"
 msgstr ""
 
-#: lib/litcovers_web/live/transaction_live/index.ex:49
+#: lib/litcovers_web/live/transaction_live/index.ex:70
 #, elixir-autogen, elixir-format
 msgid "Paint Party"
 msgstr ""
 
 #: lib/litcovers_web/live/user_login_live.ex:37
-#: lib/litcovers_web/live/user_registration_live.ex:70
+#: lib/litcovers_web/live/user_registration_live.ex:91
 #, elixir-autogen, elixir-format
 msgid "Password"
 msgstr ""
@@ -503,7 +507,7 @@ msgstr ""
 msgid "Register"
 msgstr ""
 
-#: lib/litcovers_web/live/user_registration_live.ex:41
+#: lib/litcovers_web/live/user_registration_live.ex:62
 #, elixir-autogen, elixir-format
 msgid "Register for an account"
 msgstr ""
@@ -513,7 +517,7 @@ msgstr ""
 msgid "Remember me"
 msgstr ""
 
-#: lib/litcovers_web/live/user_confirmation_instructions_live.ex:54
+#: lib/litcovers_web/live/user_confirmation_instructions_live.ex:55
 #, elixir-autogen, elixir-format
 msgid "Resend confirmation instructions"
 msgstr ""
@@ -539,7 +543,7 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: lib/litcovers_web/live/user_confirmation_instructions_live.ex:65
+#: lib/litcovers_web/live/user_confirmation_instructions_live.ex:66
 #, elixir-autogen, elixir-format
 msgid "Send"
 msgstr ""
@@ -549,14 +553,14 @@ msgstr ""
 msgid "Send password reset instructions"
 msgstr ""
 
-#: lib/litcovers_web/live/user_confirmation_instructions_live.ex:64
+#: lib/litcovers_web/live/user_confirmation_instructions_live.ex:65
 #: lib/litcovers_web/live/user_forgot_password_live.ex:18
 #, elixir-autogen, elixir-format
 msgid "Sending..."
 msgstr ""
 
 #: lib/litcovers_web/live/user_login_live.ex:47
-#: lib/litcovers_web/live/user_registration_live.ex:48
+#: lib/litcovers_web/live/user_registration_live.ex:69
 #, elixir-autogen, elixir-format
 msgid "Sign in"
 msgstr ""
@@ -658,7 +662,7 @@ msgstr ""
 msgid "We appreciate your time and know for sure that several options are better than one"
 msgstr ""
 
-#: lib/litcovers_web/live/user_confirmation_instructions_live.ex:41
+#: lib/litcovers_web/live/user_confirmation_instructions_live.ex:42
 #, elixir-autogen, elixir-format
 msgid "We sent confirmation instructions to your email address"
 msgstr ""
@@ -723,7 +727,7 @@ msgstr ""
 msgid "Your new cover is a symbiosis of our many years of experience in the field of design and technology and AI"
 msgstr ""
 
-#: lib/litcovers_web/live/transaction_live/index.html.heex:41
+#: lib/litcovers_web/live/transaction_live/index.html.heex:52
 #, elixir-autogen, elixir-format
 msgid "cheaper"
 msgstr ""
@@ -738,7 +742,48 @@ msgstr ""
 msgid "for an account now."
 msgstr ""
 
-#: lib/litcovers_web/live/user_registration_live.ex:50
+#: lib/litcovers_web/live/user_registration_live.ex:71
 #, elixir-autogen, elixir-format
 msgid "to your account now."
+msgstr ""
+
+#: lib/litcovers_web/live/user_settings_live.ex:153
+#, elixir-autogen, elixir-format
+msgid "A link to confirm your email change has been sent to the new address."
+msgstr ""
+
+#: lib/litcovers_web/live/user_registration_live.ex:58
+#, elixir-autogen, elixir-format
+msgid "Bonuses applied from "
+msgstr ""
+
+#: lib/litcovers_web/live/user_settings_live.ex:45
+#, elixir-autogen, elixir-format
+msgid "Change Email"
+msgstr ""
+
+#: lib/litcovers_web/live/user_settings_live.ex:49
+#: lib/litcovers_web/live/user_settings_live.ex:83
+#, elixir-autogen, elixir-format
+msgid "Change Password"
+msgstr ""
+
+#: lib/litcovers_web/live/user_settings_live.ex:104
+#, elixir-autogen, elixir-format
+msgid "Email change link is invalid or it has expired."
+msgstr ""
+
+#: lib/litcovers_web/live/user_settings_live.ex:101
+#, elixir-autogen, elixir-format
+msgid "Email changed successfully."
+msgstr ""
+
+#: lib/litcovers_web/live/user_settings_live.ex:88
+#, elixir-autogen, elixir-format
+msgid "Log out"
+msgstr ""
+
+#: lib/litcovers_web/live/user_settings_live.ex:77
+#, elixir-autogen, elixir-format
+msgid "Current password"
 msgstr ""

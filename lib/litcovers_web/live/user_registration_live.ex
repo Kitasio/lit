@@ -33,6 +33,7 @@ defmodule LitcoversWeb.UserRegistrationLive do
         {:ok, _} =
           Accounts.deliver_user_confirmation_instructions(
             user,
+            socket.assigns.locale,
             &url(~p"/#{socket.assigns.locale}/users/confirm/#{&1}")
           )
 
