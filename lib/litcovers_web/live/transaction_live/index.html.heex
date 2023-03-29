@@ -18,7 +18,7 @@
       >
         <h1 class="text-xl xl:text-2xl font-semibold"><%= opt.name %></h1>
         <div>
-          <div class="mt-3 flex items-center gap-3">
+          <div class="my-2 flex items-center gap-3">
             <div class="flex items-center gap-2.5">
               <p class="text-5xl xl:text-6xl font-extrabold tracking-tighter">
                 <%= opt.litcoins %>
@@ -33,15 +33,35 @@
               ) %>
             </p>
           </div>
-          <div class="mt-2 flex items-center gap-5">
-            <p class="text-2xl xl:text-4xl font-medium"><%= gettext("For") %> <%= opt.label %></p>
+          <p :if={@current_user.discount < 1.0} class="text-sm text-slate-300 font-semibold">
+            -<%= user_discount_convert(@current_user.discount, :as_percents) |> ceil() %>%
+            <span class="ml-2 line-through font-light">
+              <%= amount_to_int(opt.value) |> ceil() %><%= opt.currency %>
+            </span>
+          </p>
+          <div class="flex items-center gap-5">
+            <p class="text-2xl xl:text-4xl font-medium">
+              <%= gettext("For") %> <%= apply_discount(
+                amount_to_int(opt.value),
+                @current_user.discount
+              ) %><%= opt.currency %>
+            </p>
             <div class="flex text-slate-400 items-center gap-1">
               <p :if={@locale == "ru"}>На</p>
               <p class="text-accent-main"><%= 390 * opt.bonus %>₽</p>
               <p><%= gettext("cheaper") %></p>
             </div>
           </div>
-          <.button class="mt-5 px-10" phx-click="make-payment" phx-value-amount={opt.value}>
+          <.button
+            class="mt-5 px-10"
+            phx-click="make-payment"
+            phx-value-amount={
+              apply_discount(
+                amount_to_int(opt.value),
+                @current_user.discount
+              )
+            }
+          >
             Pay
           </.button>
         </div>

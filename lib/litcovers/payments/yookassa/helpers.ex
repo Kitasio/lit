@@ -3,7 +3,7 @@ defmodule Litcovers.Payments.Yookassa.Helpers do
   alias Litcovers.Payments.Yookassa
   require Logger
 
-  def transaction_from_yookassa(body) do
+  def transaction_from_yookassa(body, discount) do
     %{
       "amount" => %{
         "value" => amount,
@@ -21,7 +21,8 @@ defmodule Litcovers.Payments.Yookassa.Helpers do
       status: status,
       paid: paid,
       payment_service: "yookassa",
-      description: "Buying litcoins"
+      description: "Buying litcoins",
+      discount: discount
     }
   end
 
