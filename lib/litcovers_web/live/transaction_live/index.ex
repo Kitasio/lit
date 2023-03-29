@@ -12,8 +12,9 @@ defmodule LitcoversWeb.TransactionLive.Index do
     100 - discount * 100
   end
 
-  def user_discount_convert(discount, :as_price) when is_float(discount) do
-    390 - ((390 * discount) |> floor())
+  def get_tx_discount(amount, user_discount)
+      when is_integer(amount) and is_float(user_discount) do
+    amount - ((amount * user_discount) |> floor())
   end
 
   def apply_discount(price, discount) do
@@ -24,11 +25,12 @@ defmodule LitcoversWeb.TransactionLive.Index do
     amount |> String.split(".") |> List.first() |> String.to_integer()
   end
 
-  def handle_event("make-payment", %{"amount" => amount}, socket) do
+  def handle_event("make-payment", %{"amount" => amount, "total-amount" => total_amount}, socket) do
     {:ok, body} = Yookassa.Request.payment(to_string(amount) <> ".00")
     %{"confirmation" => %{"confirmation_url" => confirmation_url}} = body
 
-    tx_discount = user_discount_convert(socket.assigns.current_user.discount, :as_price)
+    tx_discount =
+      get_tx_discount(amount_to_int(total_amount), socket.assigns.current_user.discount)
 
     transaction = Yookassa.Helpers.transaction_from_yookassa(body, tx_discount)
 
