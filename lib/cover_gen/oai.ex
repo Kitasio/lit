@@ -32,7 +32,7 @@ defmodule CoverGen.OAI do
     # Send the post request
     case HTTPoison.post(endpoint, body, headers, options) do
       {:ok, %Response{body: res_body}} ->
-        ideas = oai_response_text(res_body)
+        ideas = oai_response_text(res_body) || [""]
         {:ok, ideas}
 
       {:error, reason} ->
@@ -102,15 +102,27 @@ defmodule CoverGen.OAI do
   end
 
   defp oai_response_text(oai_res_body) do
-    %{"choices" => choices_list} = Jason.decode!(oai_res_body)
-    [%{"text" => text} | _] = choices_list
+    case Jason.decode(oai_res_body) do
+      {:ok, body} ->
+        case Map.get(body, "choices") do
+          nil ->
+            nil
 
-    text
-    |> String.split("output:")
-    |> List.last()
-    |> String.trim()
-    |> String.split("\n")
-    |> List.first()
-    |> String.split(",")
+          choices_list ->
+            [%{"text" => text} | _] = choices_list
+
+            text
+            |> String.split("output:")
+            |> List.last()
+            |> String.trim()
+            |> String.split("\n")
+            |> List.first()
+            |> String.split(",")
+        end
+
+      {:error, reason} ->
+        Logger.error("decode oai response body error: #{inspect(reason)}")
+        nil
+    end
   end
 end
