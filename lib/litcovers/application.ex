@@ -23,7 +23,8 @@ defmodule Litcovers.Application do
       CoverGen.CoverProducer,
       CoverGen.CoverConsumerSupervisor,
       CoverGen.Supervisor,
-      Litcovers.GenericSupervisor
+      Litcovers.GenericSupervisor,
+      Litcovers.Metrics
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
