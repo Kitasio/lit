@@ -33,7 +33,7 @@ defmodule LitcoversWeb.UserRegistrationLive do
       {:ok, user} ->
         images = [
           %{
-            url: "https://ik.imagekit.io/soulgenesis/litnet/showcase_default_cover.jpg",
+            url: "https://ik.imagekit.io/soulgenesis/litnet/showcase_default.jpg",
             cover_url: "https://ik.imagekit.io/soulgenesis/litnet/showcase_default_cover.jpg"
           }
         ]
