@@ -393,9 +393,11 @@ defmodule LitcoversWeb.UiComponents do
     <div class="flex flex-col gap-5">
       <div class="flex justify-between items-center">
         <.header><%= gettext("Name") %></.header>
-        <div class="flex gap-3 items-center">
-          <span class="text-xs"><%= @font %></span>
-          <.type_selector type="author" />
+        <div class="sm:flex space-y-1 sm:space-y-0 gap-3 items-center">
+          <p class="text-xs"><%= @font %></p>
+          <div class="flex justify-end">
+            <.type_selector type="author" />
+          </div>
         </div>
       </div>
       <.input
@@ -416,9 +418,11 @@ defmodule LitcoversWeb.UiComponents do
     <div class="flex flex-col gap-5">
       <div class="flex justify-between items-center">
         <.header><%= gettext("Title") %></.header>
-        <div class="flex gap-3 items-center">
-          <span class="text-xs"><%= @font %></span>
-          <.type_selector type="title" />
+        <div class="sm:flex space-y-1 sm:space-y-0 gap-3 items-center">
+          <p class="text-xs"><%= @font %></p>
+          <div class="flex justify-end">
+            <.type_selector type="title" />
+          </div>
         </div>
       </div>
       <.input
@@ -438,7 +442,7 @@ defmodule LitcoversWeb.UiComponents do
 
   def type_selector(assigns) do
     ~H"""
-    <div class="px-2.5 flex items-center gap-3 border-2 border-stroke-sec bg-tag-sec rounded-lg">
+    <div class="px-2.5 w-24 flex justify-center items-center gap-3 border-2 border-stroke-sec bg-tag-sec rounded-lg">
       <span phx-click={"prev-#{@type}-font"} phx-throttle="700">
         <.icon name="hero-chevron-left" class="w-5 h-5 cursor-pointer hover:scale-105 transition" />
       </span>
