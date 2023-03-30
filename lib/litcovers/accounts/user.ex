@@ -9,7 +9,7 @@ defmodule Litcovers.Accounts.User do
     field :confirmed_at, :naive_datetime
     field :enabled, :boolean, default: true
     field :is_admin, :boolean, default: false
-    field :litcoins, :integer, default: 1
+    field :litcoins, :integer, default: 0
     field :is_generating, :boolean, default: false
     field :relaxed_mode, :boolean, default: false
     field :recent_generations, :integer, default: 0
