@@ -43,7 +43,14 @@ defmodule LitcoversWeb.UiComponents do
             </div>
           </.link>
           <.link navigate={"/#{@locale}/users/settings"}>
-            <.icon name="hero-user-circle-solid" class="w-10 h-10 text-accent-main hover:opacity-80" />
+            <%= if @current_user.referer in ["rugram.me", "i-gram.ru", "rugram-shop.ru", "delibri.ru"] do %>
+              <img src="https://ik.imagekit.io/soulgenesis/litnet/rg.svg" class="w-10 h-10" />
+            <% else %>
+              <.icon
+                name="hero-user-circle-solid"
+                class="w-10 h-10 text-accent-main hover:opacity-80"
+              />
+            <% end %>
           </.link>
           <div>
             <.link navigate={"/#{@locale}/images/new"}>
