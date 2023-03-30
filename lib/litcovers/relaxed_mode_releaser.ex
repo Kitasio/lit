@@ -12,18 +12,18 @@ defmodule Litcovers.RelaxedModeReleaser do
     Logger.info("Relaxed mode releaser started")
 
     Accounts.list_users_with_recent_generations()
-    |> Enum.map(fn user ->
+    |> Enum.each(fn user ->
       release(user)
     end)
 
-    Process.sleep(:timer.minutes(30))
+    Process.sleep(:timer.minutes(5))
     loop()
   end
 
   defp release(user) do
     last_image = Media.last_image(user)
 
-    if last_image.inserted_at > hour_ago() do
+    if last_image.inserted_at < hour_ago() do
       params = %{recent_generations: 0}
       Accounts.update_relaxed_mode(user, params)
     end
