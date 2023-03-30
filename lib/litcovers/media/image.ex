@@ -30,6 +30,7 @@ defmodule Litcovers.Media.Image do
       :url,
       :description,
       :completed,
+      :unlocked,
       :width,
       :height,
       :character_gender,

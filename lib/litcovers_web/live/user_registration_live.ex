@@ -1,6 +1,7 @@
 defmodule LitcoversWeb.UserRegistrationLive do
   use LitcoversWeb, :live_view
 
+  alias Litcovers.Media
   alias Litcovers.Accounts
   alias Litcovers.Accounts.User
 
@@ -30,6 +31,33 @@ defmodule LitcoversWeb.UserRegistrationLive do
 
     case Accounts.register_user(user_params) do
       {:ok, user} ->
+        images = [
+          %{
+            url: "https://ik.imagekit.io/soulgenesis/litnet/showcase_default_cover.jpg",
+            cover_url: "https://ik.imagekit.io/soulgenesis/litnet/showcase_default_cover.jpg"
+          }
+        ]
+
+        for i <- images do
+          params = %{
+            completed: true,
+            character_gender: "female",
+            description: "A test image",
+            height: 768,
+            width: 512,
+            url: i.url,
+            unlocked: true
+          }
+
+          case Media.create_image(user, params) do
+            {:ok, image} ->
+              Media.create_cover(image, user, %{url: i.cover_url})
+
+            {:error, %Ecto.Changeset{} = changeset} ->
+              IO.inspect(changeset)
+          end
+        end
+
         {:ok, _} =
           Accounts.deliver_user_confirmation_instructions(
             user,
