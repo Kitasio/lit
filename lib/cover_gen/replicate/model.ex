@@ -26,6 +26,19 @@ defmodule CoverGen.Replicate.Model do
     check_for_output(generation_url, headers, options)
   end
 
+  def cancel(prediction_id, replicate_token) do
+    body = Jason.encode!(%{})
+    headers = [Authorization: "Token #{replicate_token}", "Content-Type": "application/json"]
+    options = [timeout: 50_000, recv_timeout: 165_000]
+
+    endpoint = "https://api.replicate.com/v1/predictions/#{prediction_id}/cancel"
+
+    Logger.info("Canceling: #{prediction_id}")
+
+    res = HTTPoison.post(endpoint, body, headers, options)
+    IO.inspect(res)
+  end
+
   defp check_for_output(generation_url, headers, options) do
     %Response{body: res} = HTTPoison.get!(generation_url, headers, options)
     res = res |> Jason.decode!()
