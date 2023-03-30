@@ -21,52 +21,65 @@ defmodule CoverGen.Replicate.Model do
 
     Logger.info("Generating images")
 
-    {:ok, %Response{body: res_body}} = HTTPoison.post(endpoint, body, headers, options)
-    %{"urls" => %{"get" => generation_url}} = Jason.decode!(res_body)
-    check_for_output(generation_url, headers, options)
-  end
+    case HTTPoison.post(endpoint, body, headers, options) do
+      {:ok, response} ->
+        %Response{body: res_body} = response
 
-  def cancel(prediction_id, replicate_token) do
-    body = Jason.encode!(%{})
-    headers = [Authorization: "Token #{replicate_token}", "Content-Type": "application/json"]
-    options = [timeout: 50_000, recv_timeout: 165_000]
+        case Jason.decode(res_body) do
+          {:ok, data} ->
+            %{"urls" => %{"get" => generation_url}} = data
+            check_for_output(generation_url, headers, options)
 
-    endpoint = "https://api.replicate.com/v1/predictions/#{prediction_id}/cancel"
+          {:error, reason} ->
+            Logger.error("Decoding replicate data failed: #{inspect(reason)}")
+            {:error, :sd_failed, "failed data decoding"}
+        end
 
-    Logger.info("Canceling: #{prediction_id}")
-
-    res = HTTPoison.post(endpoint, body, headers, options)
-    IO.inspect(res)
+      {:error, reason} ->
+        Logger.error("Post request to replicate failed: #{inspect(reason)}")
+        {:error, :sd_failed, "failed post requsrt"}
+    end
   end
 
   defp check_for_output(generation_url, headers, options) do
-    %Response{body: res} = HTTPoison.get!(generation_url, headers, options)
-    res = res |> Jason.decode!()
+    case HTTPoison.get(generation_url, headers, options) do
+      {:ok, response} ->
+        %Response{body: res} = response
 
-    case res["error"] do
-      nil ->
-        case res["status"] do
-          "starting" ->
-            Logger.debug("Starting")
-            :timer.seconds(2) |> Process.sleep()
-            check_for_output(generation_url, headers, options)
+        case Jason.decode(res) do
+          {:ok, res} ->
+            case res["error"] do
+              nil ->
+                case res["status"] do
+                  "starting" ->
+                    Logger.debug("Starting")
+                    :timer.seconds(2) |> Process.sleep()
+                    check_for_output(generation_url, headers, options)
 
-          "processing" ->
-            Logger.debug("Processing")
-            :timer.seconds(1) |> Process.sleep()
-            check_for_output(generation_url, headers, options)
+                  "processing" ->
+                    Logger.debug("Processing")
+                    :timer.seconds(1) |> Process.sleep()
+                    check_for_output(generation_url, headers, options)
 
-          "succeeded" ->
-            Logger.debug("Succeeded")
-            {:ok, res}
+                  "succeeded" ->
+                    Logger.debug("Replicate model succeeded")
+                    {:ok, res}
 
-          "failed" ->
-            Logger.debug("Failed")
-            {:error, :sd_failed, "Generation failed, try again"}
+                  "failed" ->
+                    Logger.debug("Replicate model failed")
+                    {:error, :sd_failed, "Generation failed, try again"}
+                end
+
+              error ->
+                {:error, :sd_failed, error}
+            end
+
+          {:error, reason} ->
+            {:error, :sd_failed, "Failed decoding replicate response: #{inspect(reason)}"}
         end
 
-      error ->
-        {:error, :sd_failed, error}
+      {:error, reason} ->
+        {:error, :sd_failed, "GET request to replicate failed: #{inspect(reason)}"}
     end
   end
 
@@ -160,5 +173,18 @@ defmodule CoverGen.Replicate.Model do
         version: "9936c2001faa2194a261c01381f90e65261879985476014a0a37a334593a05eb"
       }
     ]
+  end
+
+  def cancel(prediction_id, replicate_token) do
+    body = Jason.encode!(%{})
+    headers = [Authorization: "Token #{replicate_token}", "Content-Type": "application/json"]
+    options = [timeout: 50_000, recv_timeout: 165_000]
+
+    endpoint = "https://api.replicate.com/v1/predictions/#{prediction_id}/cancel"
+
+    Logger.info("Canceling: #{prediction_id}")
+
+    res = HTTPoison.post(endpoint, body, headers, options)
+    IO.inspect(res)
   end
 end
