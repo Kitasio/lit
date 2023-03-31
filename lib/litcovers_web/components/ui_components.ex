@@ -53,9 +53,9 @@ defmodule LitcoversWeb.UiComponents do
             <% end %>
           </.link>
           <div>
-            <.link navigate={"/#{@locale}/images/new"}>
+            <.link navigate={"/#{@locale}/images"}>
               <.button>
-                <%= gettext("Create") %>
+                <%= gettext("Generations") %>
               </.button>
             </.link>
           </div>
