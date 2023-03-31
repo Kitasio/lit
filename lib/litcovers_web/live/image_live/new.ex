@@ -33,7 +33,6 @@ defmodule LitcoversWeb.ImageLive.New do
       end
 
     style_prompts = list_style_prompts()
-    prompt = style_prompts |> List.first()
     stage = get_stage(0)
 
     {:ok,
@@ -43,7 +42,8 @@ defmodule LitcoversWeb.ImageLive.New do
        lit_ai: true,
        aspect_ratio: "cover",
        style_prompts: style_prompts,
-       style_prompt: prompt.style_prompt,
+       style_prompt: nil,
+       prompt_id: nil,
        stage: stage,
        realms: realms(),
        realm: :fantasy,
@@ -52,8 +52,7 @@ defmodule LitcoversWeb.ImageLive.New do
        sentiments: sentiments(),
        sentiment: :positive,
        gender: :female,
-       prompt_id: prompt.id,
-       placeholder: placeholder_or_empty(Metadata.get_random_placeholder()),
+       placeholder: random_placeholder(locale),
        width: 512,
        height: 768,
        image: %Image{},
@@ -276,13 +275,13 @@ defmodule LitcoversWeb.ImageLive.New do
         {:ok, image} ->
           CoverGen.CoverProducer.start_image_gen(image, prompt)
 
-          socket = socket |> assign(image: image, is_generating: true)
+          socket = socket |> assign(image: image, is_generating: true, gen_error: nil)
 
           {:noreply, socket}
 
         {:error, %Ecto.Changeset{} = changeset} ->
           IO.inspect(changeset)
-          placeholder = placeholder_or_empty(Metadata.get_random_placeholder())
+          placeholder = random_placeholder(socket.assigns.locale)
           {:noreply, assign(socket, changeset: changeset, placeholder: placeholder)}
       end
     else
@@ -301,13 +300,13 @@ defmodule LitcoversWeb.ImageLive.New do
         {:ok, image} ->
           CoverGen.CoverProducer.start_image_gen(image)
 
-          socket = socket |> assign(image: image, is_generating: true)
+          socket = socket |> assign(image: image, is_generating: true, gen_error: nil)
 
           {:noreply, socket}
 
         {:error, %Ecto.Changeset{} = changeset} ->
           IO.inspect(changeset)
-          placeholder = placeholder_or_empty(Metadata.get_random_placeholder())
+          placeholder = random_placeholder(socket.assigns.locale)
           {:noreply, assign(socket, changeset: changeset, placeholder: placeholder)}
       end
     else
@@ -491,12 +490,15 @@ defmodule LitcoversWeb.ImageLive.New do
     "square"
   end
 
-  attr :aspect_ratio, :string, default: "cover"
+  attr(:aspect_ratio, :string, default: "cover")
 
   def img_dimensions(assigns) do
     ~H"""
-    <div>
-      <.header><%= gettext("Image dimensions") %></.header>
+    <div class="mb-10">
+      <.header>
+        <%= gettext("Step 2. ") %><span class="text-zinc-400 font-normal"><%= gettext("Image dimensions") %></span>
+        <:subtitle><%= gettext("Choose what dimensions the image will have") %></:subtitle>
+      </.header>
       <div class="flex gap-3 mt-5" x-data="">
         <div
           class="w-32 text-center px-4 py-2.5 cursor-pointer rounded-xl border-2 border-stroke-main bg-tag-main hover:border-accent-main transition"
@@ -514,7 +516,7 @@ defmodule LitcoversWeb.ImageLive.New do
         >
           1:1
         </div>
-        <div class="w-32 flex items-center justify-center gap-1 px-4 py-2.5 cursor-pointer rounded-xl border-2 border-stroke-main bg-tag-main">
+        <div class="w-32 bg-zinc-600 opacity-50 flex items-center justify-center gap-1 px-4 py-2.5 cursor-pointer rounded-xl border-2 border-stroke-main bg-tag-main">
           <.icon name="hero-lock-closed" class="w-5 h-5" /> <span>3:2</span>
         </div>
       </div>
@@ -554,9 +556,10 @@ defmodule LitcoversWeb.ImageLive.New do
     """
   end
 
-  attr :spin, :boolean, default: false
-  attr :relaxed_mode, :boolean, default: false
-  attr :user_id, :string, required: true
+  attr(:spin, :boolean, default: false)
+  attr(:relaxed_mode, :boolean, default: false)
+  attr(:user_id, :string, required: true)
+  attr :prompt_id, :integer, default: nil
 
   def generate_btn(assigns) do
     ~H"""
@@ -567,8 +570,8 @@ defmodule LitcoversWeb.ImageLive.New do
     >
       <.button
         type="submit"
-        class="btn-small flex items-center justify-center gap-3 py-3 bg-accent-main disabled:bg-dis-btn rounded-full w-full"
-        disabled={@spin or @relaxed_mode}
+        class="btn-small flex items-center justify-center gap-3 py-3 bg-accent-main disabled:bg-zinc-600 disabled:opacity-50 disabled:hover:shadow-none rounded-full w-full"
+        disabled={@spin or @relaxed_mode or @prompt_id == nil}
       >
         <span :if={@relaxed_mode} class="my-2" id={"relaxed-timer-user-#{@user_id}"}>00:00</span>
         <svg
@@ -597,11 +600,11 @@ defmodule LitcoversWeb.ImageLive.New do
 
   def stage_nav(assigns) do
     ~H"""
-    <div class="mt-3 flex text-xs sm:text-base">
+    <div class="mt-7 flex text-xs sm:text-sm leading-6 text-zinc-300">
       <%= for stage <- stages() do %>
         <%= if stage.id <= assigns.stage do %>
           <%= if stage.id == assigns.stage do %>
-            <div class="cursor-pointer capitalize text-zinc-100 font-light">
+            <div class="cursor-pointer capitalize text-zinc-100 font-bold">
               <%= stage.name %>
             </div>
           <% else %>
@@ -615,7 +618,7 @@ defmodule LitcoversWeb.ImageLive.New do
               <%= stage.name %>
             </div>
           <% end %>
-          <span class="last:hidden pb-1 mx-2 text-zinc-400">></span>
+          <span class="last:hidden mx-2 text-zinc-400">></span>
         <% end %>
       <% end %>
     </div>
@@ -642,8 +645,8 @@ defmodule LitcoversWeb.ImageLive.New do
     end
   end
 
-  attr :label, :string, default: nil
-  attr :disabled, :boolean, default: false
+  attr(:label, :string, default: nil)
+  attr(:disabled, :boolean, default: false)
 
   def img_box(assigns) do
     assigns = assign_new(assigns, :prompt_id, fn -> nil end)
@@ -747,8 +750,8 @@ defmodule LitcoversWeb.ImageLive.New do
 
   def stage_msg(assigns) do
     ~H"""
-    <div class="mt-5 mb-4">
-      <h1 class="text-sm sm:text-base font-light">
+    <div class="mb-4">
+      <h1 class="mt-2 text-sm leading-6 text-zinc-300">
         <%= assigns.msg %>
       </h1>
     </div>
@@ -825,5 +828,135 @@ defmodule LitcoversWeb.ImageLive.New do
       style_prompts ->
         style_prompts
     end
+  end
+
+  def random_placeholder("en") do
+    [
+      %{
+        title: "To Kill a Mockingbird",
+        author: "Harper Lee",
+        description: "A young girl's perspective on racial injustice in the American South."
+      },
+      %{
+        title: "1984",
+        author: "George Orwell",
+        description:
+          "A cautionary tale of a dystopian society controlled by a totalitarian regime."
+      },
+      %{
+        title: "Pride and Prejudice",
+        author: "Jane Austen",
+        description:
+          "A witty romance novel that satirizes the social norms of 19th-century England."
+      },
+      %{
+        title: "The Catcher in the Rye",
+        author: "J.D. Salinger",
+        description:
+          "A novel capturing the disillusionment and angst of teenage life in post-World War II America."
+      },
+      %{
+        title: "The Great Gatsby",
+        author: "F. Scott Fitzgerald",
+        description:
+          "A tragic love story set in the lavish world of the 1920s, exploring themes of wealth, status, and the American Dream."
+      },
+      %{
+        title: "Moby-Dick",
+        author: "Herman Melville",
+        description:
+          "A story of obsession, revenge, and the struggle between man and nature as a whaling ship pursues a white whale."
+      },
+      %{
+        title: "The Adventures of Huckleberry Finn",
+        author: "Mark Twain",
+        description:
+          "A classic novel about a young boy's journey down the Mississippi River, exploring themes of racism and social injustice."
+      },
+      %{
+        title: "The Odyssey",
+        author: "Homer",
+        description:
+          "An epic poem about the adventures of Odysseus as he tries to return home after the Trojan War."
+      },
+      %{
+        title: "Jane Eyre",
+        author: "Charlotte Bronte",
+        description:
+          "A bildungsroman novel about a young woman's journey to find love and independence in 19th-century England."
+      },
+      %{
+        title: "One Hundred Years of Solitude",
+        author: "Gabriel Garcia Marquez",
+        description:
+          "A magical realist novel chronicling the history of the Buendia family in the fictional town of Macondo."
+      }
+    ]
+    |> Enum.random()
+  end
+
+  def random_placeholder("ru") do
+    [
+      %{
+        title: "Убить пересмешника",
+        author: "Харпер Ли",
+        description: "Взгляд молодой девушки на расовую несправедливость в Южной Америке."
+      },
+      %{
+        title: "1984",
+        author: "Джордж Оруэлл",
+        description:
+          "Роман-предостережение о дистопическом обществе, контролируемом тоталитарным режимом."
+      },
+      %{
+        title: "Гордость и предубеждение",
+        author: "Джейн Остин",
+        description:
+          "Остроумный роман о любви, который сатиризирует социальные нормы Англии XIX века."
+      },
+      %{
+        title: "Над пропастью во ржи",
+        author: "Джером Д. Сэлинджер",
+        description:
+          "Роман, в котором описывается разочарование в юношеской жизни в послевоенной Америке."
+      },
+      %{
+        title: "Великий Гэтсби",
+        author: "Фрэнсис Скотт Фицджеральд",
+        description:
+          "Трагическая история любви, происходящая в роскошном мире 1920-х годов, исследующая темы богатства, статуса и американской мечты."
+      },
+      %{
+        title: "Моби Дик",
+        author: "Герман Мелвилл",
+        description:
+          "История одержимости, мести и борьбы между человеком и природой, когда корабль на китобойной охоте преследует белого кита."
+      },
+      %{
+        title: "Приключения Гекльберри Финна",
+        author: "Марк Твен",
+        description:
+          "Классический роман о путешествии мальчика вниз по реке Миссисипи, исследуя темы расизма и социальной несправедливости."
+      },
+      %{
+        title: "Одиссея",
+        author: "Гомер",
+        description:
+          "Эпическое поэма об приключениях Одиссея, когда он пытается вернуться домой после Троянской войны."
+      },
+      %{
+        title: "Джейн Эйр",
+        author: "Шарлотта Бронте",
+        description:
+          "Роман о жизненном пути молодой женщины, которая пытается преодолеть невзгоды сиротства, находит любовь и ищет свое место в обществе в Англии XIX века."
+      },
+      %{
+        title: "Война и мир",
+        author: "Лев Толстой",
+        description:
+          "Эпический роман, охватывающий жизнь российского общества в период Наполеоновских войн, исследуя темы любви, войны, семьи и человеческого прогресса."
+      }
+    ]
+    |> Enum.random()
   end
 end

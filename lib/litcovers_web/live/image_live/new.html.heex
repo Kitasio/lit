@@ -9,11 +9,11 @@
     request_path={~p"/#{@locale}/images/new"}
   />
   <div class="lg:col-span-5 sm:my-14 sm:mx-8">
-    <div class="bg-sec px-8 py-5 sm:rounded-tr-xl sm:rounded-tl-xl">
-      <div class="flex items-center gap-8">
-        <.header><%= gettext("LIT AI") %></.header>
-        <.toggler />
-      </div>
+    <div class="bg-sec px-8 py-3 sm:rounded-tr-xl sm:rounded-tl-xl">
+      <!-- <div class="flex items-center gap-8"> -->
+      <!--   <.header><%= gettext("LIT AI") %></.header> -->
+      <!--   <.toggler /> -->
+      <!-- </div> -->
     </div>
     <%= if @lit_ai do %>
       <div class="bg-sec flex flex-col justify-between rounded-br-xl rounded-bl-xl overflow-hidden">
@@ -24,8 +24,15 @@
           phx-change="validate"
           phx-submit="save"
         >
-          <div class="space-y-5">
-            <.header><%= gettext("Book description") %></.header>
+          <div class="space-y-5 mb-10">
+            <.header>
+              <%= gettext("Step 1. ") %><span class="text-zinc-400 font-normal"><%= gettext("Description") %></span>
+              <:subtitle>
+                <%= gettext(
+                  "Write down what comes to mind, it can be a book annotation, character description, idea for an image, or anything you'd like"
+                ) %>
+              </:subtitle>
+            </.header>
             <.input
               id="description-input"
               field={{f, :description}}
@@ -44,8 +51,18 @@
           <.img_dimensions aspect_ratio={@aspect_ratio} />
 
           <div class="bg-sec">
-            <div class="pt-5">
-              <.header><%= gettext("What are we creating?") %></.header>
+            <div>
+              <.header>
+                <%= gettext("Step 3. ") %>
+                <span class="text-zinc-400 font-normal">
+                  <%= gettext("What are we creating?") %>
+                </span>
+                <:subtitle>
+                  <%= gettext(
+                    "Pick one of many presets to steer the creation in the right direction"
+                  ) %>
+                </:subtitle>
+              </.header>
               <.stage_nav stage={@stage.id} />
             </div>
             <div id="stage-box" class="transition duration-300">
@@ -154,6 +171,7 @@
             spin={@is_generating}
             user_id={@current_user.id}
             relaxed_mode={@current_user.relaxed_mode}
+            prompt_id={@prompt_id}
           />
         </.form>
       </div>
