@@ -796,7 +796,7 @@ msgstr "Описание"
 #: lib/litcovers_web/components/ui_components.ex:58
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Generations"
-msgstr "Мои генерации"
+msgstr "Генерации"
 
 #: lib/litcovers_web/live/image_live/new.html.heex:61
 #, elixir-autogen, elixir-format

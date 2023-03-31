@@ -263,8 +263,8 @@ defmodule LitcoversWeb.CoreComponents do
       class={[
         "bg-gradient-to-r from-[#FF00E5] via-[#8F00FF] to-[#3600D0]",
         "hover:shadow-[0_0_0_2px_rgba(1,1,1,1)] hover:shadow-white",
-        "phx-submit-loading:opacity-75 py-3 px-7 rounded-full",
-        "text-xs lg:text-sm font-semibold leading-6 text-white active:text-white/80 transition duration-300 disabled:bg-none disabled:bg-dis-btn",
+        "phx-submit-loading:opacity-75 py-2 px-5 sm:py-3 sm:px-7 rounded-full",
+        "text-xs lg:text-sm sm:font-semibold leading-6 text-white active:text-white/80 transition duration-300 disabled:bg-none disabled:bg-dis-btn",
         @class
       ]}
       {@rest}
