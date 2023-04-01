@@ -11,7 +11,52 @@ defmodule CoverGen.Create do
 
   require Elixir.Logger
 
-  def new(%Image{} = image, lit_ai) do
+  def new(%Image{} = image, %Model{} = params) do
+    with _ <- lock_user(image.user_id),
+         {:ok, res} <-
+           Model.diffuse(
+             params,
+             System.get_env("REPLICATE_TOKEN")
+           ) do
+      %{"output" => image_list} = res
+
+      case Spaces.save_to_spaces(image_list) do
+        {:error, reason} ->
+          release_user(image.user_id)
+          IO.inspect(reason)
+
+        img_urls ->
+          for url <- img_urls do
+            image_params = %{url: url, completed: true}
+            ai_update_image(image, image_params)
+          end
+
+          {:ok, user} = release_user(image.user_id)
+          {:ok, user} = Accounts.inc_recent_generations(user)
+
+          if user.recent_generations >= user.litcoins * 10 + 10 do
+            broadcast(image.user_id, image.id, :relaxed_mode)
+          else
+            broadcast(image.user_id, image.id, :gen_complete)
+          end
+      end
+    else
+      {:error, :oai_failed} ->
+        release_user(image.user_id)
+        broadcast(image.user_id, image.id, :oai_failed)
+
+      {:error, :sd_failed, error} ->
+        release_user(image.user_id)
+        IO.inspect(error)
+        broadcast(image.user_id, image.id, :sd_failed)
+
+      _ ->
+        release_user(image.user_id)
+        broadcast(image.user_id, image.id, :unknown_error)
+    end
+  end
+
+  def new(%Image{} = image, lit_ai) when is_boolean(lit_ai) do
     with _ <- lock_user(image.user_id),
          oai_res <- mutate_description(image, lit_ai),
          prompt <-

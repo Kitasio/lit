@@ -125,7 +125,7 @@ defmodule LitcoversWeb.ImageLive.New do
       {:ok, new_image} =
         Media.create_image(socket.assigns.current_user, image.prompt, image_params)
 
-      CoverGen.CoverProducer.start_image_gen(new_image, model_params)
+      CoverGen.Worker.generate(new_image, model_params)
 
       for i <- image.ideas do
         Media.create_idea(new_image, %{idea: i.idea})
