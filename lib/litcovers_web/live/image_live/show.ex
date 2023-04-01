@@ -14,8 +14,8 @@ defmodule LitcoversWeb.ImageLive.Show do
 
     image_base64 =
       image.url
-      |> Imagekit.transform("oi-vin-top.png,oy-0")
-      |> Imagekit.transform("oi-vin-bot.png,oy-N0")
+      |> Imagekit.transform("oi-dark-effect-top.png,oy-0")
+      |> Imagekit.transform("oi-dark-effect-bot.png,oy-N0")
       |> Imagekit.transform("q-100,f-jpg")
       |> img_url_to_base64()
 
