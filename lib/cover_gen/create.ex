@@ -11,64 +11,12 @@ defmodule CoverGen.Create do
 
   require Elixir.Logger
 
-  def new(%Image{} = image, %Model{} = params) do
+  def new(%Image{} = image, lit_ai) do
     with _ <- lock_user(image.user_id),
-         {:ok, res} <-
-           Model.diffuse(
-             params,
-             System.get_env("REPLICATE_TOKEN")
-           ) do
-      %{"output" => image_list} = res
-
-      case Spaces.save_to_spaces(image_list) do
-        {:error, reason} ->
-          release_user(image.user_id)
-          IO.inspect(reason)
-
-        img_urls ->
-          for url <- img_urls do
-            image_params = %{url: url, completed: true}
-            ai_update_image(image, image_params)
-          end
-
-          {:ok, user} = release_user(image.user_id)
-          {:ok, user} = Accounts.inc_recent_generations(user)
-
-          if user.recent_generations >= user.litcoins * 10 + 10 do
-            broadcast(image.user_id, image.id, :relaxed_mode)
-          else
-            broadcast(image.user_id, image.id, :gen_complete)
-          end
-      end
-    else
-      {:error, :oai_failed} ->
-        release_user(image.user_id)
-        broadcast(image.user_id, image.id, :oai_failed)
-
-      {:error, :sd_failed, error} ->
-        release_user(image.user_id)
-        IO.inspect(error)
-        broadcast(image.user_id, image.id, :sd_failed)
-
-      _ ->
-        release_user(image.user_id)
-        broadcast(image.user_id, image.id, :unknown_error)
-    end
-  end
-
-  def new(%Image{} = image) do
-    with _ <- lock_user(image.user_id),
-         {:ok, ideas_list} <-
-           OAI.description_to_cover_idea(
-             image.description,
-             image.prompt.type,
-             image.character_gender,
-             System.get_env("OAI_TOKEN")
-           ),
-         _ <- save_ideas(ideas_list, image),
+         oai_res <- mutate_description(image, lit_ai),
          prompt <-
            Helpers.create_prompt(
-             ideas_list |> Enum.random(),
+             oai_res,
              image.prompt.style_prompt,
              image.character_gender,
              image.prompt.type
@@ -121,6 +69,34 @@ defmodule CoverGen.Create do
         release_user(image.user_id)
         broadcast(image.user_id, image.id, :unknown_error)
     end
+  end
+
+  defp mutate_description(image, _lit_ai = true) do
+    {:ok, ideas_list} =
+      OAI.description_to_cover_idea(
+        image.description,
+        image.prompt.type,
+        image.character_gender,
+        System.get_env("OAI_TOKEN")
+      )
+
+    save_ideas(ideas_list, image)
+
+    Enum.random(ideas_list)
+  end
+
+  defp mutate_description(image, _lit_ai = false) do
+    {:ok, text} =
+      OAI.description_tldr(
+        image.description,
+        System.get_env("OAI_TOKEN")
+      )
+
+    text
+  end
+
+  defp mutate_description(image, _) do
+    image.description
   end
 
   def ai_update_image(%Image{} = image, attrs) do

@@ -52,7 +52,7 @@ defmodule LitcoversWeb.ImageLive.New do
        sentiments: sentiments(),
        sentiment: :positive,
        gender: :female,
-       placeholder: random_placeholder(locale),
+       placeholder: random_placeholder(locale, true),
        width: 512,
        height: 768,
        image: %Image{},
@@ -273,7 +273,7 @@ defmodule LitcoversWeb.ImageLive.New do
 
       case Media.create_image(socket.assigns.current_user, image_params) do
         {:ok, image} ->
-          CoverGen.CoverProducer.start_image_gen(image, prompt)
+          # CoverGen.CoverProducer.start_image_gen(image, prompt)
 
           socket = socket |> assign(image: image, is_generating: true, gen_error: nil)
 
@@ -281,7 +281,7 @@ defmodule LitcoversWeb.ImageLive.New do
 
         {:error, %Ecto.Changeset{} = changeset} ->
           IO.inspect(changeset)
-          placeholder = random_placeholder(socket.assigns.locale)
+          placeholder = random_placeholder(socket.assigns.locale, socket.assigns.lit_ai)
           {:noreply, assign(socket, changeset: changeset, placeholder: placeholder)}
       end
     else
@@ -298,7 +298,7 @@ defmodule LitcoversWeb.ImageLive.New do
 
       case Media.create_image(socket.assigns.current_user, prompt, image_params) do
         {:ok, image} ->
-          CoverGen.CoverProducer.start_image_gen(image)
+          CoverGen.Worker.generate(image, socket.assigns.lit_ai)
 
           socket = socket |> assign(image: image, is_generating: true, gen_error: nil)
 
@@ -306,7 +306,7 @@ defmodule LitcoversWeb.ImageLive.New do
 
         {:error, %Ecto.Changeset{} = changeset} ->
           IO.inspect(changeset)
-          placeholder = random_placeholder(socket.assigns.locale)
+          placeholder = random_placeholder(socket.assigns.locale, socket.assigns.lit_ai)
           {:noreply, assign(socket, changeset: changeset, placeholder: placeholder)}
       end
     else
@@ -326,7 +326,8 @@ defmodule LitcoversWeb.ImageLive.New do
   def handle_event("toggle-change", %{"toggle" => toggle}, socket) do
     toggle = if toggle == "1", do: true, else: false
 
-    {:noreply, assign(socket, :lit_ai, toggle)}
+    {:noreply,
+     assign(socket, lit_ai: toggle, placeholder: random_placeholder(socket.assigns.locale, toggle))}
   end
 
   def handle_event("toggle-favorite", %{"image_id" => image_id}, socket) do
@@ -534,22 +535,21 @@ defmodule LitcoversWeb.ImageLive.New do
       phx-hook="Toggle"
     >
       <div
-        class="relative w-12 h-6 rounded-full transition duration-200 ease-linear"
+        class="relative w-10 h-5 rounded-full transition duration-200 ease-linear"
         x-bind:class="[toggle === '1' ? 'bg-accent-main' : 'bg-dis-btn']"
       >
         <label
           for="toggle"
-          class="absolute left-0 w-6 h-6 mb-2 bg-white border-2 rounded-full cursor-pointer transition transform duration-100 ease-linear"
+          class="absolute left-0 w-5 h-5 mb-2 bg-white border-2 rounded-full cursor-pointer transition transform duration-100 ease-linear"
           x-bind:class="[toggle === '1' ? 'translate-x-full border-accent-main' : 'translate-x-0 border-dis-btn']"
         >
         </label>
-        <input type="hidden" name="toggle" value="off" />
+        <input type="hidden" value="off" />
         <input
           type="checkbox"
           id="toggle"
-          name="toggle"
           class="hidden"
-          @click="toggle === '0' ? toggle = '1' : toggle = '0'"
+          x-on:click="toggle === '0' ? toggle = '1' : toggle = '0'"
         />
       </div>
     </div>
@@ -830,7 +830,7 @@ defmodule LitcoversWeb.ImageLive.New do
     end
   end
 
-  def random_placeholder("en") do
+  def random_placeholder("en", _lit_ai = true) do
     [
       %{
         title: "To Kill a Mockingbird",
@@ -895,7 +895,7 @@ defmodule LitcoversWeb.ImageLive.New do
     |> Enum.random()
   end
 
-  def random_placeholder("ru") do
+  def random_placeholder("ru", _lit_ai = true) do
     [
       %{
         title: "Убить пересмешника",
@@ -955,6 +955,125 @@ defmodule LitcoversWeb.ImageLive.New do
         author: "Лев Толстой",
         description:
           "Эпический роман, охватывающий жизнь российского общества в период Наполеоновских войн, исследуя темы любви, войны, семьи и человеческого прогресса."
+      }
+    ]
+    |> Enum.random()
+  end
+
+  def random_placeholder("en", _lit_ai = false) do
+    [
+      %{
+        title: "To Kill a Mockingbird",
+        author: "Harper Lee",
+        description: "A black mockingbird perched on a tree branch against a blue sky."
+      },
+      %{
+        title: "1984",
+        author: "George Orwell",
+        description:
+          "A pair of eyes looking out from a screen with the word 'BIG BROTHER' in bold letters."
+      },
+      %{
+        title: "Pride and Prejudice",
+        author: "Jane Austen",
+        description:
+          "A woman in a blue dress walking in a garden with a man in a tailcoat and top hat."
+      },
+      %{
+        title: "The Great Gatsby",
+        author: "F. Scott Fitzgerald",
+        description:
+          "A man in a suit holding a champagne glass with a green light in the background."
+      },
+      %{
+        title: "One Hundred Years of Solitude",
+        author: "Gabriel García Márquez",
+        description: "A tree with a face carved into its trunk surrounded by butterflies."
+      },
+      %{
+        title: "Moby-Dick",
+        author: "Herman Melville",
+        description: "A whale tail breaking the surface of the water with a ship in the distance."
+      },
+      %{
+        title: "The Catcher in the Rye",
+        author: "J.D. Salinger",
+        description:
+          "A red hunting hat perched on a brick wall with a New York City skyline in the background."
+      },
+      %{
+        title: "The Hobbit",
+        author: "J.R.R. Tolkien",
+        description: "A hobbit hole with a green door set into a grassy hillside."
+      },
+      %{
+        title: "Wuthering Heights",
+        author: "Emily Bronte",
+        description: "A dark and stormy moor with a manor house in the distance."
+      },
+      %{
+        title: "Frankenstein",
+        author: "Mary Shelley",
+        description: "A man made of stitched-together body parts against a stormy sky."
+      }
+    ]
+    |> Enum.random()
+  end
+
+  def random_placeholder("ru", _lit_ai = false) do
+    [
+      %{
+        title: "Убить пересмешника",
+        author: "Харпер Ли",
+        description: "Черный пересмешник, сидящий на ветке дерева на фоне голубого неба."
+      },
+      %{
+        title: "1984",
+        author: "Джордж Оруэлл",
+        description:
+          "Пара глаз, смотрящих из экрана, на котором написаны жирными буквами слова 'БОЛЬШОЙ БРАТ'."
+      },
+      %{
+        title: "Гордость и предубеждение",
+        author: "Джейн Остин",
+        description:
+          "Женщина в синем платье, идущая по саду, рядом с мужчиной в фраке и цилиндре."
+      },
+      %{
+        title: "Великий Гэтсби",
+        author: "Фрэнсис Скотт Фицджеральд",
+        description: "Мужчина в костюме, держащий бокал шампанского, на фоне зеленого света."
+      },
+      %{
+        title: "Сто лет одиночества",
+        author: "Габриэль Гарсия Маркес",
+        description: "Дерево с вырезанным лицом, окруженное бабочками."
+      },
+      %{
+        title: "Моби Дик",
+        author: "Герман Мелвилл",
+        description: "Хвост кита, выходящий из воды, на фоне корабля вдали."
+      },
+      %{
+        title: "Над пропастью во ржи",
+        author: "Джером Д. Сэлинджер",
+        description:
+          "Красная охотничья шапка, стоящая на кирпичной стене, на фоне горизонта Нью-Йорка."
+      },
+      %{
+        title: "Хоббит, или Туда и обратно",
+        author: "Джон Р.Р. Толкин",
+        description: "Нора хоббита с зеленой дверью, расположенная на склоне травяного холма."
+      },
+      %{
+        title: "Грозовой перевал",
+        author: "Эмили Бронте",
+        description: "Темный и бурный болотистый край, на фоне поместья вдали."
+      },
+      %{
+        title: "Франкенштейн, или Современный Прометей",
+        author: "Мэри Шелли",
+        description: "Рука, вытянутая из тьмы, держит воскрешенное тело на фоне молний и грозы."
       }
     ]
     |> Enum.random()

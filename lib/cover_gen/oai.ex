@@ -9,6 +9,47 @@ defmodule CoverGen.OAI do
             model: "text-davinci-003",
             temperature: 1
 
+  def description_tldr(_description, nil),
+    do: raise("OAI_TOKEN was not set\nVisit https://beta.openai.com/account/api-keys to get it")
+
+  def description_tldr(description, oai_token) do
+    # Set Open AI endpoint
+    endpoint = "https://api.openai.com/v1/completions"
+
+    # Set headers and options
+    headers = [Authorization: "Bearer #{oai_token}", "Content-Type": "application/json"]
+    options = [timeout: 40_000, recv_timeout: 40_000]
+
+    prompt = "
+    #{description}
+    
+    One sentence Tl;dr in English:
+    "
+
+    # Prepare params for Open AI
+    oai_params = %OAI{prompt: prompt, temperature: 1}
+    body = Jason.encode!(oai_params)
+
+    # Send the post request
+    case HTTPoison.post(endpoint, body, headers, options) do
+      {:ok, %Response{body: res_body}} ->
+        text = oai_response_text(res_body) || ""
+
+        text =
+          text
+          |> String.split("\n")
+          |> List.last()
+          |> String.trim()
+
+        {:ok, text}
+
+      {:error, reason} ->
+        IO.inspect(reason)
+        Logger.error("Open AI gen idea failed")
+        {:error, :oai_failed}
+    end
+  end
+
   # Returns a prompt for stable diffusion
   def description_to_cover_idea(_description, _cover_type, _gender, nil),
     do: raise("OAI_TOKEN was not set\nVisit https://beta.openai.com/account/api-keys to get it")
@@ -32,7 +73,17 @@ defmodule CoverGen.OAI do
     # Send the post request
     case HTTPoison.post(endpoint, body, headers, options) do
       {:ok, %Response{body: res_body}} ->
-        ideas = oai_response_text(res_body) || [""]
+        text = oai_response_text(res_body) || ""
+
+        ideas =
+          text
+          |> String.split("output:")
+          |> List.last()
+          |> String.trim()
+          |> String.split("\n")
+          |> List.first()
+          |> String.split(",")
+
         {:ok, ideas}
 
       {:error, reason} ->
@@ -112,12 +163,6 @@ defmodule CoverGen.OAI do
             [%{"text" => text} | _] = choices_list
 
             text
-            |> String.split("output:")
-            |> List.last()
-            |> String.trim()
-            |> String.split("\n")
-            |> List.first()
-            |> String.split(",")
         end
 
       {:error, reason} ->

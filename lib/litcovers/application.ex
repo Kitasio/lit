@@ -20,8 +20,6 @@ defmodule Litcovers.Application do
       LitcoversWeb.Endpoint,
       # Start a worker by calling: Litcovers.Worker.start_link(arg)
       # {Litcovers.Worker, arg}
-      CoverGen.CoverProducer,
-      CoverGen.CoverConsumerSupervisor,
       CoverGen.Supervisor,
       Litcovers.GenericSupervisor,
       Litcovers.Metrics

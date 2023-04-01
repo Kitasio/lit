@@ -24,7 +24,8 @@ defmodule CoverGen.Supervisor do
 
     children = [
       CoverGen.Cleaner.ImageDeleter,
-      {CoverGen.DrippingMachine, %{}}
+      {CoverGen.DrippingMachine, %{}},
+      {CoverGen.Worker, %{}}
     ]
 
     Supervisor.init(children,
