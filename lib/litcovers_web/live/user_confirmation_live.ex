@@ -34,7 +34,7 @@ defmodule LitcoversWeb.UserConfirmationLive do
         {:noreply,
          socket
          |> put_flash(:info, gettext("User confirmed successfully."))
-         |> redirect(to: ~p"/#{socket.assigns.locale}/")}
+         |> redirect(to: ~p"/#{socket.assigns.locale}/images/new")}
 
       :error ->
         # If there is a current user and the account was already confirmed,
