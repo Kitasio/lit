@@ -436,7 +436,7 @@ defmodule LitcoversWeb.CoreComponents do
         class={[
           input_border(@errors),
           "bg-transparent text-white block w-full rounded-lg border-stroke-main p-4",
-          "text-zinc-900 focus:ring-0 focus:border-accent-main border-2 border-stroke-main sm:text-sm sm:leading-6",
+          "text-zinc-200 focus:ring-0 focus:border-accent-main border-2 border-stroke-main sm:text-sm sm:leading-6",
           "phx-no-feedback:border-stroke-main phx-no-feedback:focus:border-accent-main"
         ]}
         {@rest}
