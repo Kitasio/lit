@@ -1,6 +1,7 @@
 defmodule LitcoversWeb.ImageLive.Index do
   use LitcoversWeb, :live_view
 
+  alias Litcovers.Metadata
   alias Phoenix.LiveView.JS
   alias Litcovers.Media
   alias Litcovers.Media.Image
@@ -12,7 +13,13 @@ defmodule LitcoversWeb.ImageLive.Index do
     Gettext.put_locale(locale)
     Task.start_link(fn -> Media.see_all_user_images(socket.assigns.current_user) end)
 
-    socket = assign(socket, locale: locale, page: 0)
+    socket =
+      assign(socket,
+        locale: locale,
+        page: 0,
+        current_tut: nil,
+        user_tuts: Metadata.list_user_tutorials(socket.assigns.current_user)
+      )
 
     if connected?(socket) do
       get_images(socket)
@@ -21,6 +28,36 @@ defmodule LitcoversWeb.ImageLive.Index do
     end
 
     {:ok, socket, temporary_assigns: [images: []]}
+  end
+
+  def next_tut(_socket, []), do: nil
+
+  def next_tut(socket, [tut | tuts]) do
+    user_tuts = socket.assigns.user_tuts
+
+    case Enum.find(user_tuts, fn x -> x.title == tut.title end) do
+      nil ->
+        tut
+
+      _ ->
+        next_tut(socket, tuts)
+    end
+  end
+
+  defp tutorials do
+    [
+      %{
+        title: "generations",
+        banner_url: "https://ik.imagekit.io/soulgenesis/generations.jpg",
+        header: gettext("My generations"),
+        text: [
+          gettext(
+            "In this section we carefully add up all your results. Each unblocked generation is available 24 hours from the moment it appears. Opening allows you to save, enlarge and edit the image, and the copyright is transferred to you!"
+          )
+        ],
+        button: gettext("Begin!")
+      }
+    ]
   end
 
   @impl true
@@ -44,6 +81,14 @@ defmodule LitcoversWeb.ImageLive.Index do
   end
 
   defp apply_action(socket, :all, _params) do
+    next = next_tut(socket, tutorials())
+
+    if connected?(socket) and next != nil do
+      Metadata.create_tutotial(socket.assigns.current_user, %{title: next.title})
+    end
+
+    socket = assign(socket, current_tut: next)
+
     socket
     |> assign(images: list_all_images(socket.assigns.current_user))
   end

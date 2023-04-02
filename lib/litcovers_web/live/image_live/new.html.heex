@@ -1,3 +1,15 @@
+<.modal
+  :if={@current_tut}
+  id="tut-modal"
+  show={@current_tut != nil}
+  banner_url={@current_tut.banner_url}
+  on_confirm={hide_modal("tut-modal")}
+  on_cancel={hide_modal("tut-modal")}
+>
+  <:title><%= @current_tut.header %></:title>
+  <.tutorial_text entries={@current_tut.text} />
+  <:confirm><%= @current_tut.button %></:confirm>
+</.modal>
 <div class="flex flex-col h-screen lg:grid grid-cols-12">
   <.navbar
     current_user={@current_user}

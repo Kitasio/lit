@@ -4,6 +4,8 @@ defmodule LitcoversWeb.UiComponents do
   import LitcoversWeb.CoreComponents
   alias Phoenix.LiveView.JS
 
+  defp referers, do: ["rugram.me", "i-gram.ru", "rugram-shop.ru", "delibri.ru"]
+
   attr :request_path, :string, required: true
   attr :locale, :string, required: true
   attr :current_user, :map, default: nil
@@ -15,11 +17,20 @@ defmodule LitcoversWeb.UiComponents do
 
   def navbar(assigns) do
     ~H"""
-    <div class="z-10 bg-black/20 backdrop-blur-sm col-span-12 py-7 px-8 flex justify-between items-center relative">
-      <.link class="sm:w-44" navigate="/">
-        <.logo class="hidden sm:inline w-2/3 sm:w-full" />
-        <.logo_small class="sm:hidden h-8 w-8" />
-      </.link>
+    <div class="z-10 bg-black/20 backdrop-blur-sm col-span-12 py-7 px-8 flex gap-3 justify-between items-center relative">
+      <div class="flex gap-5 items-center">
+        <.link class="sm:w-44" navigate="/">
+          <.logo class="hidden sm:inline w-2/3 sm:w-full" />
+          <.logo_small class="sm:hidden h-8 w-8" />
+        </.link>
+
+        <%= if @current_user do %>
+          <div :if={@current_user.referer in referers()} class="hidden sm:flex">
+            <span class="mr-3">x</span>
+            <img class="w-24 mt-1" src="https://ik.imagekit.io/soulgenesis/Rugram.svg" />
+          </div>
+        <% end %>
+      </div>
 
       <div class="flex items-center gap-5">
         <%= if @current_user do %>
@@ -43,8 +54,11 @@ defmodule LitcoversWeb.UiComponents do
             </div>
           </.link>
           <.link navigate={"/#{@locale}/users/settings"}>
-            <%= if @current_user.referer in ["rugram.me", "i-gram.ru", "rugram-shop.ru", "delibri.ru"] do %>
-              <img src="https://ik.imagekit.io/soulgenesis/litnet/rg.svg" class="w-10 h-10" />
+            <%= if @current_user.referer in referers() do %>
+              <img
+                src="https://ik.imagekit.io/soulgenesis/rugram_avatar.svg"
+                class="w-10 h-10 rounded-full"
+              />
             <% else %>
               <.icon
                 name="hero-user-circle-solid"
@@ -580,6 +594,16 @@ defmodule LitcoversWeb.UiComponents do
           <.p class="max-w-md"><%= entry.text %></.p>
         </div>
       </div>
+    </div>
+    """
+  end
+
+  attr :entries, :list, default: []
+
+  def tutorial_text(assigns) do
+    ~H"""
+    <div class="flex text-xs sm:text-sm font-light sm:font-normal text-zinc-300 flex-col gap-2">
+      <p :for={text <- @entries}><%= text %></p>
     </div>
     """
   end

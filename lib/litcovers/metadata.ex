@@ -4,6 +4,7 @@ defmodule Litcovers.Metadata do
   """
 
   import Ecto.Query, warn: false
+  alias Litcovers.Accounts
   alias Litcovers.Repo
 
   alias Litcovers.Metadata.Prompt
@@ -247,5 +248,118 @@ defmodule Litcovers.Metadata do
   """
   def change_placeholder(%Placeholder{} = placeholder, attrs \\ %{}) do
     Placeholder.changeset(placeholder, attrs)
+  end
+
+  alias Litcovers.Metadata.Tutotial
+
+  @doc """
+  Returns the list of tutorials.
+
+  ## Examples
+
+      iex> list_tutorials()
+      [%Tutotial{}, ...]
+
+  """
+  def list_tutorials do
+    Repo.all(Tutotial)
+  end
+
+  defp user_tutorials_query(query, %Accounts.User{id: user_id}) do
+    from(r in query, where: r.user_id == ^user_id)
+  end
+
+  def list_user_tutorials(%Accounts.User{} = user) do
+    Tutotial
+    |> user_tutorials_query(user)
+    |> Repo.all()
+  end
+
+  @doc """
+  Gets a single tutotial.
+
+  Raises `Ecto.NoResultsError` if the Tutotial does not exist.
+
+  ## Examples
+
+      iex> get_tutotial!(123)
+      %Tutotial{}
+
+      iex> get_tutotial!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_tutotial!(id), do: Repo.get!(Tutotial, id)
+
+  @doc """
+  Creates a tutotial.
+
+  ## Examples
+
+      iex> create_tutotial(%{field: value})
+      {:ok, %Tutotial{}}
+
+      iex> create_tutotial(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_tutotial(%Accounts.User{} = user, attrs \\ %{}) do
+    %Tutotial{}
+    |> Tutotial.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:user, user)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a tutotial.
+
+  ## Examples
+
+      iex> update_tutotial(tutotial, %{field: new_value})
+      {:ok, %Tutotial{}}
+
+      iex> update_tutotial(tutotial, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_tutotial(%Tutotial{} = tutotial, attrs) do
+    tutotial
+    |> Tutotial.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a tutotial.
+
+  ## Examples
+
+      iex> delete_tutotial(tutotial)
+      {:ok, %Tutotial{}}
+
+      iex> delete_tutotial(tutotial)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_tutotial(%Tutotial{} = tutotial) do
+    Repo.delete(tutotial)
+  end
+
+  def delete_all_tutorials(%Accounts.User{} = user) do
+    Tutotial
+    |> user_tutorials_query(user)
+    |> Repo.delete_all()
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking tutotial changes.
+
+  ## Examples
+
+      iex> change_tutotial(tutotial)
+      %Ecto.Changeset{data: %Tutotial{}}
+
+  """
+  def change_tutotial(%Tutotial{} = tutotial, attrs \\ %{}) do
+    Tutotial.changeset(tutotial, attrs)
   end
 end

@@ -32,8 +32,26 @@ defmodule LitcoversWeb.ImageLive.Show do
        title_font_base64: author_font_base64,
        title_current_font: author_current_font,
        params: initial_params(),
-       placeholder: placeholder_or_empty(Metadata.get_random_placeholder())
+       placeholder: placeholder_or_empty(Metadata.get_random_placeholder()),
+       current_tut: nil,
+       user_tuts: Metadata.list_user_tutorials(socket.assigns.current_user)
      )}
+  end
+
+  defp tutorials do
+    [
+      %{
+        title: "overlay",
+        banner_url: "https://ik.imagekit.io/soulgenesis/overlay_tut.jpg",
+        header: gettext("Text overlay"),
+        text: [
+          gettext(
+            "Specially for the authors, we have prepared an alpha version of the text overlay, which will allow you to create a ready-made cover in a matter of seconds! Just enter your name/creative pseudonym and the title of the work. Font selection and other parameters will give you room for variation."
+          )
+        ],
+        button: gettext("Begin!")
+      }
+    ]
   end
 
   @impl true
@@ -53,6 +71,14 @@ defmodule LitcoversWeb.ImageLive.Show do
     image = Media.get_image_preload!(id)
 
     if image.user_id == socket.assigns.current_user.id do
+      next = next_tut(socket, tutorials())
+
+      if connected?(socket) and next != nil do
+        Metadata.create_tutotial(socket.assigns.current_user, %{title: next.title})
+      end
+
+      socket = assign(socket, current_tut: next)
+
       assign(socket, image: image)
     else
       socket

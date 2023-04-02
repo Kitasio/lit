@@ -37,6 +37,7 @@ defmodule LitcoversWeb.CoreComponents do
   attr :show, :boolean, default: false
   attr :on_cancel, JS, default: %JS{}
   attr :on_confirm, JS, default: %JS{}
+  attr :banner_url, :string, default: nil
 
   slot :inner_block, required: true
   slot :title
@@ -54,7 +55,7 @@ defmodule LitcoversWeb.CoreComponents do
     >
       <div
         id={"#{@id}-bg"}
-        class="fixed inset-0 bg-zinc-700/90 transition-opacity"
+        class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
         aria-hidden="true"
       />
       <div
@@ -66,15 +67,16 @@ defmodule LitcoversWeb.CoreComponents do
         tabindex="0"
       >
         <div class="flex min-h-full items-center justify-center">
-          <div class="w-full max-w-3xl p-4 sm:p-6 lg:py-8">
+          <div class="w-full max-w-xl px-4 sm:p-6 lg:py-8">
             <.focus_wrap
               id={"#{@id}-container"}
               phx-mounted={@show && show_modal(@id)}
               phx-window-keydown={hide_modal(@on_cancel, @id)}
               phx-key="escape"
               phx-click-away={hide_modal(@on_cancel, @id)}
-              class="hidden relative rounded-2xl bg-sec p-14 shadow-lg shadow-zinc-700/10 ring-1 ring-zinc-700/10 transition"
+              class="hidden relative rounded-2xl bg-sec overflow-hidden shadow-lg shadow-zinc-700/10 ring-1 ring-zinc-700/10 transition"
             >
+              <img src={@banner_url} />
               <div class="absolute top-6 right-5">
                 <button
                   phx-click={hide_modal(@on_cancel, @id)}
@@ -85,9 +87,12 @@ defmodule LitcoversWeb.CoreComponents do
                   <.icon name="hero-x-mark-solid" class="w-5 h-5" />
                 </button>
               </div>
-              <div id={"#{@id}-content"}>
-                <header :if={@title != []}>
-                  <h1 id={"#{@id}-title"} class="text-lg font-semibold leading-8 text-zinc-800">
+              <div class="px-10 py-7" id={"#{@id}-content"}>
+                <header :if={@title != []} class="mb-5">
+                  <h1
+                    id={"#{@id}-title"}
+                    class="text-lg lg:text-2xl font-semibold leading-8 text-zinc-100"
+                  >
                     <%= render_slot(@title) %>
                   </h1>
                   <p
@@ -99,7 +104,10 @@ defmodule LitcoversWeb.CoreComponents do
                   </p>
                 </header>
                 <%= render_slot(@inner_block) %>
-                <div :if={@confirm != [] or @cancel != []} class="ml-6 mb-4 flex items-center gap-5">
+                <div
+                  :if={@confirm != [] or @cancel != []}
+                  class="mt-7 flex justify-center items-center gap-5"
+                >
                   <.button
                     :for={confirm <- @confirm}
                     id={"#{@id}-confirm"}

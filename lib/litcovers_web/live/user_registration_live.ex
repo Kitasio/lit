@@ -14,10 +14,25 @@ defmodule LitcoversWeb.UserRegistrationLive do
         changeset: changeset,
         trigger_submit: false,
         locale: locale,
-        referer: session["referer"]
+        referer: session["referer"],
+        current_tut: tut()
       )
 
     {:ok, socket, temporary_assigns: [changeset: nil]}
+  end
+
+  defp tut do
+    %{
+      title: "rugram",
+      banner_url: "https://ik.imagekit.io/soulgenesis/ban_rugram.jpg",
+      header: "Крепкое партнёрство",
+      text: [
+        "Мы верим в силу сотворчества и понимаем насколько важно экспериментировать!",
+        "Для всех авторов издательской платформы Rugram мы подготовили специальные условия: приоритет в выдаче генераций и самые низкие цены в индустрии.",
+        "Время создавать и удивлять!"
+      ],
+      button: "Начать!"
+    }
   end
 
   def handle_event("save", %{"user" => user_params}, socket) do
@@ -53,6 +68,19 @@ defmodule LitcoversWeb.UserRegistrationLive do
 
   def render(assigns) do
     ~H"""
+    <.modal
+      :if={@referer}
+      on_confirm={hide_modal("reg-referer-modal")}
+      id="reg-referer-modal"
+      show={@referer}
+      banner_url={@current_tut.banner_url}
+    >
+      <:title><%= @current_tut.header %></:title>
+      <div class="flex text-xs sm:text-sm font-light sm:font-normal text-zinc-300 flex-col gap-2">
+        <p :for={text <- @current_tut.text}><%= text %></p>
+      </div>
+      <:confirm><%= @current_tut.button %></:confirm>
+    </.modal>
     <.navbar locale={@locale} request_path={"/#{@locale}/users/register"} />
     <div class="bg-main p-10 sm:my-5 lg:my-20 mx-auto max-w-md rounded-lg sm:border-2 border-stroke-main">
       <p :if={@referer} class="mb-2 text-xs text-slate-300 text-center w-full">

@@ -61,8 +61,29 @@ defmodule LitcoversWeb.ImageLive.New do
        has_images: has_images?(socket.assigns.current_user),
        has_new_images: has_new_images?(socket.assigns.current_user),
        models: Replicate.Model.list_all(),
-       selected_model: Replicate.Model.list_all() |> List.first()
+       selected_model: Replicate.Model.list_all() |> List.first(),
+       current_tut: nil,
+       user_tuts: Metadata.list_user_tutorials(socket.assigns.current_user)
      )}
+  end
+
+  defp tutorials do
+    [
+      %{
+        title: "create",
+        banner_url: "https://ik.imagekit.io/soulgenesis/create_tut.jpg",
+        header: gettext("Create"),
+        text: [
+          gettext(
+            "We're here! At the first step, you will be able to enter a description of the desired image or an annotation of the book in text, then select the aspect ratio and finally determine the most appropriate styles."
+          ),
+          gettext(
+            "Toggle switch LIT.AI disables our idea generator, giving you the opportunity to accurately describe the desired image"
+          )
+        ],
+        button: gettext("Begin!")
+      }
+    ]
   end
 
   @impl true
@@ -71,7 +92,13 @@ defmodule LitcoversWeb.ImageLive.New do
   end
 
   defp apply_action(socket, :index, _params) do
-    socket
+    next = next_tut(socket, tutorials())
+
+    if connected?(socket) and next != nil do
+      Metadata.create_tutotial(socket.assigns.current_user, %{title: next.title})
+    end
+
+    assign(socket, current_tut: next)
   end
 
   # TODO: refactor it
