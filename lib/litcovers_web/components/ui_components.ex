@@ -48,9 +48,6 @@ defmodule LitcoversWeb.UiComponents do
                 <span><.icon name="hero-book-open" class="w-6 h-6" /></span>
                 <span><%= @current_user.litcoins %></span>
               </span>
-              <.tooltip class="mt-1" position="left">
-                <span class="text-xs font-normal text-slate-200"><%= gettext("Litcoins") %></span>
-              </.tooltip>
             </div>
           </.link>
           <.link navigate={"/#{@locale}/users/settings"}>
