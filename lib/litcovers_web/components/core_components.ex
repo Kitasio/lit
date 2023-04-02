@@ -95,7 +95,7 @@ defmodule LitcoversWeb.CoreComponents do
                     if @banner_top do
                       "max-h-80 w-full object-cover"
                     else
-                      "order-last max-h-44 sm:max-h-96 w-full sm:w-1/3 object-cover"
+                      "order-last max-h-44 sm:max-h-max w-full sm:w-1/3 object-cover"
                     end
                   }
                   src={@banner_url}
