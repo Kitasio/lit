@@ -707,6 +707,7 @@ defmodule LitcoversWeb.ImageLive.New do
           ]}
         >
           <.icon :if={@disabled} name="hero-lock-closed-solid" class="w-7 h-7" />
+          <span :if={@disabled} class="text-xs"><%= gettext("(Coming soon)") %></span>
           <span><%= @label %></span>
         </span>
         <img
