@@ -156,6 +156,7 @@ defmodule LitcoversWeb.UiComponents do
   attr :aspect_ratio, :string, default: "cover"
   attr :class, :string, default: nil
   attr :unlocked, :boolean, default: false
+  attr :show_bottom, :boolean, default: false
 
   slot :top
   slot :bottom
@@ -200,7 +201,13 @@ defmodule LitcoversWeb.UiComponents do
           </div>
         </div>
         <div
-          x-show="showToolbar"
+          x-show={
+            if @show_bottom do
+              'true'
+            else
+              "showToolbar"
+            end
+          }
           x-transition.duration.200ms
           class="z-20 bottom-0 bg-sec/30 backdrop-blur left-0 w-full absolute p-5"
         >
@@ -604,6 +611,24 @@ defmodule LitcoversWeb.UiComponents do
     ~H"""
     <div class="flex text-xs sm:text-sm font-light sm:font-normal text-zinc-300 flex-col gap-2">
       <p :for={text <- @entries}><%= text %></p>
+    </div>
+    """
+  end
+
+  def unlock_modal_text(assigns) do
+    ~H"""
+    <div class="my-5 w-full flex justify-center">
+      <span class="border-4 px-6 py-3 border-accent-main rounded-full text-2xl">
+        -1 <.icon name="hero-book-open" class="w-6 h-6 mb-1" />
+      </span>
+    </div>
+    <div class="space-y-3 text-sm sm:text-base">
+      <p><%= gettext("You are going to spend a Litcoin and open an image") %></p>
+      <p>
+        <%= gettext(
+          "This will increase the quality to the maximum, remove the watermark and allow you to overlay text"
+        ) %>
+      </p>
     </div>
     """
   end

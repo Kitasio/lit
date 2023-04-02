@@ -38,6 +38,7 @@ defmodule LitcoversWeb.CoreComponents do
   attr :on_cancel, JS, default: %JS{}
   attr :on_confirm, JS, default: %JS{}
   attr :banner_url, :string, default: nil
+  attr :banner_top, :boolean, default: true
 
   slot :inner_block, required: true
   slot :title
@@ -67,7 +68,13 @@ defmodule LitcoversWeb.CoreComponents do
         tabindex="0"
       >
         <div class="flex min-h-full items-center justify-center">
-          <div class="w-full max-w-xl px-4 sm:p-6 lg:py-8">
+          <div class={
+            if @banner_top do
+              "max-w-xl px-4 sm:p-6 lg:py-8"
+            else
+              "max-w-3xl px-4 sm:p-6 lg:py-8"
+            end
+          }>
             <.focus_wrap
               id={"#{@id}-container"}
               phx-mounted={@show && show_modal(@id)}
@@ -76,54 +83,84 @@ defmodule LitcoversWeb.CoreComponents do
               phx-click-away={hide_modal(@on_cancel, @id)}
               class="hidden relative rounded-2xl bg-sec overflow-hidden shadow-lg shadow-zinc-700/10 ring-1 ring-zinc-700/10 transition"
             >
-              <img src={@banner_url} />
-              <div class="absolute top-6 right-5">
-                <button
-                  phx-click={hide_modal(@on_cancel, @id)}
-                  type="button"
-                  class="-m-3 flex-none p-3 opacity-20 hover:opacity-40"
-                  aria-label={gettext("close")}
-                >
-                  <.icon name="hero-x-mark-solid" class="w-5 h-5" />
-                </button>
-              </div>
-              <div class="px-10 py-7" id={"#{@id}-content"}>
-                <header :if={@title != []} class="mb-5">
-                  <h1
-                    id={"#{@id}-title"}
-                    class="text-lg lg:text-2xl font-semibold leading-8 text-zinc-100"
+              <div class={
+                if @banner_top do
+                  "flex flex-col"
+                else
+                  "sm:flex flex-row"
+                end
+              }>
+                <img
+                  class={
+                    if @banner_top do
+                      "max-h-80 w-full object-cover"
+                    else
+                      "order-last max-h-44 sm:max-h-96 w-full sm:w-1/3 object-cover"
+                    end
+                  }
+                  src={@banner_url}
+                />
+                <div class={
+                  if @banner_top do
+                    "w-full"
+                  else
+                    "w-full sm:w-2/3"
+                  end
+                }>
+                  <div class="absolute top-6 right-5">
+                    <button
+                      phx-click={hide_modal(@on_cancel, @id)}
+                      type="button"
+                      class="-m-3 flex-none p-3 opacity-20 hover:opacity-40"
+                      aria-label={gettext("close")}
+                    >
+                      <.icon name="hero-x-mark-solid" class="w-5 h-5" />
+                    </button>
+                  </div>
+                  <div
+                    class="px-6 py-5 sm:px-10 sm:py-7 flex flex-col justify-between h-full"
+                    id={"#{@id}-content"}
                   >
-                    <%= render_slot(@title) %>
-                  </h1>
-                  <p
-                    :if={@subtitle != []}
-                    id={"#{@id}-description"}
-                    class="mt-2 text-sm leading-6 text-zinc-600"
-                  >
-                    <%= render_slot(@subtitle) %>
-                  </p>
-                </header>
-                <%= render_slot(@inner_block) %>
-                <div
-                  :if={@confirm != [] or @cancel != []}
-                  class="mt-7 flex justify-center items-center gap-5"
-                >
-                  <.button
-                    :for={confirm <- @confirm}
-                    id={"#{@id}-confirm"}
-                    phx-click={@on_confirm}
-                    phx-disable-with
-                    class="py-2 px-3"
-                  >
-                    <%= render_slot(confirm) %>
-                  </.button>
-                  <.link
-                    :for={cancel <- @cancel}
-                    phx-click={hide_modal(@on_cancel, @id)}
-                    class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
-                  >
-                    <%= render_slot(cancel) %>
-                  </.link>
+                    <div>
+                      <header :if={@title != []} class="mb-5">
+                        <h1
+                          id={"#{@id}-title"}
+                          class="text-lg lg:text-2xl font-semibold leading-8 text-zinc-100"
+                        >
+                          <%= render_slot(@title) %>
+                        </h1>
+                        <p
+                          :if={@subtitle != []}
+                          id={"#{@id}-description"}
+                          class="mt-2 text-sm leading-6 text-zinc-600"
+                        >
+                          <%= render_slot(@subtitle) %>
+                        </p>
+                      </header>
+                      <%= render_slot(@inner_block) %>
+                    </div>
+                    <div
+                      :if={@confirm != [] or @cancel != []}
+                      class="mt-7 flex justify-center items-center gap-5"
+                    >
+                      <.button
+                        :for={confirm <- @confirm}
+                        id={"#{@id}-confirm"}
+                        phx-click={@on_confirm}
+                        phx-disable-with
+                        class="py-2 px-3"
+                      >
+                        <%= render_slot(confirm) %>
+                      </.button>
+                      <.link
+                        :for={cancel <- @cancel}
+                        phx-click={hide_modal(@on_cancel, @id)}
+                        class="mr-5 text-sm font-semibold leading-6 text-zinc-300 hover:text-zinc-200"
+                      >
+                        <%= render_slot(cancel) %>
+                      </.link>
+                    </div>
+                  </div>
                 </div>
               </div>
             </.focus_wrap>

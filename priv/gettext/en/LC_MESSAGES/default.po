@@ -11,12 +11,12 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2\n"
 
-#: lib/litcovers_web/components/core_components.ex:544
+#: lib/litcovers_web/components/core_components.ex:581
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
 
-#: lib/litcovers_web/components/core_components.ex:85
+#: lib/litcovers_web/components/core_components.ex:115
 #, elixir-autogen, elixir-format
 msgid "close"
 msgstr ""
@@ -122,7 +122,7 @@ msgstr ""
 msgid "Warm - Bright"
 msgstr ""
 
-#: lib/litcovers_web/components/ui_components.ex:434
+#: lib/litcovers_web/components/ui_components.ex:441
 #, elixir-autogen, elixir-format
 msgid "Title"
 msgstr ""
@@ -158,7 +158,7 @@ msgstr ""
 msgid "Image dimensions"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.html.heex:37
+#: lib/litcovers_web/live/image_live/new.html.heex:51
 #, elixir-autogen, elixir-format
 msgid "LIT AI"
 msgstr ""
@@ -169,7 +169,7 @@ msgstr ""
 msgid "My generations"
 msgstr ""
 
-#: lib/litcovers_web/components/ui_components.ex:409
+#: lib/litcovers_web/components/ui_components.ex:416
 #, elixir-autogen, elixir-format
 msgid "Name"
 msgstr ""
@@ -179,7 +179,7 @@ msgstr ""
 msgid "Text size"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.html.heex:74
+#: lib/litcovers_web/live/image_live/new.html.heex:88
 #, elixir-autogen, elixir-format
 msgid "What are we creating?"
 msgstr ""
@@ -204,7 +204,7 @@ msgstr ""
 msgid "Litcoins"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/index.html.heex:62
+#: lib/litcovers_web/live/image_live/index.html.heex:77
 #, elixir-autogen, elixir-format
 msgid "Locked image, dissapears after 24 hours"
 msgstr ""
@@ -322,7 +322,7 @@ msgstr ""
 msgid "Download the finished result and start publishing."
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/index.html.heex:94
+#: lib/litcovers_web/live/image_live/index.html.heex:109
 #, elixir-autogen, elixir-format
 msgid "Edit"
 msgstr ""
@@ -633,8 +633,10 @@ msgstr ""
 msgid "Unlimited generation – the result is guaranteed."
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/index.html.heex:117
-#: lib/litcovers_web/live/image_live/new.html.heex:222
+#: lib/litcovers_web/live/image_live/index.html.heex:67
+#: lib/litcovers_web/live/image_live/index.html.heex:132
+#: lib/litcovers_web/live/image_live/new.html.heex:10
+#: lib/litcovers_web/live/image_live/new.html.heex:237
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Unlock"
 msgstr ""
@@ -786,7 +788,7 @@ msgstr ""
 msgid "Choose what dimensions the image will have"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.html.heex:35
+#: lib/litcovers_web/live/image_live/new.html.heex:49
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Description"
 msgstr ""
@@ -796,12 +798,12 @@ msgstr ""
 msgid "Generations"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.html.heex:77
+#: lib/litcovers_web/live/image_live/new.html.heex:91
 #, elixir-autogen, elixir-format
 msgid "Pick one of many presets to steer the creation in the right direction"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.html.heex:35
+#: lib/litcovers_web/live/image_live/new.html.heex:49
 #, elixir-autogen, elixir-format
 msgid "Step 1. "
 msgstr ""
@@ -811,17 +813,17 @@ msgstr ""
 msgid "Step 2. "
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.html.heex:72
+#: lib/litcovers_web/live/image_live/new.html.heex:86
 #, elixir-autogen, elixir-format
 msgid "Step 3. "
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.html.heex:42
+#: lib/litcovers_web/live/image_live/new.html.heex:56
 #, elixir-autogen, elixir-format
 msgid "AI will come up with an idea based on your input, write down annotations, stories or character descriptions"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.html.heex:47
+#: lib/litcovers_web/live/image_live/new.html.heex:61
 #, elixir-autogen, elixir-format
 msgid "Lit AI is off, what you write is what you get, describe the picture you want to get with details"
 msgstr ""
@@ -862,4 +864,26 @@ msgstr ""
 #: lib/litcovers_web/live/image_live/new.ex:77
 #, elixir-autogen, elixir-format
 msgid "We're here! At the first step, you will be able to enter a description of the desired image or an annotation of the book in text, then select the aspect ratio and finally determine the most appropriate styles."
+msgstr ""
+
+#: lib/litcovers_web/live/image_live/index.html.heex:68
+#: lib/litcovers_web/live/image_live/new.html.heex:11
+#, elixir-autogen, elixir-format
+msgid "Cancel"
+msgstr ""
+
+#: lib/litcovers_web/components/ui_components.ex:628
+#, elixir-autogen, elixir-format
+msgid "This will increase the quality to the maximum, remove the watermark and allow you to overlay text"
+msgstr ""
+
+#: lib/litcovers_web/components/ui_components.ex:626
+#, elixir-autogen, elixir-format
+msgid "You are going to spend a Litcoin and open an image"
+msgstr ""
+
+#: lib/litcovers_web/live/image_live/index.html.heex:65
+#: lib/litcovers_web/live/image_live/new.html.heex:8
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Unlock image"
 msgstr ""

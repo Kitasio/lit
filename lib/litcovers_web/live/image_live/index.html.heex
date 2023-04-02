@@ -54,6 +54,21 @@
     class="mt-7 grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-10 lg:gap-20"
   >
     <%= for image <- @images do %>
+      <div class="absolute" id={"modal-box-#{image.id}"}>
+        <.modal
+          id={"unlock-modal-#{image.id}"}
+          banner_url={insert_image_watermark(image)}
+          banner_top={false}
+          on_confirm={JS.push("unlock", value: %{image_id: image.id})}
+          on_cancel={hide_modal("unlock-modal-#{image.id}")}
+        >
+          <:title><%= gettext("Unlock image") %></:title>
+          <.unlock_modal_text />
+          <:confirm><%= gettext("Unlock") %></:confirm>
+          <:cancel><%= gettext("Cancel") %></:cancel>
+        </.modal>
+      </div>
+
       <div id={"img-#{image.id}-box"} x-data="" class="relative">
         <div :if={!image.unlocked} class="absolute top-5 left-5 z-30">
           <div class="relative group">
@@ -113,8 +128,11 @@
           </:bottom>
           <:bottom :if={!image.unlocked}>
             <div class="flex gap-3">
-              <.button class="w-full" phx-click={JS.push("unlock", value: %{image_id: image.id})}>
-                <%= gettext("Unlock") %>
+              <.button class="w-full" phx-click={show_modal("unlock-modal-#{image.id}")}>
+                <%= gettext("Unlock") %><span class="ml-2">(-1 <.icon
+                    name="hero-book-open"
+                    class="w-4 h-4"
+                  />)</span>
               </.button>
               <.regenerate_btn
                 :if={!Enum.empty?(image.ideas)}

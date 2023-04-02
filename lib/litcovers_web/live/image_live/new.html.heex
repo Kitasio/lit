@@ -1,4 +1,17 @@
 <.modal
+  id="unlock-modal"
+  banner_url={insert_image_watermark(@image)}
+  banner_top={false}
+  on_confirm={JS.push("unlock", value: %{image_id: @image.id})}
+  on_cancel={hide_modal("unlock-modal")}
+>
+  <:title><%= gettext("Unlock image") %></:title>
+  <.unlock_modal_text />
+  <:confirm><%= gettext("Unlock") %></:confirm>
+  <:cancel><%= gettext("Cancel") %></:cancel>
+</.modal>
+
+<.modal
   :if={@current_tut}
   id="tut-modal"
   show={@current_tut != nil}
@@ -10,6 +23,7 @@
   <.tutorial_text entries={@current_tut.text} />
   <:confirm><%= @current_tut.button %></:confirm>
 </.modal>
+
 <div class="flex flex-col h-screen lg:grid grid-cols-12">
   <.navbar
     current_user={@current_user}
@@ -215,11 +229,15 @@
           }
           image_id={@image.id}
           unlocked={@image.unlocked}
+          show_bottom={true}
         >
           <:bottom :if={!@image.unlocked}>
-            <div class="flex gap-3">
-              <.button class="w-full" phx-click={JS.push("unlock", value: %{image_id: @image.id})}>
-                <%= gettext("Unlock") %>
+            <div class="flex gap-3 justify-center">
+              <.button class="" phx-click={show_modal("unlock-modal")}>
+                <%= gettext("Unlock") %><span class="ml-2">(-1 <.icon
+                    name="hero-book-open"
+                    class="w-4 h-4"
+                  />)</span>
               </.button>
             </div>
           </:bottom>

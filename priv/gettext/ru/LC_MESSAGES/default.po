@@ -11,12 +11,12 @@ msgstr ""
 "Language: ru\n"
 "Plural-Forms: nplurals=3\n"
 
-#: lib/litcovers_web/components/core_components.ex:544
+#: lib/litcovers_web/components/core_components.ex:581
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr "Действия"
 
-#: lib/litcovers_web/components/core_components.ex:85
+#: lib/litcovers_web/components/core_components.ex:115
 #, elixir-autogen, elixir-format
 msgid "close"
 msgstr "Закрыть"
@@ -122,7 +122,7 @@ msgstr "Сеттинг"
 msgid "Warm - Bright"
 msgstr "Теплое - Светлое"
 
-#: lib/litcovers_web/components/ui_components.ex:434
+#: lib/litcovers_web/components/ui_components.ex:441
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Title"
 msgstr "Название"
@@ -158,7 +158,7 @@ msgstr "Создать"
 msgid "Image dimensions"
 msgstr "Размеры изображения"
 
-#: lib/litcovers_web/live/image_live/new.html.heex:37
+#: lib/litcovers_web/live/image_live/new.html.heex:51
 #, elixir-autogen, elixir-format
 msgid "LIT AI"
 msgstr "LIT AI"
@@ -169,7 +169,7 @@ msgstr "LIT AI"
 msgid "My generations"
 msgstr "Мои генерации"
 
-#: lib/litcovers_web/components/ui_components.ex:409
+#: lib/litcovers_web/components/ui_components.ex:416
 #, elixir-autogen, elixir-format
 msgid "Name"
 msgstr "Имя"
@@ -179,7 +179,7 @@ msgstr "Имя"
 msgid "Text size"
 msgstr "Размер текста"
 
-#: lib/litcovers_web/live/image_live/new.html.heex:74
+#: lib/litcovers_web/live/image_live/new.html.heex:88
 #, elixir-autogen, elixir-format
 msgid "What are we creating?"
 msgstr "Что мы создаем?"
@@ -204,7 +204,7 @@ msgstr "Пара"
 msgid "Litcoins"
 msgstr "Литкоины"
 
-#: lib/litcovers_web/live/image_live/index.html.heex:62
+#: lib/litcovers_web/live/image_live/index.html.heex:77
 #, elixir-autogen, elixir-format
 msgid "Locked image, dissapears after 24 hours"
 msgstr "Заблокированное изображение исчезнет через 24 часа"
@@ -322,7 +322,7 @@ msgstr "Скачать"
 msgid "Download the finished result and start publishing."
 msgstr "Скачайте готовый результат и начните публиковаться."
 
-#: lib/litcovers_web/live/image_live/index.html.heex:94
+#: lib/litcovers_web/live/image_live/index.html.heex:109
 #, elixir-autogen, elixir-format
 msgid "Edit"
 msgstr "Открыть"
@@ -633,8 +633,10 @@ msgstr "Уникальные артефакты и предметы из ваш�
 msgid "Unlimited generation – the result is guaranteed."
 msgstr "Неограниченная генерирация - результат гарантирован."
 
-#: lib/litcovers_web/live/image_live/index.html.heex:117
-#: lib/litcovers_web/live/image_live/new.html.heex:222
+#: lib/litcovers_web/live/image_live/index.html.heex:67
+#: lib/litcovers_web/live/image_live/index.html.heex:132
+#: lib/litcovers_web/live/image_live/new.html.heex:10
+#: lib/litcovers_web/live/image_live/new.html.heex:237
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Unlock"
 msgstr "Открыть"
@@ -786,7 +788,7 @@ msgstr "Настоящий пароль"
 msgid "Choose what dimensions the image will have"
 msgstr "Выберите какое разрешение будет у изображения"
 
-#: lib/litcovers_web/live/image_live/new.html.heex:35
+#: lib/litcovers_web/live/image_live/new.html.heex:49
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Description"
 msgstr "Описание"
@@ -796,12 +798,12 @@ msgstr "Описание"
 msgid "Generations"
 msgstr "Генерации"
 
-#: lib/litcovers_web/live/image_live/new.html.heex:77
+#: lib/litcovers_web/live/image_live/new.html.heex:91
 #, elixir-autogen, elixir-format
 msgid "Pick one of many presets to steer the creation in the right direction"
 msgstr "Выберите один из множества пресетов, чтобы направить процесс создания в нужное русло"
 
-#: lib/litcovers_web/live/image_live/new.html.heex:35
+#: lib/litcovers_web/live/image_live/new.html.heex:49
 #, elixir-autogen, elixir-format
 msgid "Step 1. "
 msgstr "Шаг 1. "
@@ -811,17 +813,17 @@ msgstr "Шаг 1. "
 msgid "Step 2. "
 msgstr "Шаг 2. "
 
-#: lib/litcovers_web/live/image_live/new.html.heex:72
+#: lib/litcovers_web/live/image_live/new.html.heex:86
 #, elixir-autogen, elixir-format
 msgid "Step 3. "
 msgstr "Шаг 3. "
 
-#: lib/litcovers_web/live/image_live/new.html.heex:42
+#: lib/litcovers_web/live/image_live/new.html.heex:56
 #, elixir-autogen, elixir-format
 msgid "AI will come up with an idea based on your input, write down annotations, stories or character descriptions"
 msgstr "Искусственный интеллект сам придумает идею для изображения, основанную на вашием тексте. Пишите аннотации, истории или описания персонажей"
 
-#: lib/litcovers_web/live/image_live/new.html.heex:47
+#: lib/litcovers_web/live/image_live/new.html.heex:61
 #, elixir-autogen, elixir-format
 msgid "Lit AI is off, what you write is what you get, describe the picture you want to get with details"
 msgstr "Lit AI выключен, то, что вы пишете, - то и будет создано. В деталях опишите изображение, которое вы хотите получить"
@@ -863,3 +865,25 @@ msgstr "Тумблер LIT.AI отключает наш генератор ид�
 #, elixir-autogen, elixir-format
 msgid "We're here! At the first step, you will be able to enter a description of the desired image or an annotation of the book in text, then select the aspect ratio and finally determine the most appropriate styles."
 msgstr "Мы на месте! На первом шаге Вы сможете ввести описание желаемой картинки или аннотацию книги текстом, затем выбрать соотношение сторон и в завершении определить наиболее подходящие стили"
+
+#: lib/litcovers_web/live/image_live/index.html.heex:68
+#: lib/litcovers_web/live/image_live/new.html.heex:11
+#, elixir-autogen, elixir-format
+msgid "Cancel"
+msgstr "Отменить"
+
+#: lib/litcovers_web/components/ui_components.ex:628
+#, elixir-autogen, elixir-format
+msgid "This will increase the quality to the maximum, remove the watermark and allow you to overlay text"
+msgstr "Это повысит качество до максимального, уберёт водяной знак и позволит накладывать текст"
+
+#: lib/litcovers_web/components/ui_components.ex:626
+#, elixir-autogen, elixir-format
+msgid "You are going to spend a Litcoin and open an image"
+msgstr "Вы собираетесь потратить Litcoin  и открыть изображение"
+
+#: lib/litcovers_web/live/image_live/index.html.heex:65
+#: lib/litcovers_web/live/image_live/new.html.heex:8
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Unlock image"
+msgstr "Открыть изображение"
