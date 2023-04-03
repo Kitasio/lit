@@ -287,7 +287,7 @@ msgstr ""
 msgid "Creating account..."
 msgstr ""
 
-#: lib/litcovers_web/live/transaction_live/index.ex:54
+#: lib/litcovers_web/live/transaction_live/index.ex:55
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Creative duo"
 msgstr ""
@@ -359,7 +359,7 @@ msgstr ""
 msgid "Find the perfect result."
 msgstr ""
 
-#: lib/litcovers_web/live/transaction_live/index.html.heex:44
+#: lib/litcovers_web/live/transaction_live/index.html.heex:42
 #, elixir-autogen, elixir-format
 msgid "For"
 msgstr ""
@@ -385,7 +385,7 @@ msgstr ""
 msgid "Increase the image quality to the maximum."
 msgstr ""
 
-#: lib/litcovers_web/live/transaction_live/index.ex:86
+#: lib/litcovers_web/live/transaction_live/index.ex:91
 #, elixir-autogen, elixir-format
 msgid "Legendary Gallery"
 msgstr ""
@@ -406,7 +406,7 @@ msgstr ""
 msgid "Lonely pixel"
 msgstr ""
 
-#: lib/litcovers_web/live/transaction_live/index.ex:78
+#: lib/litcovers_web/live/transaction_live/index.ex:82
 #, elixir-autogen, elixir-format
 msgid "Masterpiece creator"
 msgstr ""
@@ -428,7 +428,7 @@ msgstr ""
 msgid "Nothing here so far"
 msgstr ""
 
-#: lib/litcovers_web/live/transaction_live/index.ex:62
+#: lib/litcovers_web/live/transaction_live/index.ex:64
 #, elixir-autogen, elixir-format
 msgid "Novice collector"
 msgstr ""
@@ -446,17 +446,12 @@ msgstr ""
 msgid "Oops, something went wrong! Please check the errors below."
 msgstr ""
 
-#: lib/litcovers_web/live/transaction_live/index.html.heex:31
-#, elixir-autogen, elixir-format
-msgid "Package of "
-msgstr ""
-
 #: lib/litcovers_web/live/transaction_live/index.html.heex:8
 #, elixir-autogen, elixir-format
 msgid "Packages"
 msgstr ""
 
-#: lib/litcovers_web/live/transaction_live/index.ex:70
+#: lib/litcovers_web/live/transaction_live/index.ex:73
 #, elixir-autogen, elixir-format
 msgid "Paint Party"
 msgstr ""
@@ -716,14 +711,9 @@ msgstr ""
 msgid "Your new cover is a symbiosis of our many years of experience in the field of design and technology and AI"
 msgstr ""
 
-#: lib/litcovers_web/live/transaction_live/index.html.heex:52
+#: lib/litcovers_web/live/transaction_live/index.html.heex:50
 #, elixir-autogen, elixir-format
 msgid "cheaper"
-msgstr ""
-
-#: lib/litcovers_web/live/transaction_live/index.html.heex:31
-#, elixir-autogen, elixir-format
-msgid "covers"
 msgstr ""
 
 #: lib/litcovers_web/live/user_login_live.ex:24
@@ -886,4 +876,39 @@ msgstr ""
 #: lib/litcovers_web/live/image_live/new.ex:710
 #, elixir-autogen, elixir-format
 msgid "(Coming soon)"
+msgstr ""
+
+#: lib/litcovers_web/live/transaction_live/index.ex:51
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Package of 1 cover"
+msgstr ""
+
+#: lib/litcovers_web/live/transaction_live/index.ex:78
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Package of 13 covers"
+msgstr ""
+
+#: lib/litcovers_web/live/transaction_live/index.ex:87
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Package of 20 covers"
+msgstr ""
+
+#: lib/litcovers_web/live/transaction_live/index.ex:60
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Package of 3 covers"
+msgstr ""
+
+#: lib/litcovers_web/live/transaction_live/index.ex:96
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Package of 30 covers"
+msgstr ""
+
+#: lib/litcovers_web/live/transaction_live/index.ex:69
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Package of 7 covers"
+msgstr ""
+
+#: lib/litcovers_web/live/transaction_live/index.html.heex:64
+#, elixir-autogen, elixir-format
+msgid "Pay"
 msgstr ""

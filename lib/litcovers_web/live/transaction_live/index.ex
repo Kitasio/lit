@@ -47,7 +47,8 @@ defmodule LitcoversWeb.TransactionLive.Index do
         value: "390.00",
         currency: "₽",
         litcoins: 1,
-        bonus: 0
+        bonus: 0,
+        msg: gettext("Package of 1 cover")
       },
       %{
         bg: "https://ik.imagekit.io/soulgenesis/pay_blur_2.png",
@@ -55,7 +56,8 @@ defmodule LitcoversWeb.TransactionLive.Index do
         value: "780.00",
         currency: "₽",
         litcoins: 2,
-        bonus: 1
+        bonus: 1,
+        msg: gettext("Package of 3 covers")
       },
       %{
         bg: "https://ik.imagekit.io/soulgenesis/pay_blur_3.png",
@@ -63,7 +65,8 @@ defmodule LitcoversWeb.TransactionLive.Index do
         value: "1950.00",
         currency: "₽",
         litcoins: 5,
-        bonus: 2
+        bonus: 2,
+        msg: gettext("Package of 7 covers")
       },
       %{
         bg: "https://ik.imagekit.io/soulgenesis/pay_blur_4.png",
@@ -71,7 +74,8 @@ defmodule LitcoversWeb.TransactionLive.Index do
         value: "3900.00",
         currency: "₽",
         litcoins: 10,
-        bonus: 3
+        bonus: 3,
+        msg: gettext("Package of 13 covers")
       },
       %{
         bg: "https://ik.imagekit.io/soulgenesis/pay_blur_5.png",
@@ -79,7 +83,8 @@ defmodule LitcoversWeb.TransactionLive.Index do
         value: "5850.00",
         currency: "₽",
         litcoins: 15,
-        bonus: 5
+        bonus: 5,
+        msg: gettext("Package of 20 covers")
       },
       %{
         bg: "https://ik.imagekit.io/soulgenesis/pay_blur_6.png",
@@ -87,7 +92,8 @@ defmodule LitcoversWeb.TransactionLive.Index do
         value: "7800.00",
         currency: "₽",
         litcoins: 20,
-        bonus: 10
+        bonus: 10,
+        msg: gettext("Package of 30 covers")
       }
     ]
   end

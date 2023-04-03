@@ -27,10 +27,8 @@
                 + <%= opt.bonus %>
               </p>
             </div>
-            <p class="text-slate-400 text-xs xl:text-sm">
-              <%= gettext("Package of ") <> "#{opt.litcoins + opt.bonus}" %><br /><%= gettext(
-                "covers"
-              ) %>
+            <p class="text-slate-400 text-xs xl:text-sm w-28">
+              <%= opt.msg %>
             </p>
           </div>
           <p :if={@current_user.discount < 1.0} class="text-sm text-slate-300 font-semibold">
@@ -63,7 +61,7 @@
             }
             phx-value-total-amount={opt.value}
           >
-            Pay
+            <%= gettext("Pay") %>
           </.button>
         </div>
       </div>

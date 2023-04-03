@@ -287,7 +287,7 @@ msgstr "Создать аккаунт"
 msgid "Creating account..."
 msgstr "Создание аккаунта..."
 
-#: lib/litcovers_web/live/transaction_live/index.ex:54
+#: lib/litcovers_web/live/transaction_live/index.ex:55
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Creative duo"
 msgstr "Творческое трио"
@@ -359,7 +359,7 @@ msgstr "Быстрая  регистрация."
 msgid "Find the perfect result."
 msgstr "Найдите идеальный результат."
 
-#: lib/litcovers_web/live/transaction_live/index.html.heex:44
+#: lib/litcovers_web/live/transaction_live/index.html.heex:42
 #, elixir-autogen, elixir-format
 msgid "For"
 msgstr "За"
@@ -385,7 +385,7 @@ msgstr "Если ваш адрес электронной почты в наше
 msgid "Increase the image quality to the maximum."
 msgstr "Увеличьте качество изображения до максимума."
 
-#: lib/litcovers_web/live/transaction_live/index.ex:86
+#: lib/litcovers_web/live/transaction_live/index.ex:91
 #, elixir-autogen, elixir-format
 msgid "Legendary Gallery"
 msgstr "Легендарная галерея"
@@ -406,7 +406,7 @@ msgstr "Логин"
 msgid "Lonely pixel"
 msgstr "Одинокий пиксель"
 
-#: lib/litcovers_web/live/transaction_live/index.ex:78
+#: lib/litcovers_web/live/transaction_live/index.ex:82
 #, elixir-autogen, elixir-format
 msgid "Masterpiece creator"
 msgstr "Творец шедевров"
@@ -428,7 +428,7 @@ msgstr "Новый пароль"
 msgid "Nothing here so far"
 msgstr "Пока что здесь ничего нет"
 
-#: lib/litcovers_web/live/transaction_live/index.ex:62
+#: lib/litcovers_web/live/transaction_live/index.ex:64
 #, elixir-autogen, elixir-format
 msgid "Novice collector"
 msgstr "Молодой коллекционер"
@@ -446,17 +446,12 @@ msgstr "Из персонажей вашей книги"
 msgid "Oops, something went wrong! Please check the errors below."
 msgstr "Упс, что-то пошло не так! Пожалуйста, проверьте ошибки ниже."
 
-#: lib/litcovers_web/live/transaction_live/index.html.heex:31
-#, elixir-autogen, elixir-format
-msgid "Package of "
-msgstr "Пакет из "
-
 #: lib/litcovers_web/live/transaction_live/index.html.heex:8
 #, elixir-autogen, elixir-format
 msgid "Packages"
 msgstr "Пакеты"
 
-#: lib/litcovers_web/live/transaction_live/index.ex:70
+#: lib/litcovers_web/live/transaction_live/index.ex:73
 #, elixir-autogen, elixir-format
 msgid "Paint Party"
 msgstr "Вечеринка красок"
@@ -716,15 +711,10 @@ msgstr "Ваш обложка сохранена"
 msgid "Your new cover is a symbiosis of our many years of experience in the field of design and technology and AI"
 msgstr "Ваша новая обложка - это симбиоз нашего многолетнего опыта в области дизайна, технологий и ИИ"
 
-#: lib/litcovers_web/live/transaction_live/index.html.heex:52
+#: lib/litcovers_web/live/transaction_live/index.html.heex:50
 #, elixir-autogen, elixir-format
 msgid "cheaper"
 msgstr "дешевле"
-
-#: lib/litcovers_web/live/transaction_live/index.html.heex:31
-#, elixir-autogen, elixir-format
-msgid "covers"
-msgstr "обложки"
 
 #: lib/litcovers_web/live/user_login_live.ex:24
 #, elixir-autogen, elixir-format
@@ -887,3 +877,38 @@ msgstr "Открыть изображение"
 #, elixir-autogen, elixir-format
 msgid "(Coming soon)"
 msgstr "(Скоро)"
+
+#: lib/litcovers_web/live/transaction_live/index.ex:51
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Package of 1 cover"
+msgstr "Пакет из 1 обложки"
+
+#: lib/litcovers_web/live/transaction_live/index.ex:78
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Package of 13 covers"
+msgstr "Пакет из 13 обложек"
+
+#: lib/litcovers_web/live/transaction_live/index.ex:87
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Package of 20 covers"
+msgstr "Пакет из 20 обложек"
+
+#: lib/litcovers_web/live/transaction_live/index.ex:60
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Package of 3 covers"
+msgstr "Пакет из 3 обложек"
+
+#: lib/litcovers_web/live/transaction_live/index.ex:96
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Package of 30 covers"
+msgstr "Пакет из 30 обложек"
+
+#: lib/litcovers_web/live/transaction_live/index.ex:69
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Package of 7 covers"
+msgstr "Пакет из 7 обложек"
+
+#: lib/litcovers_web/live/transaction_live/index.html.heex:64
+#, elixir-autogen, elixir-format
+msgid "Pay"
+msgstr "Купить"
