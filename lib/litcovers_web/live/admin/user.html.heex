@@ -12,11 +12,12 @@
     <.p class="mt-10">Transactions</.p>
     <.table id="transactions" rows={@user.transactions}>
       <:col :let={tx} label="Description"><%= tx.description %></:col>
-      <:col :let={tx} label="Amount"><%= tx.amount%><%= tx.currency %></:col>
-      <:col :let={tx} label="Discount"><%= tx.discount %><%= tx.currency %></:col>
+      <:col :let={tx} label="Amount"><%= tx.amount%><span class="text-xs font-semibold"><%= tx.currency %></span></:col>
+      <:col :let={tx} label="Discount"><%= tx.discount %><span class="text-xs font-semibold"><%= tx.currency %></span></:col>
       <:col :let={tx} label="Payment method"><%= tx.payment_service %></:col>
       <:col :let={tx} label="Tx ID"><%= tx.tnx_id %></:col>
       <:col :let={tx} label="Status"><%= tx.status %></:col>
+      <:col :let={tx} label="Created at"><%= tx.inserted_at %></:col>
     </.table>
   </div>
 
