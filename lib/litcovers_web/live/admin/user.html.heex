@@ -1,5 +1,24 @@
 <div class="flex flex-col items-center gap-10 justify-center mt-10">
-  <.h1><%= @user.email %></.h1>
+  <div>
+    <.h1><%= @user.email %></.h1>
+    <.list>
+      <:item title="Litcoins"><%= @user.litcoins %></:item>
+      <:item title="Registered"><%= @user.inserted_at %></:item>
+      <:item title="Confirmed account"><%= @user.confirmed_at %></:item>
+      <:item title="Recent generations (1 hour)"><%= @user.recent_generations %></:item>
+      <:item title="Referrer"><%= @user.referer %></:item>
+      <:item title="Discount"><%= 100 - (@user.discount * 100) %>%</:item>
+    </.list>
+    <.p class="mt-10">Transactions</.p>
+    <.table id="transactions" rows={@user.transactions}>
+      <:col :let={tx} label="Description"><%= tx.description %></:col>
+      <:col :let={tx} label="Amount"><%= tx.amount%><%= tx.currency %></:col>
+      <:col :let={tx} label="Discount"><%= tx.discount %><%= tx.currency %></:col>
+      <:col :let={tx} label="Payment method"><%= tx.payment_service %></:col>
+      <:col :let={tx} label="Tx ID"><%= tx.tnx_id %></:col>
+      <:col :let={tx} label="Status"><%= tx.status %></:col>
+    </.table>
+  </div>
 
   <div class="max-w-screen-2xl mx-auto grid grid-cols-3 xl:grid-cols-4 gap-10">
     <div :for={image <- @user.images} class="p-5 border-2 border-zinc-700 rounded-lg">

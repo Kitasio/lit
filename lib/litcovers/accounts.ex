@@ -150,10 +150,10 @@ defmodule Litcovers.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
-  def get_user_preload_images!(id) do
+  def get_user_preload_images_and_tx!(id) do
   	User
     |> Repo.get!(id)
-    |> Repo.preload([:images])
+    |> Repo.preload([:images, :transactions])
   end
 
   ## User registration

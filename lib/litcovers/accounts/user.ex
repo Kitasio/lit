@@ -20,6 +20,7 @@ defmodule Litcovers.Accounts.User do
     has_many :images, Litcovers.Media.Image
     has_many :covers, Litcovers.Media.Cover
     has_many :tutorials, Litcovers.Metadata.Tutotial
+    has_many :transactions, Litcovers.Payments.Transaction
 
     timestamps()
   end

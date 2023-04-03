@@ -636,8 +636,8 @@ defmodule LitcoversWeb.CoreComponents do
     <div class="mt-14">
       <dl class="-my-4 divide-y divide-zinc-100">
         <div :for={item <- @item} class="flex gap-4 py-4 sm:gap-8">
-          <dt class="w-1/4 flex-none text-[0.8125rem] leading-6 text-zinc-500"><%= item.title %></dt>
-          <dd class="text-sm leading-6 text-zinc-700"><%= render_slot(item) %></dd>
+          <dt class="w-1/4 flex-none text-[0.8125rem] leading-6 text-zinc-300"><%= item.title %></dt>
+          <dd class="text-sm leading-6 text-zinc-300"><%= render_slot(item) %></dd>
         </div>
       </dl>
     </div>

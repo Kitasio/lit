@@ -15,7 +15,7 @@
 
   <.table id="users" rows={@users}>
     <:col :let={user} label="ID"><%= user.id %></:col>
-    <:col :let={user} label="Name"><.link navigate={~p"/en/admin/user/#{user.id}"}><%= user.email %></.link></:col>
+    <:col :let={user} label="Name"><.link navigate={~p"/#{@locale}/admin/user/#{user.id}"}><%= user.email %></.link></:col>
     <:col :let={user} label="Enabled?"><%= user.enabled %></:col>
     <:action :let={user}>
       <.link phx-click={JS.push("toggle-enabled", value: %{id: user.id})}>
