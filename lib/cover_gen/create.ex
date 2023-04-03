@@ -137,6 +137,8 @@ defmodule CoverGen.Create do
         System.get_env("OAI_TOKEN")
       )
 
+    save_ideas([text], image)
+
     text
   end
 
