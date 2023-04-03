@@ -270,7 +270,7 @@ defmodule Litcovers.Media do
   def get_image_preload_all!(id) do
     Image
     |> Repo.get!(id)
-    |> Repo.preload([:user, :prompt, :ideas])
+    |> Repo.preload([:user, :prompt, :ideas, :covers])
   end
 
   @doc """

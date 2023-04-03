@@ -1,5 +1,5 @@
 <div class="pt-10 max-w-screen-xl mx-auto">
-  <div>
+  <div class="space-y-3 justify-start items-start flex flex-col">
     <button phx-click={JS.push("toggle-dripping_machine")}>
       <%= if @drip_machine do %>
         Stop Dripping
@@ -7,11 +7,15 @@
         Start Dripping
       <% end %>
     </button>
+
+    <button>
+      <.link navigate={~p"/en/admin/dashboard"}>Dashboard</.link>
+    </button>
   </div>
 
   <.table id="users" rows={@users}>
     <:col :let={user} label="ID"><%= user.id %></:col>
-    <:col :let={user} label="Name"><%= user.email %></:col>
+    <:col :let={user} label="Name"><.link navigate={~p"/en/admin/user/#{user.id}"}><%= user.email %></.link></:col>
     <:col :let={user} label="Enabled?"><%= user.enabled %></:col>
     <:action :let={user}>
       <.link phx-click={JS.push("toggle-enabled", value: %{id: user.id})}>
