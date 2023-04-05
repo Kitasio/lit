@@ -934,3 +934,8 @@ msgstr "Напишите то что приходит на ум в свобод�
 #, elixir-autogen, elixir-format
 msgid "Your feedback"
 msgstr "Ваш отзыв"
+
+#: lib/litcovers_web/live/image_live/new.html.heex:268
+#, elixir-autogen, elixir-format
+msgid "Leave feedback"
+msgstr "Оставть отзыв"

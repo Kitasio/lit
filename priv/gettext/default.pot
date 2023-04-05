@@ -933,3 +933,8 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "Your feedback"
 msgstr ""
+
+#: lib/litcovers_web/live/image_live/new.html.heex:268
+#, elixir-autogen, elixir-format
+msgid "Leave feedback"
+msgstr ""
