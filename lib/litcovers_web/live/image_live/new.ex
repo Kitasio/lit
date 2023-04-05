@@ -39,7 +39,7 @@ defmodule LitcoversWeb.ImageLive.New do
      assign(socket,
        changeset: Media.change_image(%Image{}),
        locale: locale,
-       lit_ai: true,
+       lit_ai: false,
        aspect_ratio: "cover",
        style_prompts: style_prompts,
        style_prompt: nil,
@@ -280,40 +280,6 @@ defmodule LitcoversWeb.ImageLive.New do
       |> Map.put(:action, :validate)
 
     {:noreply, assign(socket, :changeset, changeset)}
-  end
-
-  def handle_event("save_raw", %{"image" => image_params}, socket) do
-    unless socket.assigns.current_user.is_generating or socket.assigns.current_user.relaxed_mode do
-      %{"description" => description, "width" => width, "height" => height} = image_params
-      model_name = socket.assigns.selected_model.name
-      image_params = %{image_params | "model_name" => model_name}
-      prompt = Replicate.Model.new(model_name)
-
-      prompt =
-        update_in(prompt.input, fn input ->
-          %CoverGen.Replicate.Input{
-            width: width,
-            height: height,
-            prompt: input.prompt <> description
-          }
-        end)
-
-      case Media.create_image(socket.assigns.current_user, image_params) do
-        {:ok, image} ->
-          # CoverGen.CoverProducer.start_image_gen(image, prompt)
-
-          socket = socket |> assign(image: image, is_generating: true, gen_error: nil)
-
-          {:noreply, socket}
-
-        {:error, %Ecto.Changeset{} = changeset} ->
-          IO.inspect(changeset)
-          placeholder = random_placeholder(socket.assigns.locale, socket.assigns.lit_ai)
-          {:noreply, assign(socket, changeset: changeset, placeholder: placeholder)}
-      end
-    else
-      {:noreply, socket}
-    end
   end
 
   def handle_event("save", %{"image" => image_params}, socket) do
