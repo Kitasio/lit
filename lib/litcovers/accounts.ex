@@ -153,7 +153,11 @@ defmodule Litcovers.Accounts do
   def get_user_preload_images_and_tx!(id) do
     User
     |> Repo.get!(id)
-    |> Repo.preload([:images, :transactions])
+    |> Repo.preload([:transactions, images: order_images_query()])
+  end
+
+  defp order_images_query do
+  	from(i in Litcovers.Media.Image, order_by: {:desc, i.id})
   end
 
   ## User registration
