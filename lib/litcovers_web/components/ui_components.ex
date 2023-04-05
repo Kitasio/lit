@@ -208,7 +208,13 @@ defmodule LitcoversWeb.UiComponents do
       """
     else
       ~H"""
-      <div class={"relative aspect-#{@aspect_ratio} bg-sec max-w-lg overflow-hidden rounded-lg transition-all duration-300 mx-auto"} />
+      <div class={[
+        "relative aspect-#{@aspect_ratio} bg-sec max-w-lg overflow-hidden rounded-lg transition-all duration-300 mx-auto",
+        "flex flex-col gap-2 items-center justify-center"
+        ]}>
+        <img src="/images/porro.svg" />
+        <span class="text-xs text-zinc-400"><%= gettext("Nothing here so far") %></span>
+      </div>
       """
     end
   end
