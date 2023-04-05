@@ -918,19 +918,19 @@ msgstr "Купить"
 #: lib/litcovers_web/live/image_live/new.html.heex:10
 #, elixir-autogen, elixir-format
 msgid "Feedback"
-msgstr ""
+msgstr "Отзыв"
 
 #: lib/litcovers_web/live/image_live/form_component.ex:45
 #, elixir-autogen, elixir-format
 msgid "Thanks! Your feedback is submited"
-msgstr ""
+msgstr "Спасибо! Ваш отзыв успешно отправлен"
 
 #: lib/litcovers_web/live/image_live/form_component.ex:14
 #, elixir-autogen, elixir-format
 msgid "Write what comes to mind in a free manner and a human being will definetly read it and make conclusions"
-msgstr ""
+msgstr "Напишите то что приходит на ум в свободной форме, вскоре реальный человек прочитает ваше сообщение и сделает выводы"
 
 #: lib/litcovers_web/live/image_live/form_component.ex:20
 #, elixir-autogen, elixir-format
 msgid "Your feedback"
-msgstr ""
+msgstr "Ваш отзыв"
