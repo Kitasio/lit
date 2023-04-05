@@ -522,7 +522,7 @@ defmodule LitcoversWeb.ImageLive.New do
     ~H"""
     <div
       class="flex items-center justify-start"
-      x-data="{ toggle: '1' }"
+      x-data="{ toggle: '0' }"
       x-init="() => { $watch('toggle', active => $dispatch('toggle-change', { toggle: active })) }"
       id="toggle-lit-ai"
       phx-hook="Toggle"
