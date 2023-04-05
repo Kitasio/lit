@@ -229,7 +229,7 @@ defmodule LitcoversWeb.ImageLive.New do
   @impl true
   def handle_info({:relaxed_mode, image_id}, socket) do
     image = Media.get_image_preload!(image_id)
-    {:ok, user} = Accounts.relax_user_for(socket.assigns.current_user, 5)
+    {:ok, user} = Accounts.relax_user_for(socket.assigns.current_user, 1)
     relaxed_mode_releaser(user, self())
 
     socket =
