@@ -1,4 +1,20 @@
 <.modal
+  :if={@live_action in [:feedback]}
+  id="feedback-modal"
+  show
+  on_cancel={JS.navigate(~p"/#{@locale}/images/new")}
+>
+  <.live_component
+    module={LitcoversWeb.ImageLive.FormComponent}
+    id="feedback-form"
+    title={gettext("Feedback")}
+    form={@form}
+    current_user={@current_user}
+    locale={@locale}
+  />
+</.modal>
+
+<.modal
   id="unlock-modal"
   banner_url={insert_image_watermark(@image)}
   banner_top={false}
@@ -243,6 +259,14 @@
           </:bottom>
         </.img>
       <% end %>
+      <div class={[
+        "mt-5",
+        "flex justify-center",
+        "text-xs text-zinc-400 hover:underline hover:text-zinc-200",
+        "lg:fixed bottom-10 right-10"
+      ]}>
+        <.link navigate={~p"/#{@locale}/images/new/feedback"}>Leave a feedback</.link>
+      </div>
     </div>
   </div>
 </div>

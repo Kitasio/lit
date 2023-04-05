@@ -1,4 +1,6 @@
 defmodule LitcoversWeb.ImageLive.New do
+  alias Litcovers.Accounts.Feedback
+  alias Litcovers.Accounts
   alias CoverGen.Replicate
   alias Litcovers.Metadata.Prompt
   alias Litcovers.Payments.Yookassa
@@ -89,6 +91,11 @@ defmodule LitcoversWeb.ImageLive.New do
   @impl true
   def handle_params(params, _url, socket) do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+  end
+
+  defp apply_action(socket, :feedback, _params) do
+    socket
+    |> assign(form: Accounts.change_feedback(%Feedback{}))
   end
 
   defp apply_action(socket, :index, _params) do

@@ -1,7 +1,8 @@
 defmodule LitcoversWeb.ImageLive.FormComponent do
   use LitcoversWeb, :live_component
 
-  alias Litcovers.Media
+  alias Litcovers.Accounts.Feedback
+  alias Litcovers.Accounts
 
   @impl true
   def render(assigns) do
@@ -9,26 +10,16 @@ defmodule LitcoversWeb.ImageLive.FormComponent do
     <div>
       <.header>
         <%= @title %>
-        <:subtitle>Use this form to manage image records in your database.</:subtitle>
+        <:subtitle>
+          <%= gettext(
+            "Write what comes to mind in a free manner and a human being will definetly read it and make conclusions"
+          ) %>
+        </:subtitle>
       </.header>
-
-      <.simple_form
-        :let={f}
-        for={@changeset}
-        id="image-form"
-        phx-target={@myself}
-        phx-change="validate"
-        phx-submit="save"
-      >
-        <.input field={{f, :url}} type="text" label="Url" />
-        <.input field={{f, :description}} type="text" label="Description" />
-        <.input field={{f, :completed}} type="checkbox" label="Completed" />
-        <.input field={{f, :width}} type="number" label="Width" />
-        <.input field={{f, :height}} type="number" label="Height" />
-        <.input field={{f, :prompt}} type="text" label="Prompt" />
-        <.input field={{f, :character_gender}} type="text" label="Character gender" />
+      <.simple_form :let={f} for={@form} phx-target={@myself} phx-change="validate" phx-submit="save">
+        <.input field={{f, :text}} type="textarea" label={gettext("Your feedback")} />
         <:actions>
-          <.button phx-disable-with="Saving...">Save Image</.button>
+          <.button><%= gettext("Send") %></.button>
         </:actions>
       </.simple_form>
     </div>
@@ -36,52 +27,26 @@ defmodule LitcoversWeb.ImageLive.FormComponent do
   end
 
   @impl true
-  def update(%{image: image} = assigns, socket) do
-    changeset = Media.change_image(image)
+  def handle_event("validate", %{"feedback" => feedback_params}, socket) do
+    IO.inspect(feedback_params)
 
-    {:ok,
-     socket
-     |> assign(assigns)
-     |> assign(:changeset, changeset)}
-  end
-
-  @impl true
-  def handle_event("validate", %{"image" => image_params}, socket) do
-    changeset =
-      socket.assigns.image
-      |> Media.change_image(image_params)
+    form =
+      Accounts.change_feedback(%Feedback{}, feedback_params)
       |> Map.put(:action, :validate)
 
-    {:noreply, assign(socket, :changeset, changeset)}
+    {:noreply, assign(socket, :form, form)}
   end
 
-  def handle_event("save", %{"image" => image_params}, socket) do
-    save_image(socket, socket.assigns.action, image_params)
-  end
-
-  defp save_image(socket, :edit, image_params) do
-    case Media.update_image(socket.assigns.image, image_params) do
-      {:ok, _image} ->
+  def handle_event("save", %{"feedback" => feedback_params}, socket) do
+    case Accounts.create_feedback(socket.assigns.current_user, feedback_params) do
+      {:ok, _feedback} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Image updated successfully")
-         |> push_navigate(to: socket.assigns.navigate)}
+         |> put_flash(:info, gettext("Thanks! Your feedback is submited"))
+         |> push_navigate(to: ~p"/#{socket.assigns.locale}/images/new")}
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
+      {:error, %Ecto.Changeset{} = form} ->
+        {:noreply, assign(socket, form: form)}
     end
   end
-
-  # defp save_image(socket, :new, image_params) do
-  #   case Media.create_image(image_params) do
-  #     {:ok, _image} ->
-  #       {:noreply,
-  #        socket
-  #        |> put_flash(:info, "Image created successfully")
-  #        |> push_navigate(to: socket.assigns.navigate)}
-  #
-  #     {:error, %Ecto.Changeset{} = changeset} ->
-  #       {:noreply, assign(socket, changeset: changeset)}
-  #   end
-  # end
 end
