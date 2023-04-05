@@ -55,6 +55,7 @@ defmodule LitcoversWeb.Router do
 
     live_session :is_admin, on_mount: [{LitcoversWeb.UserAuth, :is_admin}] do
       live "/admin", AdminLive.Index, :index
+      live "/admin/feedback", AdminLive.Feedback
       live "/admin/images/:id", AdminLive.Image
       live "/admin/user/:id", AdminLive.User
 

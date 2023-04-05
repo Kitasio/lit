@@ -21,6 +21,7 @@ defmodule Litcovers.Accounts.User do
     has_many :covers, Litcovers.Media.Cover
     has_many :tutorials, Litcovers.Metadata.Tutotial
     has_many :transactions, Litcovers.Payments.Transaction
+    has_many :feedbacks, Litcovers.Accounts.Feedback
 
     timestamps()
   end

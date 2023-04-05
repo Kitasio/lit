@@ -486,6 +486,7 @@ defmodule Litcovers.Accounts do
   """
   def list_feedbacks do
     Repo.all(Feedback)
+    |> Repo.preload([:user])
   end
 
   @doc """

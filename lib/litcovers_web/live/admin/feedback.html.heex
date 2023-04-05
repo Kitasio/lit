@@ -1,0 +1,6 @@
+<div class="mx-auto max-w-screen-2xl w-full">
+  <.table id="feedbacks" rows={@feedbacks}>
+    <:col :let={fb} label="User"><.link navigate={~p"/#{@locale}/admin/user/#{fb.user.id}"}><%= fb.user.email %></.link></:col>
+    <:col :let={fb} label="Text"><%= fb.text %></:col>
+  </.table>
+</div>
