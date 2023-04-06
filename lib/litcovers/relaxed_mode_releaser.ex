@@ -8,6 +8,7 @@ defmodule Litcovers.RelaxedModeReleaser do
     Task.start_link(&loop/0)
   end
 
+  # Loops every 5 minutes and releases users from relaxed mode if they haven't
   defp loop do
     Logger.info("Relaxed mode releaser started")
 

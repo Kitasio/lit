@@ -5,5 +5,6 @@ defmodule CoverGen.Replicate.Input do
             width: 512,
             height: 768,
             num_outputs: 1,
-            guidance_scale: 10
+            guidance_scale: 10,
+            disable_safety_check: true
 end
