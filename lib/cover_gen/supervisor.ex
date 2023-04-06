@@ -22,11 +22,19 @@ defmodule CoverGen.Supervisor do
   def init(_init_arg) do
     Logger.info("CoverGen.Supervisor init, pid: #{inspect(self())}")
 
-    children = [
-      CoverGen.Cleaner.ImageDeleter,
-      {CoverGen.DrippingMachine, %{}},
-      {CoverGen.Worker, %{}}
-    ]
+    children =
+      if System.get_env("MIX_ENV") == "prod" do
+        [
+          CoverGen.Cleaner.ImageDeleter,
+          {CoverGen.DrippingMachine, %{}},
+          {CoverGen.Worker, %{}}
+        ]
+      else
+        [
+          CoverGen.Cleaner.ImageDeleter,
+          {CoverGen.DrippingMachine, %{}}
+        ]
+      end
 
     Supervisor.init(children,
       strategy: :one_for_one
