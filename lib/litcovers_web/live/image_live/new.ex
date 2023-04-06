@@ -17,7 +17,7 @@ defmodule LitcoversWeb.ImageLive.New do
 
   @impl true
   def mount(%{"locale" => locale}, _session, socket) do
-    if connected?(socket), do: CoverGen.Create.subscribe(socket.assigns.current_user.id)
+    if connected?(socket), do: CoverGen.Worker.subscribe(socket.assigns.current_user.id)
     Gettext.put_locale(locale)
 
     check_new_payments(socket, self())
@@ -159,7 +159,7 @@ defmodule LitcoversWeb.ImageLive.New do
       {:ok, new_image} =
         Media.create_image(socket.assigns.current_user, image.prompt, image_params)
 
-      CoverGen.Worker.generate(new_image, model_params)
+      CoverGen.start_job(image: new_image, params: model_params, stage: :sd_request)
 
       for i <- image.ideas do
         Media.create_idea(new_image, %{idea: i.idea})
@@ -298,7 +298,7 @@ defmodule LitcoversWeb.ImageLive.New do
 
       case Media.create_image(socket.assigns.current_user, prompt, image_params) do
         {:ok, image} ->
-          CoverGen.Worker.generate(image, socket.assigns.lit_ai)
+          CoverGen.start_job(image: image)
 
           socket = socket |> assign(image: image, is_generating: true, gen_error: nil)
 

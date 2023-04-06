@@ -211,6 +211,7 @@
           <.input field={{f, :width}} value={@width} type="hidden" />
           <.input field={{f, :height}} value={@height} type="hidden" />
           <.input field={{f, :model_name}} value={@selected_model.name} type="hidden" />
+          <.input field={{f, :lit_ai}} value={@lit_ai} type="hidden" />
         </div>
 
         <.generate_btn
@@ -265,7 +266,9 @@
         "text-xs text-zinc-400 hover:underline hover:text-zinc-200",
         "lg:fixed bottom-10 right-10"
       ]}>
-        <.link navigate={~p"/#{@locale}/images/new/feedback"}><%= gettext("Leave feedback") %></.link>
+        <.link navigate={~p"/#{@locale}/images/new/feedback"}>
+          <%= gettext("Leave feedback") %>
+        </.link>
       </div>
     </div>
   </div>

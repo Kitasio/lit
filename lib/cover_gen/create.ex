@@ -142,10 +142,6 @@ defmodule CoverGen.Create do
     text
   end
 
-  defp mutate_description(image, _) do
-    image.description
-  end
-
   def ai_update_image(%Image{} = image, attrs) do
     image
     |> Image.ai_changeset(attrs)
