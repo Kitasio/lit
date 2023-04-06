@@ -13,6 +13,7 @@ defmodule Litcovers.Media.Image do
     field :unlocked, :boolean, default: false
     field :seen, :boolean, default: false
     field :model_name, :string
+    field :lit_ai, :boolean, default: false
 
     belongs_to :user, Litcovers.Accounts.User
     belongs_to :prompt, Litcovers.Metadata.Prompt
@@ -36,7 +37,8 @@ defmodule Litcovers.Media.Image do
       :character_gender,
       :favorite,
       :seen,
-      :model_name
+      :model_name,
+      :lit_ai
     ])
     |> validate_required([
       :description,
