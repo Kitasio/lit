@@ -9,6 +9,7 @@ defmodule CoverGen.OAI do
             model: "text-davinci-003",
             temperature: 1
 
+  
   def description_tldr(_description, nil),
     do: raise("OAI_TOKEN was not set\nVisit https://beta.openai.com/account/api-keys to get it")
 

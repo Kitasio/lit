@@ -133,12 +133,18 @@ defmodule CoverGen.Worker do
         image.prompt.type
       )
 
+    save_final_prompt(image, prompt)
+
     Model.get_params(
       image.model_name,
       prompt,
       image.width,
       image.height
     )
+  end
+
+  defp save_final_prompt(image, prompt) do
+    Media.update_image(image, %{final_prompt: prompt})
   end
 
   defp mutate_description(image) when image.lit_ai == true do
