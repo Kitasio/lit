@@ -25,11 +25,6 @@
         <%= gettext("All") %>
       </span>
     </.link>
-    <.link navigate={~p"/#{@locale}/images/unlocked"}>
-      <span x-bind:class={"'#{@live_action}' == 'unlocked' && 'text-accent-main'"}>
-        <%= gettext("Unlocked") %>
-      </span>
-    </.link>
     <.link navigate={~p"/#{@locale}/images/favorites"}>
       <span x-bind:class={"'#{@live_action}' == 'favorites' && 'text-accent-main'"}>
         <%= gettext("Favorites") %>

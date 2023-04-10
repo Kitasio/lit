@@ -2,7 +2,6 @@ defmodule LitcoversWeb.UiComponents do
   use Phoenix.Component, global_prefixes: ~w(x-)
   import LitcoversWeb.Gettext
   import LitcoversWeb.CoreComponents
-  alias Phoenix.LiveView.JS
 
   defp referers, do: ["rugram.me", "i-gram.ru", "rugram-shop.ru", "delibri.ru"]
 
@@ -34,22 +33,6 @@ defmodule LitcoversWeb.UiComponents do
 
       <div class="flex items-center gap-5">
         <%= if @current_user do %>
-          <.link navigate={"/#{@locale}/payment_options"}>
-            <div class="group relative">
-              <span
-                class="transition-all inline-block flex items-center gap-2"
-                data-update-litcoins={
-                  JS.transition(
-                    {"ease-out duration-300", "opacity-50 -translate-y-1/3", "opacity-100"}
-                  )
-                }
-                id={"litcoins-of-user-#{@current_user.id}"}
-              >
-                <span><.icon name="hero-book-open" class="w-6 h-6" /></span>
-                <span><%= @current_user.litcoins %></span>
-              </span>
-            </div>
-          </.link>
           <.link navigate={"/#{@locale}/users/settings"}>
             <%= if @current_user.referer in referers() do %>
               <img
@@ -209,9 +192,9 @@ defmodule LitcoversWeb.UiComponents do
     else
       ~H"""
       <div class={[
-          "relative aspect-#{@aspect_ratio} bg-sec max-w-lg overflow-hidden rounded-lg transition-all duration-300 mx-auto",
-          "flex flex-col gap-2 items-center justify-center"
-        ]}>
+        "relative aspect-#{@aspect_ratio} bg-sec max-w-lg overflow-hidden rounded-lg transition-all duration-300 mx-auto",
+        "flex flex-col gap-2 items-center justify-center"
+      ]}>
         <img src="/images/porro.svg" />
         <span class="text-xs text-zinc-400"><%= gettext("Nothing here so far") %></span>
       </div>

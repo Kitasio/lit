@@ -10,7 +10,7 @@ defmodule Litcovers.Media.Image do
     field :url, :string
     field :width, :integer
     field :favorite, :boolean, default: false
-    field :unlocked, :boolean, default: false
+    field :unlocked, :boolean, default: true
     field :seen, :boolean, default: false
     field :model_name, :string
     field :lit_ai, :boolean, default: false

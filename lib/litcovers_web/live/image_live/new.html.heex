@@ -258,6 +258,18 @@
               </.button>
             </div>
           </:bottom>
+          <:bottom :if={@image.unlocked}>
+            <div class="flex gap-3 justify-center">
+              <.link navigate={~p"/#{@locale}/images/#{@image.id}/edit"}>
+                <.button class="">
+                  <%= gettext("Edit") %><span class="ml-2"><.icon
+                      name="hero-pencil-square"
+                      class="w-4 h-4"
+                    /></span>
+                </.button>
+              </.link>
+            </div>
+          </:bottom>
         </.img>
       <% end %>
       <div class={[
