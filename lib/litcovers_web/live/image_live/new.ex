@@ -38,7 +38,7 @@ defmodule LitcoversWeb.ImageLive.New do
       unless Metadata.has_tutorial?(socket.assigns.current_user, "feedback") and
                socket.assigns.current_user.recent_generations < 5 do
         Metadata.create_tutotial(socket.assigns.current_user, %{title: "feedback"})
-        redirect(socket, to: "/#{socket.assigns.locale}/images/new/feedback")
+        redirect(socket, to: "/#{locale}/images/new/feedback")
       else
         socket
       end
