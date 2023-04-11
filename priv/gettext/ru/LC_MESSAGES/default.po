@@ -21,52 +21,52 @@ msgstr "Действия"
 msgid "close"
 msgstr "Закрыть"
 
-#: lib/litcovers_web/live/image_live/new.ex:766
+#: lib/litcovers_web/live/image_live/new.ex:775
 #, elixir-autogen, elixir-format
 msgid "Cover type"
 msgstr "Тип обложки"
 
-#: lib/litcovers_web/live/image_live/new.ex:727
+#: lib/litcovers_web/live/image_live/new.ex:736
 #, elixir-autogen, elixir-format
 msgid "Female"
 msgstr "Женщина"
 
-#: lib/litcovers_web/live/image_live/new.ex:738
+#: lib/litcovers_web/live/image_live/new.ex:747
 #, elixir-autogen, elixir-format
 msgid "Male"
 msgstr "Мужчина"
 
-#: lib/litcovers_web/live/image_live/new.ex:771
+#: lib/litcovers_web/live/image_live/new.ex:780
 #, elixir-autogen, elixir-format
 msgid "Style"
 msgstr "Стиль"
 
-#: lib/litcovers_web/live/image_live/new.ex:770
+#: lib/litcovers_web/live/image_live/new.ex:779
 #, elixir-autogen, elixir-format
 msgid "Vibe"
 msgstr "Атмосфера"
 
-#: lib/litcovers_web/live/image_live/new.ex:771
+#: lib/litcovers_web/live/image_live/new.ex:780
 #, elixir-autogen, elixir-format
 msgid "What style do you prefer?"
 msgstr "Какой стиль вам больше подходит?"
 
-#: lib/litcovers_web/live/image_live/new.ex:767
+#: lib/litcovers_web/live/image_live/new.ex:776
 #, elixir-autogen, elixir-format
 msgid "What type of cover is more suitable for your book?"
 msgstr "Какой тип обложки больше подходит для вашей книги?"
 
-#: lib/litcovers_web/live/image_live/new.ex:770
+#: lib/litcovers_web/live/image_live/new.ex:779
 #, elixir-autogen, elixir-format
 msgid "What vibe does your book have?"
 msgstr "Какая атмосфера у вашей книги?"
 
-#: lib/litcovers_web/live/image_live/new.ex:769
+#: lib/litcovers_web/live/image_live/new.ex:778
 #, elixir-autogen, elixir-format
 msgid "What world is your book set in?"
 msgstr "В каком мире разворачивается действие вашей книги?"
 
-#: lib/litcovers_web/live/image_live/new.ex:769
+#: lib/litcovers_web/live/image_live/new.ex:778
 #, elixir-autogen, elixir-format
 msgid "World"
 msgstr "Мир"
@@ -82,53 +82,53 @@ msgstr "Вы не можете получить доступ к этой стр�
 msgid "You must log in to access this page."
 msgstr "Для доступа к этой странице вы должны войти в систему."
 
-#: lib/litcovers_web/live/image_live/new.ex:807
+#: lib/litcovers_web/live/image_live/new.ex:816
 #, elixir-autogen, elixir-format
 msgid "Brutal - Dark"
 msgstr "Брутальное - Тёмное"
 
-#: lib/litcovers_web/live/image_live/new.ex:788
+#: lib/litcovers_web/live/image_live/new.ex:797
 #, elixir-autogen, elixir-format
 msgid "Character"
 msgstr "Персонаж"
 
-#: lib/litcovers_web/live/image_live/new.ex:797
+#: lib/litcovers_web/live/image_live/new.ex:806
 #, elixir-autogen, elixir-format
 msgid "Fantasy - Past"
 msgstr "Фэнтези - Прошлое"
 
-#: lib/litcovers_web/live/image_live/new.ex:799
+#: lib/litcovers_web/live/image_live/new.ex:808
 #, elixir-autogen, elixir-format
 msgid "Futurism - Future"
 msgstr "Футуризм - Будущее"
 
-#: lib/litcovers_web/live/image_live/new.ex:806
+#: lib/litcovers_web/live/image_live/new.ex:815
 #, elixir-autogen, elixir-format
 msgid "Natural - Neutral"
 msgstr "Натуральное - Нейтральное"
 
-#: lib/litcovers_web/live/image_live/new.ex:798
+#: lib/litcovers_web/live/image_live/new.ex:807
 #, elixir-autogen, elixir-format
 msgid "Realism - Present"
 msgstr "Реализм - Настоящее"
 
-#: lib/litcovers_web/live/image_live/new.ex:786
+#: lib/litcovers_web/live/image_live/new.ex:795
 #, elixir-autogen, elixir-format
 msgid "Setting"
 msgstr "Сеттинг"
 
-#: lib/litcovers_web/live/image_live/new.ex:805
+#: lib/litcovers_web/live/image_live/new.ex:814
 #, elixir-autogen, elixir-format
 msgid "Warm - Bright"
 msgstr "Теплое - Светлое"
 
-#: lib/litcovers_web/components/ui_components.ex:438
+#: lib/litcovers_web/components/ui_components.ex:421
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Title"
 msgstr "Название"
 
-#: lib/litcovers_web/components/ui_components.ex:102
-#: lib/litcovers_web/live/image_live/new.ex:77
+#: lib/litcovers_web/components/ui_components.ex:85
+#: lib/litcovers_web/live/image_live/new.ex:86
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Create"
 msgstr "Создай"
@@ -143,17 +143,17 @@ msgstr "Все"
 msgid "Composition"
 msgstr "Композиция"
 
-#: lib/litcovers_web/live/image_live/index.html.heex:35
+#: lib/litcovers_web/live/image_live/index.html.heex:30
 #, elixir-autogen, elixir-format
 msgid "Favorites"
 msgstr "Избранные"
 
-#: lib/litcovers_web/live/image_live/new.ex:595
+#: lib/litcovers_web/live/image_live/new.ex:604
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Generate"
 msgstr "Создать"
 
-#: lib/litcovers_web/live/image_live/new.ex:500
+#: lib/litcovers_web/live/image_live/new.ex:509
 #, elixir-autogen, elixir-format
 msgid "Image dimensions"
 msgstr "Размеры изображения"
@@ -163,13 +163,13 @@ msgstr "Размеры изображения"
 msgid "LIT AI"
 msgstr "LIT AI"
 
-#: lib/litcovers_web/components/ui_components.ex:118
+#: lib/litcovers_web/components/ui_components.ex:101
 #: lib/litcovers_web/live/image_live/index.ex:52
 #, elixir-autogen, elixir-format
 msgid "My generations"
 msgstr "Мои генерации"
 
-#: lib/litcovers_web/components/ui_components.ex:413
+#: lib/litcovers_web/components/ui_components.ex:396
 #, elixir-autogen, elixir-format
 msgid "Name"
 msgstr "Имя"
@@ -194,34 +194,29 @@ msgstr "У вас нет доступа к этому изображению"
 msgid "Your account is not active."
 msgstr "Ваш аккаунт не активен."
 
-#: lib/litcovers_web/live/image_live/new.ex:787
+#: lib/litcovers_web/live/image_live/new.ex:796
 #, elixir-autogen, elixir-format
 msgid "Couple"
 msgstr "Пара"
 
-#: lib/litcovers_web/live/image_live/index.html.heex:77
+#: lib/litcovers_web/live/image_live/index.html.heex:72
 #, elixir-autogen, elixir-format
 msgid "Locked image, dissapears after 24 hours"
 msgstr "Заблокированное изображение исчезнет через 24 часа"
 
-#: lib/litcovers_web/live/image_live/new.ex:203
-#: lib/litcovers_web/live/image_live/new.ex:209
-#: lib/litcovers_web/live/image_live/new.ex:215
+#: lib/litcovers_web/live/image_live/new.ex:212
+#: lib/litcovers_web/live/image_live/new.ex:218
+#: lib/litcovers_web/live/image_live/new.ex:224
 #, elixir-autogen, elixir-format
 msgid "Something went wrong"
 msgstr "Что-то пошло не по плану. Попробуйте снова"
 
-#: lib/litcovers_web/live/image_live/new.ex:194
+#: lib/litcovers_web/live/image_live/new.ex:203
 #, elixir-autogen, elixir-format
 msgid "Timeout"
 msgstr "Тайм-аут"
 
-#: lib/litcovers_web/live/image_live/index.html.heex:30
-#, elixir-autogen, elixir-format
-msgid "Unlocked"
-msgstr "Открытые"
-
-#: lib/litcovers_web/live/image_live/new.ex:790
+#: lib/litcovers_web/live/image_live/new.ex:799
 #, elixir-autogen, elixir-format
 msgid "Abstract"
 msgstr "Абстрактный"
@@ -241,7 +236,7 @@ msgstr "Уже зарегистрированы?"
 msgid "Amazing in its atmosphere and fullness"
 msgstr "Удивительно в своей атмосфере и полноте"
 
-#: lib/litcovers_web/live/image_live/new.ex:789
+#: lib/litcovers_web/live/image_live/new.ex:798
 #, elixir-autogen, elixir-format
 msgid "Attribute"
 msgstr "Атрибут"
@@ -317,7 +312,8 @@ msgstr "Скачать"
 msgid "Download the finished result and start publishing."
 msgstr "Скачайте готовый результат и начните публиковаться."
 
-#: lib/litcovers_web/live/image_live/index.html.heex:109
+#: lib/litcovers_web/live/image_live/index.html.heex:104
+#: lib/litcovers_web/live/image_live/new.html.heex:265
 #, elixir-autogen, elixir-format
 msgid "Edit"
 msgstr "Открыть"
@@ -396,7 +392,7 @@ msgstr "Легендарная галерея"
 msgid "Log in"
 msgstr "Войти"
 
-#: lib/litcovers_web/components/ui_components.ex:82
+#: lib/litcovers_web/components/ui_components.ex:65
 #, elixir-autogen, elixir-format
 msgid "Login"
 msgstr "Логин"
@@ -411,7 +407,7 @@ msgstr "Одинокий пиксель"
 msgid "Masterpiece creator"
 msgstr "Творец шедевров"
 
-#: lib/litcovers_web/components/ui_components.ex:137
+#: lib/litcovers_web/components/ui_components.ex:120
 #: lib/litcovers_web/live/cover_live/index.ex:68
 #, elixir-autogen, elixir-format
 msgid "My covers"
@@ -423,8 +419,8 @@ msgstr "Мои обложки"
 msgid "New password"
 msgstr "Новый пароль"
 
-#: lib/litcovers_web/components/ui_components.ex:216
-#: lib/litcovers_web/live/image_live/index.html.heex:48
+#: lib/litcovers_web/components/ui_components.ex:199
+#: lib/litcovers_web/live/image_live/index.html.heex:43
 #, elixir-autogen, elixir-format
 msgid "Nothing here so far"
 msgstr "Пока что здесь ничего нет"
@@ -483,7 +479,7 @@ msgstr "Быстрые результаты и выбор"
 msgid "Refine the layout to the level of a finished cover, ready for web publishing or printing."
 msgstr "Доработайте макет до уровня итоговой обложки, готовой для веб-публикации или печати."
 
-#: lib/litcovers_web/components/ui_components.ex:78
+#: lib/litcovers_web/components/ui_components.ex:61
 #: lib/litcovers_web/live/user_forgot_password_live.ex:24
 #: lib/litcovers_web/live/user_reset_password_live.ex:38
 #, elixir-autogen, elixir-format
@@ -599,7 +595,7 @@ msgstr "Второй этап"
 msgid "The ultimate platform for creating eye-catching covers, posters, and more, quickly and easily. Our cutting-edge technology utilizes advanced artificial intelligence, along with intuitive text overlay tools, to help you craft professional-looking designs in no time."
 msgstr "Писать новую реальность и погружать в неё тысячи читателей  — суперспособность каждого автора. Рисовать эту реальность помогает Litcovers. Сотни стилистических алгоритмов под капотом собственных разработок творят магию под вашим чутким руководством.Творите, исследуйте стили и погружайтесь в это цифровое путешествие совершенно бесплатно!"
 
-#: lib/litcovers_web/live/image_live/new.ex:791
+#: lib/litcovers_web/live/image_live/new.ex:800
 #, elixir-autogen, elixir-format
 msgid "Third person"
 msgstr "Третье лицо"
@@ -625,10 +621,10 @@ msgstr "Уникальные артефакты и предметы из ваш�
 msgid "Unlimited generation – the result is guaranteed."
 msgstr "Неограниченная генерирация - результат гарантирован."
 
-#: lib/litcovers_web/live/image_live/index.html.heex:67
-#: lib/litcovers_web/live/image_live/index.html.heex:132
+#: lib/litcovers_web/live/image_live/index.html.heex:62
+#: lib/litcovers_web/live/image_live/index.html.heex:127
 #: lib/litcovers_web/live/image_live/new.html.heex:26
-#: lib/litcovers_web/live/image_live/new.html.heex:253
+#: lib/litcovers_web/live/image_live/new.html.heex:254
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Unlock"
 msgstr "Открыть"
@@ -770,7 +766,7 @@ msgstr "Выйти"
 msgid "Current password"
 msgstr "Настоящий пароль"
 
-#: lib/litcovers_web/live/image_live/new.ex:501
+#: lib/litcovers_web/live/image_live/new.ex:510
 #, elixir-autogen, elixir-format
 msgid "Choose what dimensions the image will have"
 msgstr "Выберите какое разрешение будет у изображения"
@@ -780,7 +776,7 @@ msgstr "Выберите какое разрешение будет у изоб�
 msgid "Description"
 msgstr "Описание"
 
-#: lib/litcovers_web/components/ui_components.ex:69
+#: lib/litcovers_web/components/ui_components.ex:52
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Generations"
 msgstr "Генерации"
@@ -795,7 +791,7 @@ msgstr "Выберите один из множества пресетов, чт
 msgid "Step 1. "
 msgstr "Шаг 1. "
 
-#: lib/litcovers_web/live/image_live/new.ex:500
+#: lib/litcovers_web/live/image_live/new.ex:509
 #, elixir-autogen, elixir-format
 msgid "Step 2. "
 msgstr "Шаг 2. "
@@ -822,7 +818,7 @@ msgstr "Все ваши отредактированные изображени�
 
 #: lib/litcovers_web/live/cover_live/index.ex:74
 #: lib/litcovers_web/live/image_live/index.ex:58
-#: lib/litcovers_web/live/image_live/new.ex:86
+#: lib/litcovers_web/live/image_live/new.ex:95
 #: lib/litcovers_web/live/image_live/show.ex:52
 #, elixir-autogen, elixir-format
 msgid "Begin!"
@@ -843,39 +839,39 @@ msgstr "Специально для авторов мы подготовили �
 msgid "Text overlay"
 msgstr "Наложение текста"
 
-#: lib/litcovers_web/live/image_live/new.ex:82
+#: lib/litcovers_web/live/image_live/new.ex:91
 #, elixir-autogen, elixir-format
 msgid "Toggle switch LIT.AI disables our idea generator, giving you the opportunity to accurately describe the desired image"
 msgstr "Тумблер LIT.AI отключает наш генератор идей, давая вам возможность точно описать желаемое изображение"
 
-#: lib/litcovers_web/live/image_live/new.ex:79
+#: lib/litcovers_web/live/image_live/new.ex:88
 #, elixir-autogen, elixir-format
 msgid "We're here! At the first step, you will be able to enter a description of the desired image or an annotation of the book in text, then select the aspect ratio and finally determine the most appropriate styles."
 msgstr "Мы на месте! На первом шаге Вы сможете ввести описание желаемой картинки или аннотацию книги текстом, затем выбрать соотношение сторон и в завершении определить наиболее подходящие стили"
 
-#: lib/litcovers_web/live/image_live/index.html.heex:68
+#: lib/litcovers_web/live/image_live/index.html.heex:63
 #: lib/litcovers_web/live/image_live/new.html.heex:27
 #, elixir-autogen, elixir-format
 msgid "Cancel"
 msgstr "Отменить"
 
-#: lib/litcovers_web/components/ui_components.ex:625
+#: lib/litcovers_web/components/ui_components.ex:608
 #, elixir-autogen, elixir-format
 msgid "This will increase the quality to the maximum, remove the watermark and allow you to overlay text"
 msgstr "Это повысит качество до максимального, уберёт водяной знак и позволит накладывать текст"
 
-#: lib/litcovers_web/components/ui_components.ex:623
+#: lib/litcovers_web/components/ui_components.ex:606
 #, elixir-autogen, elixir-format
 msgid "You are going to spend a Litcoin and open an image"
 msgstr "Вы собираетесь потратить Litcoin  и открыть изображение"
 
-#: lib/litcovers_web/live/image_live/index.html.heex:65
+#: lib/litcovers_web/live/image_live/index.html.heex:60
 #: lib/litcovers_web/live/image_live/new.html.heex:24
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Unlock image"
 msgstr "Открыть изображение"
 
-#: lib/litcovers_web/live/image_live/new.ex:683
+#: lib/litcovers_web/live/image_live/new.ex:692
 #, elixir-autogen, elixir-format
 msgid "(Coming soon)"
 msgstr "(Скоро)"
@@ -915,27 +911,27 @@ msgstr "Пакет из 7 обложек"
 msgid "Pay"
 msgstr "Купить"
 
-#: lib/litcovers_web/live/image_live/new.html.heex:10
-#, elixir-autogen, elixir-format
-msgid "Feedback"
-msgstr "Отзыв"
-
 #: lib/litcovers_web/live/image_live/form_component.ex:45
 #, elixir-autogen, elixir-format
 msgid "Thanks! Your feedback is submited"
 msgstr "Спасибо! Ваш отзыв успешно отправлен"
-
-#: lib/litcovers_web/live/image_live/form_component.ex:14
-#, elixir-autogen, elixir-format
-msgid "Write what comes to mind in a free manner and a human being will definetly read it and make conclusions"
-msgstr "Напишите то что приходит на ум в свободной форме, вскоре реальный человек прочитает ваше сообщение и сделает выводы"
 
 #: lib/litcovers_web/live/image_live/form_component.ex:20
 #, elixir-autogen, elixir-format
 msgid "Your feedback"
 msgstr "Ваш отзыв"
 
-#: lib/litcovers_web/live/image_live/new.html.heex:268
+#: lib/litcovers_web/live/image_live/new.html.heex:282
 #, elixir-autogen, elixir-format
 msgid "Leave feedback"
-msgstr "Оставть отзыв"
+msgstr "Оставить отзыв"
+
+#: lib/litcovers_web/live/image_live/form_component.ex:14
+#, elixir-autogen, elixir-format
+msgid "Did you like it or not? What was missing? Please tell us about your feelings and the results of using the platform — this will help make the best product on the market!"
+msgstr "Понравилось или не очень? Чего не хватило? Пожалуйста, расскажите нам о своих ощущениях и результатах пользования платформой — это поможет сделать лучший продукт на рынке!"
+
+#: lib/litcovers_web/live/image_live/new.html.heex:10
+#, elixir-autogen, elixir-format
+msgid "Improving together"
+msgstr "Становимся лучше вместе"

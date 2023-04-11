@@ -12,7 +12,7 @@ defmodule LitcoversWeb.ImageLive.FormComponent do
         <%= @title %>
         <:subtitle>
           <%= gettext(
-            "Write what comes to mind in a free manner and a human being will definetly read it and make conclusions"
+            "Did you like it or not? What was missing? Please tell us about your feelings and the results of using the platform — this will help make the best product on the market!"
           ) %>
         </:subtitle>
       </.header>

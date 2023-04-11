@@ -269,10 +269,21 @@ defmodule Litcovers.Metadata do
     from(r in query, where: r.user_id == ^user_id)
   end
 
+  defp by_the_title(query, title) do
+    from(r in query, where: r.title == ^title)
+  end
+
   def list_user_tutorials(%Accounts.User{} = user) do
     Tutotial
     |> user_tutorials_query(user)
     |> Repo.all()
+  end
+
+  def has_tutorial?(%Accounts.User{} = user, title) do
+    Tutotial
+    |> user_tutorials_query(user)
+    |> by_the_title(title)
+    |> Repo.exists?()
   end
 
   @doc """
