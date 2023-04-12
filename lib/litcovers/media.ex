@@ -163,6 +163,14 @@ defmodule Litcovers.Media do
     |> Repo.all()
   end
 
+  def list_images(limit, offset) do
+    Image
+    |> order_by_date_insert()
+    |> limit_query(limit)
+    |> offset_query(offset)
+    |> Repo.all()
+  end
+
   def list_user_images(%Accounts.User{} = user, limit, offset) do
     Image
     |> user_images_query(user)

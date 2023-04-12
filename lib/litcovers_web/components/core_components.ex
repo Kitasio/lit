@@ -656,10 +656,10 @@ defmodule LitcoversWeb.CoreComponents do
 
   def back(assigns) do
     ~H"""
-    <div class="mt-16">
+    <div>
       <.link
         navigate={@navigate}
-        class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+        class="text-sm font-semibold leading-6 text-zinc-200 hover:text-accent-main"
       >
         <.icon name="hero-arrow-left-solid" class="w-3 h-3" />
         <%= render_slot(@inner_block) %>

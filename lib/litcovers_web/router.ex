@@ -58,6 +58,7 @@ defmodule LitcoversWeb.Router do
       live "/admin/feedback", AdminLive.Feedback
       live "/admin/images/:id", AdminLive.Image
       live "/admin/user/:id", AdminLive.User
+      live "/admin/images_feed", AdminLive.ImagesFeed
 
       live "/prompts", PromptLive.Index, :index
       live "/prompts/new", PromptLive.Index, :new
