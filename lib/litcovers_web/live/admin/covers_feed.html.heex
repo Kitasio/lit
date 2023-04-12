@@ -1,0 +1,27 @@
+<div>
+  <div class="my-10 flex flex-col items-center justify-center gap-5">
+    <.h1>All covers</.h1>
+    <.link navigate={~p"/en/admin/images_feed"}>Go to images feed</.link>
+    <.back navigate={~p"/en/admin"}>Back to admin panel</.back>
+  </div>
+
+  <div
+    id="all-images"
+    phx-update="append"
+    class="max-w-screen-2xl mx-auto grid grid-cols-3 xl:grid-cols-4 gap-10"
+  >
+    <div
+      :for={image <- @images}
+      id={"cover-#{image.id}-box"}
+      class="p-5 border-2 border-zinc-700 rounded-lg"
+    >
+      <.link navigate={~p"/en/admin/images/#{image.image_id}"}>
+        <div class="relative">
+          <img id={"#{image.id}-cover"} src={image.url} />
+        </div>
+      </.link>
+    </div>
+  </div>
+
+  <div id="infinite-scroll-marker" phx-hook="InfiniteScroll" data-page={@page}></div>
+</div>

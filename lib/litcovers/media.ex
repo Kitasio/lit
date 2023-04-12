@@ -163,6 +163,14 @@ defmodule Litcovers.Media do
     |> Repo.all()
   end
 
+  def list_covers(limit, offset) do
+    Cover
+    |> order_by_date_insert()
+    |> limit_query(limit)
+    |> offset_query(offset)
+    |> Repo.all()
+  end
+
   def list_images(limit, offset) do
     Image
     |> order_by_date_insert()

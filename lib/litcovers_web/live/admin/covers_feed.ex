@@ -1,4 +1,4 @@
-defmodule LitcoversWeb.AdminLive.ImagesFeed do
+defmodule LitcoversWeb.AdminLive.CoversFeed do
   use LitcoversWeb, :live_view
   alias Litcovers.Media
 
@@ -16,13 +16,14 @@ defmodule LitcoversWeb.AdminLive.ImagesFeed do
       socket
     end
 
-    {:ok, socket, temporary_assigns: [images: Media.list_images(8, 0)]}
+    {:ok, socket, temporary_assigns: [images: Media.list_covers(8, 0)]}
   end
 
   defp get_images(%{assigns: %{page: page}} = socket) do
     socket = assign(socket, page: page)
+    covers = Media.list_covers(8, page * 8)
 
-    assign(socket, images: Media.list_images(8, page * 8))
+    assign(socket, images: covers)
   end
 
   @impl true
@@ -30,4 +31,3 @@ defmodule LitcoversWeb.AdminLive.ImagesFeed do
     {:noreply, assign(socket, page: assigns.page + 1) |> get_images()}
   end
 end
-

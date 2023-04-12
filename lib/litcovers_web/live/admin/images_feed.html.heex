@@ -1,7 +1,8 @@
-<div>
+<div class="h-screen">
   <div class="my-10 flex flex-col items-center justify-center gap-5">
     <.h1>All images</.h1>
-    <.back navigate={~p"/en/admin"}>Back</.back>
+    <.link navigate={~p"/en/admin/covers_feed"}>Go to covers feed</.link>
+    <.back navigate={~p"/en/admin"}>Back to admin panel</.back>
   </div>
   <div
     id="all-images"
@@ -22,7 +23,6 @@
       </.link>
     </div>
   </div>
-
-  <div class="mt-10" id="infinite-scroll-marker" phx-hook="InfiniteScroll" data-page={@page}>
+  <div class="h-10 mt-10" id="infinite-scroll-marker" phx-hook="InfiniteScroll" data-page={@page}>
   </div>
 </div>
