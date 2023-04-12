@@ -1,5 +1,6 @@
 defmodule Litcovers.Accounts.User do
   use Ecto.Schema
+  import LitcoversWeb.Gettext
   import Ecto.Changeset
 
   schema "users" do
@@ -86,7 +87,8 @@ defmodule Litcovers.Accounts.User do
   defp validate_email(changeset, opts) do
     changeset
     |> validate_required([:email])
-    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
+    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: gettext("must have the @ sign and no spaces"))
+    |> validate_format(:email, ~r/^(?!.*\bmail\.ru\b).*$/, message: gettext("mail.ru not supported, use another provider"))
     |> validate_length(:email, max: 160)
     |> maybe_validate_unique_email(opts)
   end
