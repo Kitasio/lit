@@ -1,4 +1,4 @@
-defmodule CoverGen.StateHolder do
+defmodule CoverGen.Worker.StateHolder do
   alias Litcovers.Accounts
   use GenServer, restart: :transient
   require Logger

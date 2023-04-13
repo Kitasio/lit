@@ -1,4 +1,4 @@
-defmodule CoverGen.Worker do
+defmodule CoverGen.Worker.Creator do
   use GenServer, restart: :transient
   require Logger
 

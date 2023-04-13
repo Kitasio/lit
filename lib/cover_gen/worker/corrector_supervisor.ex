@@ -1,4 +1,4 @@
-defmodule CoverGen.WorkerSupervisor do
+defmodule CoverGen.Worker.CorrectorSupervisor do
   use Supervisor, restart: :temporary
 
   def start_link(args) do
@@ -10,8 +10,8 @@ defmodule CoverGen.WorkerSupervisor do
     image = Keyword.get(args, :image)
 
     children = [
-      {CoverGen.StateHolder, name: state_holder_name, image: image},
-      {CoverGen.Worker, args}
+      {CoverGen.Worker.StateHolder, name: state_holder_name, image: image},
+      {CoverGen.Worker.Corrector, args}
     ]
 
     options = [strategy: :one_for_one, max_seconds: :timer.seconds(30)]
