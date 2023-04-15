@@ -8,6 +8,9 @@ defmodule LitcoversWeb.ImageLive.ChatComponent do
     <div>
       <.header>
         <%= @title %>
+        <:subtitle>
+          <%= gettext("Describe what you would like to add, change or remove in the image.") %>
+        </:subtitle>
       </.header>
       <.simple_form :let={f} for={@form} phx-target={@myself} phx-change="validate" phx-submit="save">
         <.input field={{f, :content}} label="Message" />
