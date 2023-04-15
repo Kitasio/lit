@@ -9,6 +9,7 @@ defmodule LitcoversWeb.ImageLive.New do
   alias Litcovers.Media
   alias Litcovers.Media.Image
   alias Litcovers.Metadata
+  alias Litcovers.Metadata.UserChatMessage
   require Elixir.Logger
   import LitcoversWeb.ImageLive.Index
   alias Phoenix.LiveView.JS

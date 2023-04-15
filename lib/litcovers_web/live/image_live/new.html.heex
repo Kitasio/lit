@@ -1,4 +1,20 @@
 <.modal
+  id={"redo-image-#{@image.id}"}
+  banner_url={@image.url}
+  banner_top={false}
+  on_cancel={hide_modal("redo-image-#{@image.id}")}
+>
+  <.live_component
+    module={LitcoversWeb.ImageLive.ChatComponent}
+    id={"redo-image-#{@image.id}-live"}
+    form={UserChatMessage.changeset(%UserChatMessage{}, %{})}
+    title={gettext("Edit the image")}
+    image_id={@image.id}
+    locale={@locale}
+  />
+</.modal>
+
+<.modal
   :if={@live_action in [:feedback]}
   id="feedback-modal"
   show
@@ -260,14 +276,13 @@
           </:bottom>
           <:bottom :if={@image.unlocked}>
             <div class="flex gap-3 justify-center">
-              <.link navigate={~p"/#{@locale}/images/#{@image.id}/edit"}>
-                <.button class="">
-                  <%= gettext("Edit") %><span class="ml-2"><.icon
-                      name="hero-pencil-square"
-                      class="w-4 h-4"
-                    /></span>
-                </.button>
-              </.link>
+              <.button phx-click={show_modal("redo-image-#{@image.id}")}>
+                <%= gettext("Edit") %><span class="ml-2"><.icon
+                    name="hero-pencil-square"
+                    class="w-4 h-4"
+                  /></span>
+              </.button>
+              <.regenerate_btn url={~p"/#{@locale}/images/new/#{@image.id}/redo"} />
             </div>
           </:bottom>
         </.img>
