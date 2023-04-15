@@ -6,11 +6,8 @@ defmodule CoverGen.Worker.CreatorSupervisor do
   end
 
   def init(args) do
-    state_holder_name = Keyword.get(args, :state_holder_name)
-    image = Keyword.get(args, :image)
-
     children = [
-      {CoverGen.Worker.StateHolder, name: state_holder_name, image: image},
+      {CoverGen.Worker.StateHolder, args},
       {CoverGen.Worker.Creator, args}
     ]
 

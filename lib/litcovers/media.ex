@@ -4,6 +4,7 @@ defmodule Litcovers.Media do
   """
 
   import Ecto.Query, warn: false
+  alias Litcovers.Metadata.Chat
   alias Litcovers.Metadata
   alias Litcovers.Accounts
   alias Litcovers.Repo
@@ -286,7 +287,13 @@ defmodule Litcovers.Media do
   def get_image_preload_all!(id) do
     Image
     |> Repo.get!(id)
-    |> Repo.preload([:user, :prompt, :ideas, :covers])
+    |> Repo.preload([
+      :user,
+      :prompt,
+      :ideas,
+      :covers,
+      chats: from(c in Chat, order_by: [asc: c.id])
+    ])
   end
 
   @doc """

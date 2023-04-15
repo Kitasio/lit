@@ -2,13 +2,15 @@ defmodule CoverGen.Worker.Creator do
   use GenServer, restart: :transient
   require Logger
 
+  alias CoverGen.OAIChat
+  alias Litcovers.Metadata
+  alias CoverGen.Worker.StateHolder
   alias Litcovers.Accounts
   alias Litcovers.Media
   alias Litcovers.Repo
   alias Litcovers.Media.Image
   alias CoverGen.Spaces
   alias CoverGen.OAI
-  alias CoverGen.StateHolder
   alias CoverGen.Replicate.Model
   alias CoverGen.Helpers
 
@@ -18,6 +20,7 @@ defmodule CoverGen.Worker.Creator do
 
   def init(args) do
     image = Keyword.get(args, :image)
+    message = Keyword.get(args, :message, "")
     stage = Keyword.get(args, :stage, :oai_request)
     params = Keyword.get(args, :params, %{})
     state_holder_name = Keyword.get(args, :state_holder_name)
@@ -26,6 +29,7 @@ defmodule CoverGen.Worker.Creator do
 
     state = %{
       image: image,
+      message: message,
       stage: stage,
       state_holder_name: state_holder_name,
       params: params,
@@ -41,8 +45,62 @@ defmodule CoverGen.Worker.Creator do
     {:noreply, state}
   end
 
+  def handle_info(:oai_chat, state) do
+    # get image chats
+    chats = Metadata.list_image_chats(state.image)
+
+    # arrange the chat
+    messages = arrange_chat(chats, state)
+
+    # insert user chat to database
+    _chat = Metadata.create_chat(state.image, List.last(messages))
+
+    # send the chat to OAI
+    {:ok, res} = OAIChat.send(messages, System.get_env("OAI_TOKEN"))
+
+    # decode the response
+    oai_res = %{content: res["content"], role: res["role"]}
+
+    # save the response to database
+    Metadata.create_chat(state.image, oai_res)
+
+    save_final_prompt(state.image, oai_res.content)
+
+    params =
+      Model.get_params(
+        state.image.model_name,
+        oai_res.content,
+        state.image.width,
+        state.image.height
+      )
+
+    # Updating the state
+    new_state = %{state | params: params, stage: :sd_request}
+    StateHolder.set(state.state_holder_name, new_state)
+
+    {:noreply, new_state, {:continue, :run}}
+  end
+
   def handle_info(:oai_request, state) do
-    params = generate_model_params(state.image)
+    oai_res = mutate_description(state.image)
+
+    prompt =
+      Helpers.create_prompt(
+        oai_res,
+        state.image.prompt.style_prompt,
+        state.image.character_gender,
+        state.image.prompt.type
+      )
+
+    save_final_prompt(state.image, prompt)
+
+    params =
+      Model.get_params(
+        state.image.model_name,
+        prompt,
+        state.image.width,
+        state.image.height
+      )
 
     # Updating the state
     new_state = %{state | params: params, stage: :sd_request}
@@ -122,27 +180,6 @@ defmodule CoverGen.Worker.Creator do
     Accounts.update_is_generating(user, false)
   end
 
-  defp generate_model_params(image) do
-    oai_res = mutate_description(image)
-
-    prompt =
-      Helpers.create_prompt(
-        oai_res,
-        image.prompt.style_prompt,
-        image.character_gender,
-        image.prompt.type
-      )
-
-    save_final_prompt(image, prompt)
-
-    Model.get_params(
-      image.model_name,
-      prompt,
-      image.width,
-      image.height
-    )
-  end
-
   defp save_final_prompt(image, prompt) do
     Media.update_image(image, %{final_prompt: prompt})
   end
@@ -178,5 +215,22 @@ defmodule CoverGen.Worker.Creator do
       idea = String.trim(idea)
       Media.create_idea(image, %{idea: idea})
     end
+  end
+
+  defp arrange_chat([], state),
+    do: [%{role: "user", content: "#{state.image.final_prompt} 
+
+  #{state.message}"}]
+
+  defp arrange_chat(chats, state) when is_list(chats) do
+    old_messages =
+      Enum.map(chats, fn chat ->
+        %{
+          role: chat.role,
+          content: chat.content
+        }
+      end)
+
+    old_messages ++ [%{role: "user", content: state.message}]
   end
 end

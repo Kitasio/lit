@@ -4,7 +4,7 @@ defmodule CoverGen.Worker.StateHolder do
   require Logger
 
   def start_link(args) do
-    name = Keyword.get(args, :name)
+    name = Keyword.get(args, :state_holder_name)
     GenServer.start_link(__MODULE__, args, name: name)
   end
 
@@ -20,6 +20,7 @@ defmodule CoverGen.Worker.StateHolder do
     Process.flag(:trap_exit, true)
     stage = Keyword.get(args, :stage, :oai_request)
     image = Keyword.get(args, :image)
+    Logger.info("StateHolder started, stage: #{inspect(stage)}")
 
     state = %{
       stage: stage,
@@ -35,7 +36,7 @@ defmodule CoverGen.Worker.StateHolder do
   end
 
   def handle_cast({:set, new_state}, _state) do
-    Logger.info("Setting state")
+    Logger.info("Setting state, new stage: #{inspect(new_state.stage)}")
     {:noreply, new_state}
   end
 

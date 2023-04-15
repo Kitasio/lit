@@ -22,6 +22,7 @@ defmodule Litcovers.Media.Image do
 
     has_many :ideas, Litcovers.Media.Idea, on_delete: :delete_all
     has_many :covers, Litcovers.Media.Cover, on_delete: :delete_all
+    has_many :chats, Litcovers.Metadata.Chat, on_delete: :delete_all
 
     timestamps()
   end

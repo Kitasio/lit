@@ -1,6 +1,7 @@
 defmodule LitcoversWeb.ImageLive.Index do
   use LitcoversWeb, :live_view
 
+  alias Litcovers.Metadata.UserChatMessage
   alias Litcovers.Metadata
   alias Phoenix.LiveView.JS
   alias Litcovers.Media

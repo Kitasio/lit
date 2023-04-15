@@ -1,4 +1,5 @@
 defmodule CoverGen.Worker.Corrector do
+  alias Litcovers.Metadata
   alias CoverGen.OAIChat
   alias CoverGen.Worker.StateHolder
   use GenServer, restart: :transient
@@ -36,10 +37,17 @@ defmodule CoverGen.Worker.Corrector do
   end
 
   def handle_info(:oai_request, state) do
-    message = state.image.final_prompt <> "\n#{state.message}"
-    Logger.info("message: #{message}")
-    res = OAIChat.send(message, System.get_env("OAI_TOKEN"))
-    Logger.info("OAI res: #{inspect(res)}")
+    # arrange the chat
+    messages = arrange_chat(state.image.chats, state)
+
+    # insert user chat to database
+    Metadata.create_chat(state.image, List.last(messages))
+
+    # send the chat to OAI
+    {:ok, res} = OAIChat.send(messages, System.get_env("OAI_TOKEN"))
+
+    # save the response to database
+    Metadata.create_chat(state.image, res)
 
     # Updating the state
     # new_state = %{state | params: params, stage: :sd_request}
@@ -47,5 +55,22 @@ defmodule CoverGen.Worker.Corrector do
     #
     # {:noreply, new_state, {:continue, :run}}
     {:stop, :normal, state}
+  end
+
+  def arrange_chat([], state),
+    do: [%{role: "user", content: "#{state.image.final_prompt} 
+
+  #{state.message}"}]
+
+  def arrange_chat(chats, state) when is_list(chats) do
+    old_messages =
+      Enum.map(chats, fn chat ->
+        %{
+          role: chat.role,
+          content: chat.content
+        }
+      end)
+
+    old_messages ++ [%{role: "user", content: state.message}]
   end
 end

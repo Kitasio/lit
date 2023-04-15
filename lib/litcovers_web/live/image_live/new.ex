@@ -110,7 +110,8 @@ defmodule LitcoversWeb.ImageLive.New do
 
   # TODO: refactor it
   defp apply_action(socket, :redo, params) do
-    %{"image_id" => image_id} = params
+    message = Map.get(params, "message")
+    image_id = Map.get(params, "image_id")
     image = Media.get_image_preload_all!(image_id)
 
     unless socket.assigns.current_user.is_generating or socket.assigns.current_user.relaxed_mode or
@@ -130,36 +131,26 @@ defmodule LitcoversWeb.ImageLive.New do
 
       style_prompts = Metadata.list_all_where(prompt.realm, prompt.sentiment, prompt.type)
 
-      model_prompt =
-        CoverGen.Helpers.create_prompt(
-          image.ideas |> Enum.random() |> Map.fetch!(:idea),
-          image.prompt.style_prompt,
-          image.character_gender,
-          image.prompt.type
-        )
-
-      model_params = Replicate.Model.new(image.model_name)
-
-      model_params =
-        update_in(model_params.input, fn _input ->
-          %CoverGen.Replicate.Input{
-            width: image.width,
-            height: image.height,
-            prompt: model_prompt
-          }
-        end)
-
       image_params = %{
         description: image.description,
         width: image.width,
         height: image.height,
-        character_gender: image.character_gender
+        character_gender: image.character_gender,
+        final_prompt: image.final_prompt
       }
 
       {:ok, new_image} =
         Media.create_image(socket.assigns.current_user, image.prompt, image_params)
 
-      CoverGen.create_new(image: new_image, params: model_params, stage: :sd_request)
+      for chat <- image.chats do
+        Metadata.create_chat(new_image, %{content: chat.content, role: chat.role})
+      end
+
+      CoverGen.create_new(
+        image: new_image,
+        stage: :oai_chat,
+        message: message
+      )
 
       for i <- image.ideas do
         Media.create_idea(new_image, %{idea: i.idea})

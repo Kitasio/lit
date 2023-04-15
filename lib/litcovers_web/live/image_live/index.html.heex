@@ -62,6 +62,22 @@
           <:confirm><%= gettext("Unlock") %></:confirm>
           <:cancel><%= gettext("Cancel") %></:cancel>
         </.modal>
+
+        <.modal
+          id={"redo-image-#{image.id}"}
+          banner_url={image.url}
+          banner_top={false}
+          on_cancel={hide_modal("redo-image-#{image.id}")}
+        >
+          <.live_component
+            module={LitcoversWeb.ImageLive.ChatComponent}
+            id={"redo-image-#{image.id}-live"}
+            form={UserChatMessage.changeset(%UserChatMessage{}, %{})}
+            title={gettext("Edit the image")}
+            image_id={image.id}
+            locale={@locale}
+          />
+        </.modal>
       </div>
 
       <div id={"img-#{image.id}-box"} x-data="" class="relative">
@@ -104,9 +120,17 @@
                   <%= gettext("Edit") %>
                 </.button>
               </.link>
+              <.button phx-click={show_modal("redo-image-#{image.id}")}>
+                <%= gettext("Edit") %><span class="ml-2"><.icon
+                    name="hero-pencil-square"
+                    class="w-4 h-4"
+                  /></span>
+              </.button>
               <.regenerate_btn
                 :if={!Enum.empty?(image.ideas)}
-                url={~p"/#{@locale}/images/new/#{image.id}/redo"}
+                url={
+                  ~p"/#{@locale}/images/new/#{image.id}/redo?message=with a tall building near"
+                }
               />
               <.heart_button
                 phx-click={

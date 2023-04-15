@@ -17,4 +17,19 @@ defmodule Litcovers.MetadataFixtures do
 
     tutotial
   end
+
+  @doc """
+  Generate a chat.
+  """
+  def chat_fixture(attrs \\ %{}) do
+    {:ok, chat} =
+      attrs
+      |> Enum.into(%{
+        content: "some content",
+        role: "some role"
+      })
+      |> Litcovers.Metadata.create_chat()
+
+    chat
+  end
 end
