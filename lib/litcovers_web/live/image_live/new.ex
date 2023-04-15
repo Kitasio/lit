@@ -154,7 +154,8 @@ defmodule LitcoversWeb.ImageLive.New do
         width: image.width,
         height: image.height,
         character_gender: image.character_gender,
-        final_prompt: image.final_prompt
+        final_prompt: image.final_prompt,
+        parent_image_id: image.id
       }
 
       {:ok, new_image} =
@@ -219,7 +220,8 @@ defmodule LitcoversWeb.ImageLive.New do
         width: image.width,
         height: image.height,
         character_gender: image.character_gender,
-        final_prompt: image.final_prompt
+        final_prompt: image.final_prompt,
+        parent_image_id: image.id
       }
 
       {:ok, new_image} =
