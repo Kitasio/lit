@@ -108,8 +108,90 @@ defmodule LitcoversWeb.ImageLive.New do
     assign(socket, current_tut: next)
   end
 
-  # TODO: refactor it
   defp apply_action(socket, :redo, params) do
+    %{"image_id" => image_id} = params
+    image = Media.get_image_preload_all!(image_id)
+
+    unless socket.assigns.current_user.is_generating or socket.assigns.current_user.relaxed_mode or
+             image.ideas == [] do
+      prompt =
+        if image.prompt != nil do
+          case Metadata.get_prompt(image.prompt.id) do
+            nil ->
+              list_style_prompts() |> List.first()
+
+            prompt ->
+              prompt
+          end
+        else
+          list_style_prompts() |> List.first()
+        end
+
+      style_prompts = Metadata.list_all_where(prompt.realm, prompt.sentiment, prompt.type)
+
+      model_prompt =
+        CoverGen.Helpers.create_prompt(
+          image.final_prompt || image.ideas |> Enum.random() |> Map.fetch!(:idea),
+          image.prompt.style_prompt,
+          image.character_gender,
+          image.prompt.type
+        )
+
+      model_params = Replicate.Model.new(image.model_name)
+
+      model_params =
+        update_in(model_params.input, fn _input ->
+          %CoverGen.Replicate.Input{
+            width: image.width,
+            height: image.height,
+            prompt: model_prompt
+          }
+        end)
+
+      image_params = %{
+        description: image.description,
+        width: image.width,
+        height: image.height,
+        character_gender: image.character_gender,
+        final_prompt: image.final_prompt
+      }
+
+      {:ok, new_image} =
+        Media.create_image(socket.assigns.current_user, image.prompt, image_params)
+
+      for chat <- image.chats do
+        Metadata.create_chat(new_image, %{content: chat.content, role: chat.role})
+      end
+
+      CoverGen.create_new(image: new_image, params: model_params, stage: :sd_request)
+
+      for i <- image.ideas do
+        Media.create_idea(new_image, %{idea: i.idea})
+      end
+
+      socket = push_event(socket, "update-description-input", %{description: image.description})
+
+      socket
+      |> assign(
+        image: new_image,
+        stage: get_stage(3),
+        prompt: prompt,
+        gender: image.character_gender,
+        style_prompt: prompt.style_prompt,
+        style_prompts: style_prompts,
+        prompt_id: prompt.id,
+        realm: prompt.realm,
+        sentiment: prompt.sentiment,
+        type: prompt.type,
+        aspect_ratio: get_aspect_ratio({image.width, image.height}),
+        is_generating: true
+      )
+    else
+      redirect(socket, to: ~p"/#{socket.assigns.locale}/images/new")
+    end
+  end
+
+  defp apply_action(socket, :correct, params) do
     message = Map.get(params, "message")
     image_id = Map.get(params, "image_id")
     image = Media.get_image_preload_all!(image_id)

@@ -105,6 +105,7 @@ defmodule LitcoversWeb.Router do
       live "/images/new", ImageLive.New, :index
       live "/images/new/feedback", ImageLive.New, :feedback
       live "/images/new/:image_id/redo", ImageLive.New, :redo
+      live "/images/new/:image_id/correct", ImageLive.New, :correct
 
       live "/images", ImageLive.Index, :index
       live "/images/unlocked", ImageLive.Index, :unlocked

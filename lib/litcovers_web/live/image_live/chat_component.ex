@@ -37,7 +37,7 @@ defmodule LitcoversWeb.ImageLive.ChatComponent do
     socket =
       push_navigate(socket,
         to:
-          ~p"/#{socket.assigns.locale}/images/new/#{socket.assigns.image_id}/redo?message=#{message}"
+          ~p"/#{socket.assigns.locale}/images/new/#{socket.assigns.image_id}/correct?message=#{message}"
       )
 
     {:noreply, socket}

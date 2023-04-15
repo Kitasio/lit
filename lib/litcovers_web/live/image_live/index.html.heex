@@ -115,12 +115,7 @@
           </:top>
           <:bottom :if={image.unlocked}>
             <div class="flex gap-3">
-              <.link class="w-full" navigate={~p"/#{@locale}/images/#{image.id}/edit"}>
-                <.button class="w-full">
-                  <%= gettext("Edit") %>
-                </.button>
-              </.link>
-              <.button phx-click={show_modal("redo-image-#{image.id}")}>
+              <.button class="w-full" phx-click={show_modal("redo-image-#{image.id}")}>
                 <%= gettext("Edit") %><span class="ml-2"><.icon
                     name="hero-pencil-square"
                     class="w-4 h-4"
@@ -128,9 +123,7 @@
               </.button>
               <.regenerate_btn
                 :if={!Enum.empty?(image.ideas)}
-                url={
-                  ~p"/#{@locale}/images/new/#{image.id}/redo?message=with a tall building near"
-                }
+                url={~p"/#{@locale}/images/new/#{image.id}/redo"}
               />
               <.heart_button
                 phx-click={
