@@ -195,6 +195,7 @@ defmodule LitcoversWeb.ImageLive.New do
 
   defp apply_action(socket, :correct, params) do
     message = Map.get(params, "message")
+    composition = Map.get(params, "composition") |> String.to_atom()
     image_id = Map.get(params, "image_id")
     image = Media.get_image_preload_all!(image_id)
 
@@ -231,10 +232,18 @@ defmodule LitcoversWeb.ImageLive.New do
         Metadata.create_chat(new_image, %{content: chat.content, role: chat.role})
       end
 
+      composition_image =
+        if composition do
+          image.url
+        else
+          nil
+        end
+
       CoverGen.create_new(
         image: new_image,
         stage: :oai_chat,
-        message: message
+        message: message,
+        composition_image: composition_image
       )
 
       for i <- image.ideas do

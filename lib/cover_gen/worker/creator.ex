@@ -21,6 +21,7 @@ defmodule CoverGen.Worker.Creator do
   def init(args) do
     image = Keyword.get(args, :image)
     message = Keyword.get(args, :message, "")
+    composition_image = Keyword.get(args, :composition_image)
     stage = Keyword.get(args, :stage, :oai_request)
     params = Keyword.get(args, :params, %{})
     state_holder_name = Keyword.get(args, :state_holder_name)
@@ -30,6 +31,7 @@ defmodule CoverGen.Worker.Creator do
     state = %{
       image: image,
       message: message,
+      composition_image: composition_image,
       stage: stage,
       state_holder_name: state_holder_name,
       params: params,
@@ -73,6 +75,7 @@ defmodule CoverGen.Worker.Creator do
         state.image.width,
         state.image.height
       )
+      |> add_composition_image(state.composition_image)
 
     # Updating the state
     new_state = %{state | params: params, stage: :sd_request}
@@ -101,6 +104,7 @@ defmodule CoverGen.Worker.Creator do
         state.image.width,
         state.image.height
       )
+      |> add_composition_image(state.composition_image)
 
     # Updating the state
     new_state = %{state | params: params, stage: :sd_request}
@@ -232,5 +236,15 @@ defmodule CoverGen.Worker.Creator do
       end)
 
     old_messages ++ [%{role: "user", content: state.message}]
+  end
+
+  def add_composition_image(params, nil), do: params
+
+  def add_composition_image(params, img_url) do
+    update_in(params.input, fn input ->
+      Map.from_struct(input)
+      |> Map.put(:init_image, img_url)
+      |> Map.put(:prompt_strength, 0.75)
+    end)
   end
 end

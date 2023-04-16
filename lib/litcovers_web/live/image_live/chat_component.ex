@@ -13,6 +13,7 @@ defmodule LitcoversWeb.ImageLive.ChatComponent do
         </:subtitle>
       </.header>
       <.simple_form :let={f} for={@form} phx-target={@myself} phx-change="validate" phx-submit="save">
+        <.input field={{f, :preserve_composition}} type="checkbox" label="Preserve composition" />
         <.input field={{f, :content}} label="Message" />
         <:actions>
           <.button><%= gettext("Send") %></.button>
@@ -33,11 +34,12 @@ defmodule LitcoversWeb.ImageLive.ChatComponent do
 
   def handle_event("save", %{"user_chat_message" => chat_params}, socket) do
     message = Map.get(chat_params, "content")
+    composition = Map.get(chat_params, "preserve_composition")
 
     socket =
       push_navigate(socket,
         to:
-          ~p"/#{socket.assigns.locale}/images/new/#{socket.assigns.image_id}/correct?message=#{message}"
+          ~p"/#{socket.assigns.locale}/images/new/#{socket.assigns.image_id}/correct?message=#{message}&composition=#{composition}"
       )
 
     {:noreply, socket}

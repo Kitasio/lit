@@ -1,7 +1,6 @@
 defmodule LitcoversWeb.UserRegistrationLive do
   use LitcoversWeb, :live_view
 
-  alias Litcovers.Media
   alias Litcovers.Accounts
   alias Litcovers.Accounts.User
 
