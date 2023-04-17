@@ -102,7 +102,19 @@
           }
         >
           <:top>
-            <div class="p-2.5 flex justify-end w-full">
+            <div class="p-2.5 gap-3 flex justify-end w-full">
+              <.edit_btn url={~p"/#{@locale}/images/#{image.id}/edit"} />
+              <.heart_button
+                phx-click={
+                  JS.push("toggle-favorite", value: %{image_id: image.id})
+                  |> JS.transition("scale-90", to: "#heart-#{image.id}")
+                }
+                favorite={image.favorite}
+                image_id={image.id}
+              />
+              <.download_btn image_url={
+                "#{image.url}?ik-attachment=true" |> Imagekit.transform("q-100,f-jpg")
+              } />
               <.delete_img_button
                 phx-click={
                   JS.push("delete-image", value: %{image_id: image.id})
@@ -116,23 +128,9 @@
           <:bottom :if={image.unlocked}>
             <div class="flex gap-3">
               <.button class="w-full" phx-click={show_modal("redo-image-#{image.id}")}>
-                <%= gettext("Edit") %><span class="ml-2"><.icon
-                    name="hero-pencil-square"
-                    class="w-4 h-4"
-                  /></span>
+                <%= gettext("Edit") %>
               </.button>
               <.regenerate_btn url={~p"/#{@locale}/images/new/#{image.id}/redo"} />
-              <.heart_button
-                phx-click={
-                  JS.push("toggle-favorite", value: %{image_id: image.id})
-                  |> JS.transition("scale-90", to: "#heart-#{image.id}")
-                }
-                favorite={image.favorite}
-                image_id={image.id}
-              />
-              <.download_btn image_url={
-                "#{image.url}?ik-attachment=true" |> Imagekit.transform("q-100,f-jpg")
-              } />
             </div>
           </:bottom>
           <:bottom :if={!image.unlocked}>

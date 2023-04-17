@@ -368,7 +368,7 @@ defmodule LitcoversWeb.CoreComponents do
     assigns = assign_new(assigns, :checked, fn -> input_equals?(assigns.value, "true") end)
 
     ~H"""
-    <label phx-feedback-for={@name} class="flex items-center gap-4 text-sm leading-6 text-zinc-600">
+    <label phx-feedback-for={@name} class="flex items-center gap-4 text-xs leading-6 text-zinc-400">
       <input type="hidden" name={@name} value="false" />
       <input
         type="checkbox"
@@ -376,7 +376,7 @@ defmodule LitcoversWeb.CoreComponents do
         name={@name}
         value="true"
         checked={@checked}
-        class="rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900"
+        class="rounded border-zinc-300 text-zinc-800 focus:ring-zinc-900"
         {@rest}
       />
       <%= @label %>

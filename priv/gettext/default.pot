@@ -216,7 +216,7 @@ msgstr ""
 msgid "Download the finished result and start publishing."
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/index.html.heex:119
+#: lib/litcovers_web/live/image_live/index.html.heex:131
 #: lib/litcovers_web/live/image_live/new.html.heex:238
 #, elixir-autogen, elixir-format
 msgid "Edit"
@@ -522,7 +522,7 @@ msgid "Unlimited generation – the result is guaranteed."
 msgstr ""
 
 #: lib/litcovers_web/live/image_live/index.html.heex:62
-#: lib/litcovers_web/live/image_live/index.html.heex:141
+#: lib/litcovers_web/live/image_live/index.html.heex:139
 #: lib/litcovers_web/live/image_live/new.html.heex:42
 #: lib/litcovers_web/live/image_live/new.html.heex:228
 #, elixir-autogen, elixir-format
@@ -811,7 +811,7 @@ msgstr ""
 msgid "Your feedback"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.html.heex:255
+#: lib/litcovers_web/live/image_live/new.html.heex:252
 #, elixir-autogen, elixir-format
 msgid "Leave feedback"
 msgstr ""
@@ -960,4 +960,14 @@ msgstr ""
 #: lib/cover_gen/replicate/model.ex:155
 #, elixir-autogen, elixir-format
 msgid "Works best with landscapes, buildings, and other objects"
+msgstr ""
+
+#: lib/litcovers_web/live/image_live/chat_component.ex:22
+#, elixir-autogen, elixir-format
+msgid "Message"
+msgstr ""
+
+#: lib/litcovers_web/live/image_live/chat_component.ex:19
+#, elixir-autogen, elixir-format
+msgid "Preserve composition"
 msgstr ""

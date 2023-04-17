@@ -217,11 +217,11 @@ msgstr "Скачать"
 msgid "Download the finished result and start publishing."
 msgstr "Скачайте готовый результат и начните публиковаться."
 
-#: lib/litcovers_web/live/image_live/index.html.heex:119
+#: lib/litcovers_web/live/image_live/index.html.heex:131
 #: lib/litcovers_web/live/image_live/new.html.heex:238
 #, elixir-autogen, elixir-format
 msgid "Edit"
-msgstr "Открыть"
+msgstr "Редактировать"
 
 #: lib/litcovers_web/live/user_confirmation_instructions_live.ex:63
 #: lib/litcovers_web/live/user_login_live.ex:36
@@ -523,7 +523,7 @@ msgid "Unlimited generation – the result is guaranteed."
 msgstr "Неограниченная генерирация - результат гарантирован."
 
 #: lib/litcovers_web/live/image_live/index.html.heex:62
-#: lib/litcovers_web/live/image_live/index.html.heex:141
+#: lib/litcovers_web/live/image_live/index.html.heex:139
 #: lib/litcovers_web/live/image_live/new.html.heex:42
 #: lib/litcovers_web/live/image_live/new.html.heex:228
 #, elixir-autogen, elixir-format, fuzzy
@@ -812,7 +812,7 @@ msgstr "Спасибо! Ваш отзыв успешно отправлен"
 msgid "Your feedback"
 msgstr "Ваш отзыв"
 
-#: lib/litcovers_web/live/image_live/new.html.heex:255
+#: lib/litcovers_web/live/image_live/new.html.heex:252
 #, elixir-autogen, elixir-format
 msgid "Leave feedback"
 msgstr "Оставить отзыв"
@@ -850,12 +850,12 @@ msgstr "Аниме"
 #: lib/litcovers/metadata/style.ex:61
 #, elixir-autogen, elixir-format
 msgid "Arcane (League of Legends)"
-msgstr "Аркана (League of Legends)"
+msgstr "Arcane (League of Legends)"
 
 #: lib/litcovers/metadata/style.ex:56
 #, elixir-autogen, elixir-format
 msgid "Concept art"
-msgstr "Концептуальное искусство"
+msgstr "Концепт арт"
 
 #: lib/litcovers/metadata/style.ex:66
 #, elixir-autogen, elixir-format
@@ -865,7 +865,7 @@ msgstr "Киберпанк"
 #: lib/litcovers_web/live/image_live/new.html.heex:90
 #, elixir-autogen, elixir-format
 msgid "Describe the image you want to get in a few words, keep it simple"
-msgstr "Опишите изображение, которое вы хотите получить, в нескольких словах, держите это простым"
+msgstr "Опишите изображение, которое вы хотите получить, в нескольких словах, чем проще тем лучше"
 
 #: lib/litcovers_web/live/image_live/chat_component.ex:12
 #, elixir-autogen, elixir-format
@@ -896,12 +896,12 @@ msgstr "Импрессионизм"
 #: lib/litcovers/metadata/style.ex:27
 #, elixir-autogen, elixir-format
 msgid "Ink art"
-msgstr "Чернильное искусство"
+msgstr "Инк-арт"
 
 #: lib/litcovers/metadata/style.ex:91
 #, elixir-autogen, elixir-format
 msgid "Metal Etchings"
-msgstr "Металлические гравюры"
+msgstr "Гравюры"
 
 #: lib/litcovers/metadata/style.ex:71
 #, elixir-autogen, elixir-format
@@ -916,7 +916,7 @@ msgstr "Мозаика"
 #: lib/litcovers/metadata/style.ex:81
 #, elixir-autogen, elixir-format
 msgid "Oil on canvas"
-msgstr "Масло на холсте"
+msgstr "Масленная живопись"
 
 #: lib/litcovers/metadata/style.ex:51
 #, elixir-autogen, elixir-format
@@ -956,9 +956,19 @@ msgstr "Векторная иллюстрация"
 #: lib/litcovers/metadata/style.ex:41
 #, elixir-autogen, elixir-format
 msgid "Watercolor illustration"
-msgstr "Акварельная иллюстрация"
+msgstr "Акварель"
 
 #: lib/cover_gen/replicate/model.ex:155
 #, elixir-autogen, elixir-format
 msgid "Works best with landscapes, buildings, and other objects"
 msgstr "Лучше всего работает с пейзажами, зданиями и другими объектами"
+
+#: lib/litcovers_web/live/image_live/chat_component.ex:22
+#, elixir-autogen, elixir-format
+msgid "Message"
+msgstr "Сообщение"
+
+#: lib/litcovers_web/live/image_live/chat_component.ex:19
+#, elixir-autogen, elixir-format
+msgid "Preserve composition"
+msgstr "Сохранить композицию на картинке"

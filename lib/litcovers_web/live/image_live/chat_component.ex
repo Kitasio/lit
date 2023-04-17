@@ -16,10 +16,10 @@ defmodule LitcoversWeb.ImageLive.ChatComponent do
         <.input
           field={{f, :preserve_composition}}
           type="checkbox"
-          label="Preserve composition"
+          label={gettext("Preserve composition")}
           id={"comp-#{@image_id}-checkbox"}
         />
-        <.input field={{f, :content}} label="Message" id={"content-#{@image_id}-input"} />
+        <.input field={{f, :content}} label={gettext("Message")} id={"content-#{@image_id}-input"} />
         <:actions>
           <.button><%= gettext("Send") %></.button>
         </:actions>

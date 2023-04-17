@@ -363,7 +363,7 @@ defmodule LitcoversWeb.UiComponents do
         </.tooltip>
       <% end %>
       <div class="bg-sec/50 p-2.5 rounded-full" class="bg-sec/50 p-2.5 rounded-full">
-        <.icon name="hero-pencil-square" class="w-6 h-6 transition-all" />
+        <.icon name="hero-pencil" class="w-6 h-6 transition-all" />
       </div>
     </.link>
     """
