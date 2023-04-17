@@ -13,8 +13,13 @@ defmodule LitcoversWeb.ImageLive.ChatComponent do
         </:subtitle>
       </.header>
       <.simple_form :let={f} for={@form} phx-target={@myself} phx-change="validate" phx-submit="save">
-        <.input field={{f, :preserve_composition}} type="checkbox" label="Preserve composition" />
-        <.input field={{f, :content}} label="Message" />
+        <.input
+          field={{f, :preserve_composition}}
+          type="checkbox"
+          label="Preserve composition"
+          id={"comp-#{@image_id}-checkbox"}
+        />
+        <.input field={{f, :content}} label="Message" id={"content-#{@image_id}-input"} />
         <:actions>
           <.button><%= gettext("Send") %></.button>
         </:actions>

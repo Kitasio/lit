@@ -66,7 +66,7 @@
     locale={@locale}
     request_path={~p"/#{@locale}/images/new"}
   />
-  <div class="lg:col-span-5 sm:my-14 sm:mx-8">
+  <div class="lg:col-span-6 xl:col-span-5 sm:my-14 sm:mx-8">
     <div class="bg-sec flex flex-col justify-between rounded-xl overflow-hidden">
       <.form
         :let={f}
@@ -79,9 +79,6 @@
           <.header>
             <div class="space-y-2">
               <%= gettext("Step 1. ") %><span class="text-zinc-400 font-normal"><%= gettext("Description") %></span>
-              <div class="flex text-sm font-bold text-zinc-200 items-center gap-2">
-                <span><%= gettext("LIT AI") %></span> <.toggler />
-              </div>
             </div>
 
             <:subtitle :if={@lit_ai}>
@@ -90,9 +87,7 @@
               ) %>
             </:subtitle>
             <:subtitle :if={!@lit_ai}>
-              <%= gettext(
-                "Lit AI is off, what you write is what you get, describe the picture you want to get with details"
-              ) %>
+              <%= gettext("Describe the image you want to get in a few words, keep it simple") %>
             </:subtitle>
           </.header>
           <.input
@@ -125,105 +120,68 @@
                 ) %>
               </:subtitle>
             </.header>
-            <.stage_nav stage={@stage.id} />
-          </div>
-          <div id="stage-box" class="transition duration-300">
-            <%= if @stage.id == 0 do %>
-              <.stage_msg msg={@stage.msg} />
-              <.stage_box>
-                <%= for t <- @types do %>
-                  <.img_box
-                    src={"https://ik.imagekit.io/soulgenesis/litnet/#{t.name}.jpg"}
-                    disabled={t.disabled}
-                    label={t.label}
-                    value={t.name}
-                    stage_id={@stage.id}
-                  />
-                <% end %>
-              </.stage_box>
-            <% end %>
-
-            <%= if @stage.id == 1 do %>
-              <.stage_msg msg={@stage.msg} />
-              <%= if @type == "portrait" do %>
-                <.gender_picker gender={@gender} />
-              <% end %>
-              <.stage_box>
-                <%= for r <- @realms do %>
-                  <%= if @type == "portrait" do %>
-                    <.img_box
-                      src={"https://ik.imagekit.io/soulgenesis/litnet/#{@type}_#{@gender}_#{r.name}.jpg"}
-                      label={r.label}
-                      value={r.name}
-                      stage_id={@stage.id}
-                    />
-                  <% else %>
-                    <.img_box
-                      src={"https://ik.imagekit.io/soulgenesis/litnet/#{@type}_#{r.name}.jpg"}
-                      label={r.label}
-                      value={r.name}
-                      stage_id={@stage.id}
-                    />
-                  <% end %>
-                <% end %>
-              </.stage_box>
-            <% end %>
-
-            <%= if @stage.id == 2 do %>
-              <.stage_msg msg={@stage.msg} />
-              <.stage_box>
-                <%= for s <- @sentiments do %>
-                  <%= if @type == "portrait" do %>
-                    <.img_box
-                      src={"https://ik.imagekit.io/soulgenesis/litnet/#{@type}_#{@gender}_#{@realm}_#{s.name}.jpg"}
-                      stage_id={@stage.id}
-                      label={s.label}
-                      value={s.name}
-                    />
-                  <% else %>
-                    <.img_box
-                      src={"https://ik.imagekit.io/soulgenesis/litnet/#{@type}_#{@realm}_#{s.name}.jpg"}
-                      stage_id={@stage.id}
-                      label={s.label}
-                      value={s.name}
-                    />
-                  <% end %>
-                <% end %>
-              </.stage_box>
-            <% end %>
-
-            <%= if @stage.id == 3 do %>
-              <.stage_msg msg={@stage.msg} />
-              <.stage_box>
-                <%= for p <- @style_prompts do %>
-                  <%= if p.secondary_url != nil && @gender == "male" do %>
-                    <.img_box
-                      src={p.secondary_url}
-                      label={p.name}
-                      value={p.id}
-                      prompt_id={@prompt_id}
-                      stage_id={@stage.id}
-                    />
-                  <% else %>
-                    <.img_box
-                      src={p.image_url}
-                      label={p.name}
-                      value={p.id}
-                      prompt_id={@prompt_id}
-                      stage_id={@stage.id}
-                    />
-                  <% end %>
-                <% end %>
-              </.stage_box>
-            <% end %>
           </div>
         </div>
 
-        <div class="hidden">
-          <.input field={{f, :style_prompt}} value={@style_prompt} type="hidden" />
-          <.input field={{f, :prompt_id}} value={@prompt_id} type="hidden" />
-          <.input field={{f, :type}} value={@type} type="hidden" />
+        <div>
+          <h2 class="mt-3 text-lg text-zinc-200"><%= gettext("AI model") %></h2>
+          <div class="flex gap-3 mt-3">
+            <div :for={model <- @models} :if={model.enabled}>
+              <div
+                class={
+                  if @selected_model.name == model.name do
+                    "text-center px-4 py-2.5 cursor-pointer rounded-xl border-2 border-accent-main bg-tag-main hover:border-accent-main transition"
+                  else
+                    "text-center px-4 py-2.5 cursor-pointer rounded-xl border-2 border-stroke-main bg-tag-main hover:border-accent-main transition"
+                  end
+                }
+                phx-click="select-model"
+                phx-value-model={model.name}
+              >
+                <p><%= model.label %></p>
+              </div>
+            </div>
+          </div>
+          <p class="mt-2 text-xs text-zinc-400"><%= @selected_model.description %></p>
+
+          <h2 class="mt-8 text-lg text-zinc-200"><%= gettext("Styles") %></h2>
+          <div class="mt-2 gap-5 grid grid-cols-3 sm:grid-cols-4">
+            <div
+              :for={style <- @styles}
+              phx-click={JS.push("select-style", value: %{style: style.name})}
+            >
+              <div class={
+                if @style == style.name do
+                  [
+                    "border-2 border-accent-main rounded-xl hover:border-accent-main",
+                    "aspect-square cursor-pointer transition",
+                    "overflow-hidden"
+                  ]
+                else
+                  [
+                    "border-2 border-stroke-main rounded-xl hover:border-accent-main",
+                    "aspect-square cursor-pointer transition",
+                    "overflow-hidden brightness-75 hover:brightness-100"
+                  ]
+                end
+              }>
+                <img
+                  class={
+                    if @style == style.name do
+                      "w-full h-full object-cover"
+                    end
+                  }
+                  src={style.url}
+                />
+              </div>
+              <p class="mt-1 text-center text-xs text-zinc-400"><%= style.name %></p>
+            </div>
+          </div>
+        </div>
+
+        <div>
           <.input field={{f, :character_gender}} value={@gender} type="hidden" />
+          <.input field={{f, :style}} value={@style} type="hidden" />
           <.input field={{f, :width}} value={@width} type="hidden" />
           <.input field={{f, :height}} value={@height} type="hidden" />
           <.input field={{f, :model_name}} value={@selected_model.name} type="hidden" />
@@ -234,13 +192,13 @@
           spin={@is_generating}
           user_id={@current_user.id}
           relaxed_mode={@current_user.relaxed_mode}
-          prompt_id={@prompt_id}
+          style={@style}
         />
       </.form>
     </div>
   </div>
 
-  <div class="py-14 px-8 lg:col-start-6 lg:col-end-13 lg:py-auto">
+  <div class="py-14 px-8 lg:col-start-7 xl:col-start-6 lg:col-end-13 lg:py-auto">
     <div class="sticky top-14 max-w-md mx-auto">
       <%= if @gen_error != nil do %>
         <div class="my-1 flex w-full justify-center">

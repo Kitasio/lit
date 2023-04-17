@@ -121,10 +121,7 @@
                     class="w-4 h-4"
                   /></span>
               </.button>
-              <.regenerate_btn
-                :if={!Enum.empty?(image.ideas)}
-                url={~p"/#{@locale}/images/new/#{image.id}/redo"}
-              />
+              <.regenerate_btn url={~p"/#{@locale}/images/new/#{image.id}/redo"} />
               <.heart_button
                 phx-click={
                   JS.push("toggle-favorite", value: %{image_id: image.id})

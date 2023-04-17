@@ -2,7 +2,6 @@ defmodule LitcoversWeb.ImageLive.New do
   alias Litcovers.Accounts.Feedback
   alias Litcovers.Accounts
   alias CoverGen.Replicate
-  alias Litcovers.Metadata.Prompt
   alias Litcovers.Payments.Yookassa
   alias Litcovers.Payments
   alias Litcovers.Accounts
@@ -35,27 +34,14 @@ defmodule LitcoversWeb.ImageLive.New do
         socket
       end
 
-    style_prompts = list_style_prompts()
-    stage = get_stage(0)
-
     {:ok,
      assign(socket,
        changeset: Media.change_image(%Image{}),
        locale: locale,
        lit_ai: false,
        aspect_ratio: "cover",
-       style_prompts: style_prompts,
-       style_prompt: nil,
-       prompt_id: nil,
-       stage: stage,
-       realms: realms(),
-       realm: :fantasy,
-       types: types(),
-       type: :object,
-       sentiments: sentiments(),
-       sentiment: :positive,
        gender: :female,
-       placeholder: random_placeholder(locale, true),
+       placeholder: random_placeholder(locale, false),
        width: 512,
        height: 768,
        image: %Image{},
@@ -66,7 +52,9 @@ defmodule LitcoversWeb.ImageLive.New do
        models: Replicate.Model.list_all(),
        selected_model: Replicate.Model.list_all() |> List.first(),
        current_tut: nil,
-       user_tuts: Metadata.list_user_tutorials(socket.assigns.current_user)
+       user_tuts: Metadata.list_user_tutorials(socket.assigns.current_user),
+       style: nil,
+       styles: Metadata.Style.list_all()
      )}
   end
 
@@ -114,30 +102,7 @@ defmodule LitcoversWeb.ImageLive.New do
     image = Media.get_image_preload_all!(image_id)
 
     unless socket.assigns.current_user.is_generating or socket.assigns.current_user.relaxed_mode or
-             image.ideas == [] do
-      prompt =
-        if image.prompt != nil do
-          case Metadata.get_prompt(image.prompt.id) do
-            nil ->
-              list_style_prompts() |> List.first()
-
-            prompt ->
-              prompt
-          end
-        else
-          list_style_prompts() |> List.first()
-        end
-
-      style_prompts = Metadata.list_all_where(prompt.realm, prompt.sentiment, prompt.type)
-
-      model_prompt =
-        CoverGen.Helpers.create_prompt(
-          image.final_prompt || image.ideas |> Enum.random() |> Map.fetch!(:idea),
-          image.prompt.style_prompt,
-          image.character_gender,
-          image.prompt.type
-        )
-
+             image.final_prompt == nil do
       model_params = Replicate.Model.new(image.model_name)
 
       model_params =
@@ -145,7 +110,7 @@ defmodule LitcoversWeb.ImageLive.New do
           %CoverGen.Replicate.Input{
             width: image.width,
             height: image.height,
-            prompt: model_prompt
+            prompt: image.final_prompt
           }
         end)
 
@@ -155,11 +120,11 @@ defmodule LitcoversWeb.ImageLive.New do
         height: image.height,
         character_gender: image.character_gender,
         final_prompt: image.final_prompt,
-        parent_image_id: image.id
+        parent_image_id: image.id,
+        model_name: image.model_name
       }
 
-      {:ok, new_image} =
-        Media.create_image(socket.assigns.current_user, image.prompt, image_params)
+      {:ok, new_image} = Media.create_image(socket.assigns.current_user, image_params)
 
       for chat <- image.chats do
         Metadata.create_chat(new_image, %{content: chat.content, role: chat.role})
@@ -176,15 +141,7 @@ defmodule LitcoversWeb.ImageLive.New do
       socket
       |> assign(
         image: new_image,
-        stage: get_stage(3),
-        prompt: prompt,
         gender: image.character_gender,
-        style_prompt: prompt.style_prompt,
-        style_prompts: style_prompts,
-        prompt_id: prompt.id,
-        realm: prompt.realm,
-        sentiment: prompt.sentiment,
-        type: prompt.type,
         aspect_ratio: get_aspect_ratio({image.width, image.height}),
         is_generating: true
       )
@@ -199,34 +156,18 @@ defmodule LitcoversWeb.ImageLive.New do
     image_id = Map.get(params, "image_id")
     image = Media.get_image_preload_all!(image_id)
 
-    unless socket.assigns.current_user.is_generating or socket.assigns.current_user.relaxed_mode or
-             image.ideas == [] do
-      prompt =
-        if image.prompt != nil do
-          case Metadata.get_prompt(image.prompt.id) do
-            nil ->
-              list_style_prompts() |> List.first()
-
-            prompt ->
-              prompt
-          end
-        else
-          list_style_prompts() |> List.first()
-        end
-
-      style_prompts = Metadata.list_all_where(prompt.realm, prompt.sentiment, prompt.type)
-
+    unless socket.assigns.current_user.is_generating or socket.assigns.current_user.relaxed_mode do
       image_params = %{
         description: image.description,
         width: image.width,
         height: image.height,
         character_gender: image.character_gender,
         final_prompt: image.final_prompt,
-        parent_image_id: image.id
+        parent_image_id: image.id,
+        model_name: image.model_name
       }
 
-      {:ok, new_image} =
-        Media.create_image(socket.assigns.current_user, image.prompt, image_params)
+      {:ok, new_image} = Media.create_image(socket.assigns.current_user, image_params)
 
       for chat <- image.chats do
         Metadata.create_chat(new_image, %{content: chat.content, role: chat.role})
@@ -255,15 +196,7 @@ defmodule LitcoversWeb.ImageLive.New do
       socket
       |> assign(
         image: new_image,
-        stage: get_stage(3),
-        prompt: prompt,
         gender: image.character_gender,
-        style_prompt: prompt.style_prompt,
-        style_prompts: style_prompts,
-        prompt_id: prompt.id,
-        realm: prompt.realm,
-        sentiment: prompt.sentiment,
-        type: prompt.type,
         aspect_ratio: get_aspect_ratio({image.width, image.height}),
         is_generating: true
       )
@@ -384,14 +317,15 @@ defmodule LitcoversWeb.ImageLive.New do
 
   def handle_event("save", %{"image" => image_params}, socket) do
     unless socket.assigns.current_user.is_generating or socket.assigns.current_user.relaxed_mode do
-      %{"prompt_id" => prompt_id} = image_params
       model_name = socket.assigns.selected_model.name
       image_params = %{image_params | "model_name" => model_name}
-      prompt = Metadata.get_prompt!(prompt_id)
 
-      case Media.create_image(socket.assigns.current_user, prompt, image_params) do
+      case Media.create_image(socket.assigns.current_user, image_params) do
         {:ok, image} ->
-          CoverGen.create_new(image: image)
+          description = Map.get(image_params, "description")
+          style = Map.get(image_params, "style")
+          message = "#{description} => #{style} #{cjw_model(model_name)}"
+          CoverGen.create_new(image: image, message: message, stage: :oai_chat_create)
 
           socket = socket |> assign(image: image, is_generating: true, gen_error: nil)
 
@@ -435,15 +369,14 @@ defmodule LitcoversWeb.ImageLive.New do
     end
   end
 
-  def handle_event("set_stage", %{"stage" => stage}, socket) do
-    stage = get_stage(stage |> String.to_integer())
-    socket = assign(socket, stage: stage)
-    {:noreply, socket}
-  end
-
   def handle_event("select-model", %{"model" => model_name}, socket) do
     model = get_model(model_name)
     socket = assign(socket, selected_model: model)
+    {:noreply, socket}
+  end
+
+  def handle_event("select-style", %{"style" => style}, socket) do
+    socket = assign(socket, style: style)
     {:noreply, socket}
   end
 
@@ -453,72 +386,6 @@ defmodule LitcoversWeb.ImageLive.New do
       |> assign(gender: gender)
 
     {:noreply, socket}
-  end
-
-  def handle_event("next", %{"value" => value}, socket) do
-    case socket.assigns.stage.id do
-      0 ->
-        stage = get_stage(socket.assigns.stage.id + 1)
-
-        socket =
-          socket
-          |> assign(
-            stage: stage,
-            type: value
-          )
-
-        {:noreply, socket}
-
-      1 ->
-        stage = get_stage(socket.assigns.stage.id + 1)
-
-        socket =
-          socket
-          |> assign(
-            stage: stage,
-            realm: value
-          )
-
-        {:noreply, socket}
-
-      2 ->
-        stage = get_stage(socket.assigns.stage.id + 1)
-
-        style_prompts = Metadata.list_all_where(socket.assigns.realm, value, socket.assigns.type)
-
-        socket =
-          socket
-          |> assign(
-            stage: stage,
-            sentiment: value,
-            style_prompts: style_prompts
-          )
-
-        {:noreply, socket}
-
-      3 ->
-        prompt = Metadata.get_prompt!(value)
-
-        model =
-          if socket.assigns.type == "setting" do
-            get_model("stable-diffusion")
-          else
-            get_model("couple5")
-          end
-
-        socket =
-          socket
-          |> assign(
-            style_prompt: prompt.style_prompt,
-            prompt_id: prompt.id,
-            selected_model: model
-          )
-
-        {:noreply, socket}
-
-      4 ->
-        {:noreply, socket}
-    end
   end
 
   def relaxed_mode_releaser(user, caller) do
@@ -652,7 +519,7 @@ defmodule LitcoversWeb.ImageLive.New do
   attr(:spin, :boolean, default: false)
   attr(:relaxed_mode, :boolean, default: false)
   attr(:user_id, :string, required: true)
-  attr :prompt_id, :integer, default: nil
+  attr :style, :string, default: nil
 
   def generate_btn(assigns) do
     ~H"""
@@ -664,7 +531,7 @@ defmodule LitcoversWeb.ImageLive.New do
       <.button
         type="submit"
         class="btn-small flex items-center justify-center gap-3 py-3 bg-accent-main disabled:bg-zinc-600 disabled:opacity-50 disabled:hover:shadow-none rounded-full w-full"
-        disabled={@spin or @relaxed_mode or @prompt_id == nil}
+        disabled={@spin or @relaxed_mode or @style == nil}
       >
         <span :if={@relaxed_mode} class="my-2" id={"relaxed-timer-user-#{@user_id}"}>00:00</span>
         <svg
@@ -689,123 +556,6 @@ defmodule LitcoversWeb.ImageLive.New do
       </.button>
     </div>
     """
-  end
-
-  def stage_nav(assigns) do
-    ~H"""
-    <div class="mt-7 flex text-xs sm:text-sm leading-6 text-zinc-300">
-      <%= for stage <- stages() do %>
-        <%= if stage.id <= assigns.stage do %>
-          <%= if stage.id == assigns.stage do %>
-            <div class="cursor-pointer capitalize text-zinc-100 font-bold">
-              <%= stage.name %>
-            </div>
-          <% else %>
-            <div
-              phx-click={
-                JS.push("set_stage") |> JS.transition("opacity-0 translate-y-6", to: "#stage-box")
-              }
-              phx-value-stage={stage.id}
-              class="cursor-pointer capitalize text-zinc-400 hover:text-zinc-100 font-light"
-            >
-              <%= stage.name %>
-            </div>
-          <% end %>
-          <span class="last:hidden mx-2 text-zinc-400">></span>
-        <% end %>
-      <% end %>
-    </div>
-    """
-  end
-
-  def insert_tr(link, label) do
-    tr =
-      "tr:w-512,h-768,oi-vin.png,ow-512,oh-768,f-jpg,pr-true:ot-#{label},ots-30,otp-5_5_25_5,ofo-bottom,otc-fafafa"
-
-    uri = link |> URI.parse()
-    %URI{host: host, path: path} = uri
-
-    {filename, list} = path |> String.split("/") |> List.pop_at(-1)
-    folder = list |> List.last()
-    bucket = "soulgenesis"
-
-    case host do
-      "ik.imagekit.io" ->
-        Path.join(["https://", host, bucket, folder, tr, filename])
-
-      _ ->
-        link
-    end
-  end
-
-  attr(:label, :string, default: nil)
-  attr(:disabled, :boolean, default: false)
-
-  def img_box(assigns) do
-    assigns = assign_new(assigns, :prompt_id, fn -> nil end)
-    assigns = assign_new(assigns, :value, fn -> nil end)
-    assigns = assign_new(assigns, :stage_id, fn -> nil end)
-
-    if assigns.value == nil do
-      ~H"""
-      <div></div>
-      """
-    else
-      src = default_img_or(assigns.src)
-
-      assigns = assign(assigns, :src, src)
-
-      ~H"""
-      <div
-        id={"#{@src}"}
-        class="aspect-cover relative group flex items-center justify-center mr-8 overflow-hidden rounded-xl border-2 border-stroke-main transition inline-block min-w-[150px] sm:min-w-fit sm:mr-0"
-        x-bind:class={"{'border-accent-main': #{@value == @prompt_id}, 'hover:border-accent-main': #{!@disabled}, 'brightness-50 hover:brightness-100': #{@value != @prompt_id and @stage_id > 2}}"}
-        x-data={"{ showImage: false, imageUrl: '#{@src}' }"}
-        phx-click={next_stage_push_anim(@stage_id, @disabled)}
-        phx-value-value={assigns.value}
-      >
-        <span
-          :if={@stage_id < 3}
-          x-bind:class={"'#{@disabled}' == 'true' ? 'inline-flex': 'hidden cursor-pointer'"}
-          class={[
-            "px-4 text-xs text-slate-200 absolute z-10",
-            "group-hover:flex flex-col gap-2 items-center"
-          ]}
-        >
-          <.icon :if={@disabled} name="hero-lock-closed-solid" class="w-7 h-7" />
-          <span :if={@disabled} class="text-xs"><%= gettext("(Coming soon)") %></span>
-          <span><%= @label %></span>
-        </span>
-        <img
-          x-show="showImage"
-          x-transition.duration.500ms
-          x-bind:src="imageUrl"
-          x-on:load="showImage = true"
-          alt={assigns.label}
-          x-bind:class={"{'brightness-50': #{@disabled}, 'cursor-pointer hover:scale-[1.02]': #{!@disabled}, 'group-hover:brightness-50': #{@stage_id < 3}}"}
-          class="w-full h-full transition duration-300 ease-out object-cover"
-        />
-      </div>
-      """
-    end
-  end
-
-  defp next_stage_push_anim(stage_id, disabled) do
-    unless disabled do
-      if stage_id >= 3 do
-        JS.push("next")
-      else
-        JS.push("next") |> JS.transition("opacity-0 translate-y-6", to: "#stage-box")
-      end
-    end
-  end
-
-  defp default_img_or(img) do
-    if img == nil do
-      "https://ik.imagekit.io/soulgenesis/litnet/realm_fantasy.jpg"
-    else
-      img
-    end
   end
 
   def gender_picker(assigns) do
@@ -834,94 +584,8 @@ defmodule LitcoversWeb.ImageLive.New do
     """
   end
 
-  def stage_box(assigns) do
-    ~H"""
-    <div class="min-h-[250px] sm:min-h-full flex flex-nowrap sm:gap-5 overflow-x-scroll sm:overflow-x-hidden hide-scroll-bar sm:grid sm:grid-cols-3">
-      <%= render_slot(@inner_block) %>
-    </div>
-    """
-  end
-
-  def stage_msg(assigns) do
-    ~H"""
-    <div class="mb-4">
-      <h1 class="mt-2 text-sm leading-6 text-zinc-300">
-        <%= assigns.msg %>
-      </h1>
-    </div>
-    """
-  end
-
-  defp stages do
-    [
-      %{
-        id: 0,
-        name: gettext("Cover type"),
-        msg: gettext("What type of cover is more suitable for your book?")
-      },
-      %{id: 1, name: gettext("World"), msg: gettext("What world is your book set in?")},
-      %{id: 2, name: gettext("Vibe"), msg: gettext("What vibe does your book have?")},
-      %{id: 3, name: gettext("Style"), msg: gettext("What style do you prefer?")},
-      %{id: 4, name: nil, msg: nil}
-    ]
-  end
-
-  defp get_stage(id) do
-    Enum.find(stages(), fn stage -> stage.id == id end)
-  end
-
   defp get_model(name) do
     Enum.find(Replicate.Model.list_all(), fn model -> model.name == name end)
-  end
-
-  def types() do
-    [
-      %{disabled: false, name: :setting, label: gettext("Setting")},
-      %{disabled: false, name: :couple, label: gettext("Couple")},
-      %{disabled: false, name: :portrait, label: gettext("Character")},
-      %{disabled: true, name: :attribute, label: gettext("Attribute")},
-      %{disabled: true, name: :abstract, label: gettext("Abstract")},
-      %{disabled: true, name: :third_person, label: gettext("Third person")}
-    ]
-  end
-
-  def realms() do
-    [
-      %{name: :fantasy, label: gettext("Fantasy - Past")},
-      %{name: :realism, label: gettext("Realism - Present")},
-      %{name: :futurism, label: gettext("Futurism - Future")}
-    ]
-  end
-
-  def sentiments do
-    [
-      %{name: :positive, label: gettext("Warm - Bright")},
-      %{name: :neutral, label: gettext("Natural - Neutral")},
-      %{name: :negative, label: gettext("Brutal - Dark")}
-    ]
-  end
-
-  defp list_style_prompts do
-    case Metadata.list_all_where(:fantasy, :positive, :setting) do
-      [] ->
-        [
-          %Prompt{
-            name: "1",
-            realm: :fantasy,
-            sentiment: :positive,
-            type: :portrait,
-            style_prompt:
-              "abstract beauty, approaching perfection, delicate, dynamic, highly detailed, digital painting, artstation, concept art, smooth, sharp focus, illustration, art by Carne Griffiths and Wadim Kashin, sharp focus, by pascal blanche rutkowski repin artstation hyperrealism painting concept art",
-            image_url:
-              "https://ik.imagekit.io/soulgenesis/ac2a0657-10c7-47eb-99e3-eaa754fc47af.jpg",
-            secondary_url:
-              "https://ik.imagekit.io/soulgenesis/3c1ad675-2921-49da-bf7b-a08daf25e2e8.jpg"
-          }
-        ]
-
-      style_prompts ->
-        style_prompts
-    end
   end
 
   def random_placeholder("en", _lit_ai = true) do
@@ -1171,5 +835,13 @@ defmodule LitcoversWeb.ImageLive.New do
       }
     ]
     |> Enum.random()
+  end
+
+  defp cjw_model(model_name) do
+    if model_name in ["couple5"] do
+      "cjw"
+    else
+      nil
+    end
   end
 end

@@ -22,7 +22,7 @@ defmodule CoverGen.Worker.Creator do
     image = Keyword.get(args, :image)
     message = Keyword.get(args, :message, "")
     composition_image = Keyword.get(args, :composition_image)
-    stage = Keyword.get(args, :stage, :oai_request)
+    stage = Keyword.get(args, :stage, :oai_chat_create)
     params = Keyword.get(args, :params, %{})
     state_holder_name = Keyword.get(args, :state_holder_name)
 
@@ -45,6 +45,30 @@ defmodule CoverGen.Worker.Creator do
     current_state = StateHolder.get(state.state_holder_name)
     send(self(), current_state.stage)
     {:noreply, state}
+  end
+
+  def handle_info(:oai_chat_create, state) do
+    messages = [%{role: "user", content: state.message}]
+    {:ok, res} = OAIChat.send(messages, System.get_env("OAI_TOKEN"), :creation)
+    # decode the response
+    oai_res = %{content: res["content"], role: res["role"]}
+
+    save_final_prompt(state.image, oai_res.content)
+
+    params =
+      Model.get_params(
+        state.image.model_name,
+        oai_res.content,
+        state.image.width,
+        state.image.height
+      )
+      |> add_composition_image(state.composition_image, state.image.model_name)
+
+    # Updating the state
+    new_state = %{state | params: params, stage: :sd_request}
+    StateHolder.set(state.state_holder_name, new_state)
+
+    {:noreply, new_state, {:continue, :run}}
   end
 
   def handle_info(:oai_chat, state) do
@@ -75,7 +99,7 @@ defmodule CoverGen.Worker.Creator do
         state.image.width,
         state.image.height
       )
-      |> add_composition_image(state.composition_image)
+      |> add_composition_image(state.composition_image, state.image.model_name)
 
     # Updating the state
     new_state = %{state | params: params, stage: :sd_request}
@@ -104,7 +128,7 @@ defmodule CoverGen.Worker.Creator do
         state.image.width,
         state.image.height
       )
-      |> add_composition_image(state.composition_image)
+      |> add_composition_image(state.composition_image, state.image.model_name)
 
     # Updating the state
     new_state = %{state | params: params, stage: :sd_request}
@@ -238,13 +262,16 @@ defmodule CoverGen.Worker.Creator do
     old_messages ++ [%{role: "user", content: state.message}]
   end
 
-  def add_composition_image(params, nil), do: params
+  def add_composition_image(params, nil, _model_name), do: params
 
-  def add_composition_image(params, img_url) do
+  def add_composition_image(params, img_url, model_name) do
     update_in(params.input, fn input ->
       Map.from_struct(input)
-      |> Map.put(:init_image, img_url)
+      |> Map.put(image_field(model_name), img_url)
       |> Map.put(:prompt_strength, 0.75)
     end)
   end
+
+  defp image_field("couple5"), do: :image
+  defp image_field(_model_name), do: :init_image
 end

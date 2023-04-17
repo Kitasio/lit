@@ -9,16 +9,44 @@ defmodule CoverGen.OAIChat do
             temperature: 0.7,
             messages: []
 
-  def send(messages, oai_token) do
+  defp endpoint_settings(oai_token) do
     endpoint = "https://api.openai.com/v1/chat/completions"
 
     # Set headers and options
     headers = [Authorization: "Bearer #{oai_token}", "Content-Type": "application/json"]
     options = [timeout: 40_000, recv_timeout: 40_000]
 
+    {endpoint, headers, options}
+  end
+
+  def send(messages, oai_token, :creation) do
+    {endpoint, headers, options} = endpoint_settings(oai_token)
+
+    messages = creation_messages() ++ messages
+
+    oai_params = %OAIChat{messages: messages}
+    body = Jason.encode!(oai_params)
+
+    # Send the post request
+    case HTTPoison.post(endpoint, body, headers, options) do
+      {:ok, %Response{body: res_body}} ->
+        message = oai_response_chat(res_body) || ""
+
+        {:ok, message}
+
+      {:error, reason} ->
+        IO.inspect(reason)
+        Logger.error("Open AI gen idea failed")
+        {:error, :oai_failed}
+    end
+  end
+
+  def send(messages, oai_token) do
+    {endpoint, headers, options} = endpoint_settings(oai_token)
+
     messages = default_messages() ++ messages
 
-    oai_params = %OAIChat{model: "gpt-4", messages: messages}
+    oai_params = %OAIChat{model: "gpt-3.5-turbo", messages: messages}
     body = Jason.encode!(oai_params)
 
     # Send the post request
@@ -54,18 +82,56 @@ defmodule CoverGen.OAIChat do
     end
   end
 
+  defp creation_messages do
+    [
+      %{role: "system", content: "
+You come up with prompts to feed to diffusion models, select artists in prompts based on relevance
+    "},
+      %{role: "user", content: "
+Pick words that are relevant both to user prompt and the style chosen, pick two artists where possible and answer only with the prompt and only in English
+
+If user supplies the string `cjw` - add it before the main object of the prompt
+
+A portrait of a young woman with red hair => Photorealism
+    "},
+      %{role: "assistant", content: "
+A portrait of a young woman with red hair, agfa vista 4 0 0 photograph, synth vibe, cold vaporwave colors, lens flare, moody lighting, moody vibe, telephoto, 9 0 s vibe, blurry background, grain, tranquil, calm, faded, by Annie Leibovitz and Herb Ritts
+     "},
+      %{role: "user", content: "
+A city landscape => Pencil drawing cjw
+    "},
+      %{role: "assistant", content: "
+A cjw city landscape, pencil on paper, intricate details, precise linework, realistic shading, atmospheric perspective, dramatic contrast, bustling streets, towering skyscrapers, faded background, by Stephen Wiltshire and by David Zinn
+     "},
+      %{role: "user", content: "
+Кот сидит на полу и смотрит вверх => Impressionism
+    "},
+      %{role: "assistant", content: "
+A cat sitting beside the window, ink on paper, flowing linework, monochromatic, delicate details, expressive strokes, subtle shading, atmospheric perspective, minimalistic composition, by Hokusai and Sumi-e artist Takahashi Shotei
+     "},
+      %{role: "user", content: "
+A cute cat sitting beside the window => Concept art cjw
+    "},
+      %{role: "assistant", content: "
+A cute cjw cat sitting beside the window, ultra mega super hyper realistic digital concept design, concept art, vibrant colors, dynamic brushstrokes, stylized design, imaginative composition, atmospheric lighting, by Greg Rutkowski and Shaddy Safadi
+     "}
+    ]
+  end
+
   defp default_messages do
     [
       %{role: "system", content: "
       You help modify prompts that were created for AI diffusion models, you answer with the prompt and only in English
-
+    "},
+      %{role: "user", content: "
       Adjust the artists if user is looking for style changes
 
       If the user asks to emphasize something or says he doesn't get it in the image - rearrange your response putting the desired object at the start of the sentence 
 
-      If the user says something that doesen't make sense - ignore it and return the prompt without changes
-    "},
-      %{role: "user", content: "
+      If user supplies the string `cjw` - add it before the main object of the prompt
+
+      If the user says something that doesen't make sense - ignore it and return the prompt without changes, answer only with the prompt and only in English
+
       A young Slavic couple, with the girl having a freckled face, long reddish hair and green eyes, and the boy having black hair, black eyes and pale skin, in dark armor, stand together, artwork by tooth wu and wlop and alena aenami and greg rutkowski 
 
       Let's make the girl without freckles and make her blonde

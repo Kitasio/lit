@@ -3,6 +3,7 @@ defmodule CoverGen.Replicate.Model do
   alias CoverGen.Replicate.Input
   alias HTTPoison.Response
   require Elixir.Logger
+  import LitcoversWeb.Gettext
 
   @derive Jason.Encoder
   defstruct version: "9936c2001faa2194a261c01381f90e65261879985476014a0a37a334593a05eb",
@@ -145,19 +146,26 @@ defmodule CoverGen.Replicate.Model do
     [
       %{
         name: "stable-diffusion",
+        enabled: true,
         img: "https://ik.imagekit.io/soulgenesis/litnet/setting.jpg",
         link:
           "https://replicate.com/stability-ai/stable-diffusion/versions/8abccf52e7cba9f6e82317253f4a3549082e966db5584e92c808ece132037776",
-        version: "8abccf52e7cba9f6e82317253f4a3549082e966db5584e92c808ece132037776"
+        version: "8abccf52e7cba9f6e82317253f4a3549082e966db5584e92c808ece132037776",
+        label: gettext("Setting"),
+        description: gettext("Works best with landscapes, buildings, and other objects")
       },
       %{
         name: "couple5",
+        enabled: true,
         img: "https://ik.imagekit.io/soulgenesis/litnet/couple.jpg",
         link: "https://replicate.com/kitasio/couple5",
-        version: "41aa15ac9c83035da10c7b4472cabd7638964b1f47f39e8c7d6132d9e1b80e7f"
+        version: "41aa15ac9c83035da10c7b4472cabd7638964b1f47f39e8c7d6132d9e1b80e7f",
+        label: gettext("Faces"),
+        description: gettext("Good for depiction of a portrait or a couple")
       },
       %{
         name: "portraitplus",
+        enabled: false,
         img:
           "https://replicate.delivery/pbxt/nsv3z04pENLwCJFCNoKOCCpzPwmYBJX2YBFCB9eagHLNfdXQA/out-0.png",
         link:
@@ -166,6 +174,7 @@ defmodule CoverGen.Replicate.Model do
       },
       %{
         name: "openjourney",
+        enabled: false,
         img:
           "https://replicate.delivery/pbxt/VueyYHELjzV9WiveDN9TfybM57OXpuC66hQUms0uJHioCVAgA/out-0.png",
         link:
