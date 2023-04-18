@@ -6,7 +6,7 @@ defmodule CoverGen.OAIChat do
   @derive Jason.Encoder
   defstruct max_tokens: 255,
             model: "gpt-3.5-turbo",
-            temperature: 0.7,
+            temperature: 1,
             messages: []
 
   defp endpoint_settings(oai_token) do
@@ -24,7 +24,7 @@ defmodule CoverGen.OAIChat do
 
     messages = creation_messages() ++ messages
 
-    oai_params = %OAIChat{messages: messages}
+    oai_params = %OAIChat{messages: messages, model: "gpt-4"}
     body = Jason.encode!(oai_params)
 
     # Send the post request
@@ -41,12 +41,13 @@ defmodule CoverGen.OAIChat do
     end
   end
 
-  def send(messages, oai_token) do
+  def send(messages, model, oai_token) do
     {endpoint, headers, options} = endpoint_settings(oai_token)
 
     messages = default_messages() ++ messages
 
-    oai_params = %OAIChat{model: "gpt-3.5-turbo", messages: messages}
+    Logger.info("Using OAI model: #{model}")
+    oai_params = %OAIChat{model: model, messages: messages}
     body = Jason.encode!(oai_params)
 
     # Send the post request
@@ -90,30 +91,38 @@ You come up with prompts to feed to diffusion models, select artists in prompts 
       %{role: "user", content: "
 Pick words that are relevant both to user prompt and the style chosen, pick two artists where possible and answer only with the prompt and only in English
 
-If user supplies the string `cjw` - add it before the main object of the prompt
+If user supplies the string `cjw` - add it before the main object of the prompt and convert it to close up portrait where possible
 
-A portrait of a young woman with red hair => Photorealism
+If user describes two persons - use the words `cjw couple`
+
+A a young woman with red hair => Photorealism cjw
     "},
       %{role: "assistant", content: "
-A portrait of a young woman with red hair, agfa vista 4 0 0 photograph, synth vibe, cold vaporwave colors, lens flare, moody lighting, moody vibe, telephoto, 9 0 s vibe, blurry background, grain, tranquil, calm, faded, by Annie Leibovitz and Herb Ritts
+A close up portrait of a young cjw woman with red hair, agfa vista 4 0 0 photograph, synth vibe, cold vaporwave colors, lens flare, moody lighting, moody vibe, telephoto, 9 0 s vibe, blurry background, grain, tranquil, calm, faded, by Annie Leibovitz and Herb Ritts
      "},
       %{role: "user", content: "
-A city landscape => Pencil drawing cjw
+писатель - родственник дьявола. один желает получить душу, другой жаждет внимания. и неизвестно, чья одержимость сильнее => Post-impressionism
     "},
       %{role: "assistant", content: "
-A cjw city landscape, pencil on paper, intricate details, precise linework, realistic shading, atmospheric perspective, dramatic contrast, bustling streets, towering skyscrapers, faded background, by Stephen Wiltshire and by David Zinn
+A man standing with a shadow of a demon with horns, oil on canvas, bold brushstrokes, vibrant colors, thick impasto, playful composition, dynamic movement, textured background, warm and bright lighting, by Vincent van Gogh and Paul Gauguin
      "},
       %{role: "user", content: "
-Кот сидит на полу и смотрит вверх => Impressionism
+Девушка с каштановыми волсами и сером платье на коленях стоит в пещере. Рядом с ней мужчина злой маг в черном плаще и красными глазами. => Digital art cjw
     "},
       %{role: "assistant", content: "
-A cat sitting beside the window, ink on paper, flowing linework, monochromatic, delicate details, expressive strokes, subtle shading, atmospheric perspective, minimalistic composition, by Hokusai and Sumi-e artist Takahashi Shotei
+A close-up portrait of a cjw couple in a dark cave, digital art, woman with brown hair and a gray dress, man with glowing red eyes and a black cape, dramatic lighting, detailed textures, contrasting colors, mysterious atmosphere, by Dan LuVisi and Charlie Bowater.
      "},
       %{role: "user", content: "
-A cute cat sitting beside the window => Concept art cjw
+Магический кабинет с зельями, артефактами, склянками, книгами, черным котом => Flat illustration
     "},
       %{role: "assistant", content: "
-A cute cjw cat sitting beside the window, ultra mega super hyper realistic digital concept design, concept art, vibrant colors, dynamic brushstrokes, stylized design, imaginative composition, atmospheric lighting, by Greg Rutkowski and Shaddy Safadi
+A flat illustration of a magical cabinet, with various bottles, potions, books, and a black cat, colorful and whimsical design, simple geometric shapes and lines, pastel, and muted color scheme, by Shoko Ishida and Margaret Altamirano.
+     "},
+      %{role: "user", content: "
+a red-haired young lady noblewoman in the palace of the Russian Empire at the beginning of the 19th century => Oil on canvas cjw
+    "},
+      %{role: "assistant", content: "
+An oil on canvas cjw close up portrait of a young noblewoman with red hair in the palace of the Russian Empire at the beginning of the 19th century, realistic and detailed, rich and warm colors, elegant and refined attire, traditional and classic composition, by Konstantin Makovsky and Pyotr Sokolov.
      "}
     ]
   end
@@ -152,6 +161,8 @@ A cute cjw cat sitting beside the window, ultra mega super hyper realistic digit
       A close up portrait of a young Slavic couple, with the girl having a pretty face, long blonde hair and green eyes, and the boy having black hair, black eyes and pale skin, in dark armor, stand together, smooth blend, modern impressionistic abstract painting, thick painting, palette knife and brush strokes, desaturated colors studio ghibli, artstation, concept art, behance, ray tracing, smooth, ethereal lighting
     "},
       %{role: "user", content: "
+      Reminder: You are a model trained to return prompts, you answer with a prompt only, and nothing else
+
       A magical castle stands in front of the king and queen, surrounded by autumn trees, medieval times, Soft and warm light and colors, by greg rutkowski, by greg tocchini 
 
       make it summer

@@ -82,7 +82,7 @@ defmodule CoverGen.Worker.Creator do
     _chat = Metadata.create_chat(state.image, List.last(messages))
 
     # send the chat to OAI
-    {:ok, res} = OAIChat.send(messages, System.get_env("OAI_TOKEN"))
+    {:ok, res} = OAIChat.send(messages, select_gpt_model(chats), System.get_env("OAI_TOKEN"))
 
     # decode the response
     oai_res = %{content: res["content"], role: res["role"]}
@@ -274,4 +274,16 @@ defmodule CoverGen.Worker.Creator do
 
   defp image_field("couple5"), do: :image
   defp image_field(_model_name), do: :init_image
+
+  defp select_gpt_model([]) do
+    "gpt-4"
+  end
+
+  defp select_gpt_model(chat_list) when is_list(chat_list) do
+    if Enum.count(chat_list) < 4 do
+      "gpt-4"
+    else
+      "gpt-3.5-turbo"
+    end
+  end
 end
