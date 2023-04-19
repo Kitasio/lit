@@ -6,7 +6,7 @@ defmodule CoverGen.Replicate.Model do
   import LitcoversWeb.Gettext
 
   @derive Jason.Encoder
-  defstruct version: "9936c2001faa2194a261c01381f90e65261879985476014a0a37a334593a05eb",
+  defstruct version: "27b93a2413e7f36cd83da926f3656280b2931564ff050bf9575f1fdf9bcd7478",
             input: %Input{}
 
   # Returns a list of image links
@@ -125,7 +125,7 @@ defmodule CoverGen.Replicate.Model do
 
   def new("stable-diffusion") do
     %Model{
-      version: "8abccf52e7cba9f6e82317253f4a3549082e966db5584e92c808ece132037776",
+      version: "27b93a2413e7f36cd83da926f3656280b2931564ff050bf9575f1fdf9bcd7478",
       input: %Input{
         prompt: ""
       }
@@ -135,7 +135,7 @@ defmodule CoverGen.Replicate.Model do
   # Default is stable-diffusion
   def new(nil) do
     %Model{
-      version: "8abccf52e7cba9f6e82317253f4a3549082e966db5584e92c808ece132037776",
+      version: "27b93a2413e7f36cd83da926f3656280b2931564ff050bf9575f1fdf9bcd7478",
       input: %Input{
         prompt: ""
       }
@@ -149,8 +149,8 @@ defmodule CoverGen.Replicate.Model do
         enabled: true,
         img: "https://ik.imagekit.io/soulgenesis/litnet/setting.jpg",
         link:
-          "https://replicate.com/stability-ai/stable-diffusion/versions/8abccf52e7cba9f6e82317253f4a3549082e966db5584e92c808ece132037776",
-        version: "8abccf52e7cba9f6e82317253f4a3549082e966db5584e92c808ece132037776",
+          "https://replicate.com/stability-ai/stable-diffusion/versions/27b93a2413e7f36cd83da926f3656280b2931564ff050bf9575f1fdf9bcd7478",
+        version: "27b93a2413e7f36cd83da926f3656280b2931564ff050bf9575f1fdf9bcd7478",
         label: gettext("Setting"),
         description: gettext("Works best with landscapes, buildings, and other objects")
       },
