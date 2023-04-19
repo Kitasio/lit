@@ -24,7 +24,7 @@ defmodule CoverGen.OAIChat do
 
     messages = creation_messages() ++ messages
 
-    oai_params = %OAIChat{messages: messages, model: "gpt-4"}
+    oai_params = %OAIChat{messages: messages}
     body = Jason.encode!(oai_params)
 
     # Send the post request
@@ -95,34 +95,49 @@ If user supplies the string `cjw` - add it before the main object of the prompt 
 
 If user describes two persons - use the words `cjw couple`
 
-A a young woman with red hair => Photorealism cjw
+A good prompt needs to be detailed and specific. A good process is to look through a list of keyword categories and decide whether you want to use any of them.
+
+The keyword categories are
+
+    Subject
+    Medium
+    Style
+    Artist
+    Website
+    Resolution
+    Additional details
+    Color
+    Lighting
+
+
+A a young woman with red hair, a powerful mysterious sorceress, casting lightning magic => Digital painting cjw
     "},
       %{role: "assistant", content: "
-A close up portrait of a young cjw woman with red hair, agfa vista 4 0 0 photograph, synth vibe, cold vaporwave colors, lens flare, moody lighting, moody vibe, telephoto, 9 0 s vibe, blurry background, grain, tranquil, calm, faded, by Annie Leibovitz and Herb Ritts
+A cjw close up portrait of a young woman with red hair, a powerful mysterious sorceress, casting lightning magic, detailed clothing, digital painting, hyperrealistic, fantasy, Surrealist, full body, by Stanley Artgerm Lau and Alphonse Mucha, artstation, highly detailed, sharp focus, sci-fi, stunningly beautiful, dystopian, iridescent gold, cinematic lighting, dark
      "},
       %{role: "user", content: "
-писатель - родственник дьявола. один желает получить душу, другой жаждет внимания. и неизвестно, чья одержимость сильнее => Post-impressionism
+Магический кабинет с зельями, артефактами, склянками, книгами, черным котом => Flat Illustration
     "},
       %{role: "assistant", content: "
-A man standing with a shadow of a demon with horns, oil on canvas, bold brushstrokes, vibrant colors, thick impasto, playful composition, dynamic movement, textured background, warm and bright lighting, by Vincent van Gogh and Paul Gauguin
-     "},
-      %{role: "user", content: "
-Девушка с каштановыми волсами и сером платье на коленях стоит в пещере. Рядом с ней мужчина злой маг в черном плаще и красными глазами. => Digital art cjw
-    "},
-      %{role: "assistant", content: "
-A close-up portrait of a cjw couple in a dark cave, digital art, woman with brown hair and a gray dress, man with glowing red eyes and a black cape, dramatic lighting, detailed textures, contrasting colors, mysterious atmosphere, by Dan LuVisi and Charlie Bowater.
-     "},
-      %{role: "user", content: "
-Магический кабинет с зельями, артефактами, склянками, книгами, черным котом => Flat illustration
-    "},
-      %{role: "assistant", content: "
-A flat illustration of a magical cabinet, with various bottles, potions, books, and a black cat, colorful and whimsical design, simple geometric shapes and lines, pastel, and muted color scheme, by Shoko Ishida and Margaret Altamirano.
+A magical cabinet, filled with various bottles, potions, books, and a curious black cat, flat illustration, minimalistic, modern design, by Mary Blair and Charley Harper, behance, clean lines, simple shapes, vibrant colors, whimsical, playful, mysterious, well-organized, limited color palette, soft lighting, slightly abstract
      "},
       %{role: "user", content: "
 a red-haired young lady noblewoman in the palace of the Russian Empire at the beginning of the 19th century => Oil on canvas cjw
     "},
       %{role: "assistant", content: "
-An oil on canvas cjw close up portrait of a young noblewoman with red hair in the palace of the Russian Empire at the beginning of the 19th century, realistic and detailed, rich and warm colors, elegant and refined attire, traditional and classic composition, by Konstantin Makovsky and Pyotr Sokolov.
+A cjw close up portrait of red-haired young lady noblewoman, elegantly dressed, standing in the grand palace of the Russian Empire at the beginning of the 19th century, oil on canvas, exquisite detail, historical, Romanticism, by Ilya Repin and Ivan Aivazovsky, fineartamerica, full-length portrait, sumptuous interior, luxurious fabrics, intricate patterns, rich colors, dramatic lighting, regal bearing
+     "},
+      %{role: "user", content: "
+Девушка с каштановыми волсами и сером платье на коленях стоит в пещере. Рядом с ней мужчина злой маг в черном плаще и красными глазами. => Digital art cjw
+    "},
+      %{role: "assistant", content: "
+A cjw close up portrait of a couple, girl with chestnut hair, wearing a knee-length gray dress, standing in a dimly lit cave, accompanied by a sinister male sorcerer in a black cloak and red eyes, digital art, fantasy, dark atmosphere, by H.R. Giger and Gerald Brom, artstation, contrasting characters, detailed textures, tension-filled, cold color scheme, eerie lighting, ominous presence
+     "},
+      %{role: "user", content: "
+писатель - родственник дьявола. один желает получить душу, другой жаждет внимания. и неизвестно, чья одержимость сильнее => Arcane (League of Legends)
+    "},
+      %{role: "assistant", content: "
+A man standing with a shadow of a demon with horns, digital art, inspired by League of Legends' Arcane series, dark fantasy, by Christian Fell and Riot Games Art Team, artstation, dramatic scene, intense emotions, magical aura, sinister atmosphere, vivid colors, dynamic lighting, power struggle
      "}
     ]
   end
