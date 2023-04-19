@@ -8,4 +8,8 @@ defmodule CoverGen.Replicate.Input do
             num_outputs: 1,
             guidance_scale: 10,
             disable_safety_check: true
+
+  def universal_neg_prompt do
+    "ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, bad anatomy, watermark, signature, cut off, low contrast, underexposed, overexposed, bad art, beginner, amateur, distorted face, blurry, draft, grainy"
+  end
 end

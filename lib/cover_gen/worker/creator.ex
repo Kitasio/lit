@@ -59,10 +59,32 @@ defmodule CoverGen.Worker.Creator do
       Model.get_params(
         state.image.model_name,
         oai_res.content,
+        state.image.negative_prompt,
         state.image.width,
         state.image.height
       )
       |> add_composition_image(state.composition_image, state.image.model_name)
+
+    # Updating the state
+    new_state = %{state | params: params, stage: :sd_request}
+    StateHolder.set(state.state_holder_name, new_state)
+
+    {:noreply, new_state, {:continue, :run}}
+  end
+
+  def handle_info(:oai_negative, state) do
+    params =
+      Model.get_params(
+        state.image.model_name,
+        state.image.final_prompt,
+        state.image.negative_prompt,
+        state.image.width,
+        state.image.height
+      )
+      |> add_composition_image(state.composition_image, state.image.model_name)
+      |> add_negative_prompt(state.message)
+
+    save_negative_prompt(state.image, params.input.negative_prompt)
 
     # Updating the state
     new_state = %{state | params: params, stage: :sd_request}
@@ -96,6 +118,7 @@ defmodule CoverGen.Worker.Creator do
       Model.get_params(
         state.image.model_name,
         oai_res.content,
+        state.image.negative_prompt,
         state.image.width,
         state.image.height
       )
@@ -125,6 +148,7 @@ defmodule CoverGen.Worker.Creator do
       Model.get_params(
         state.image.model_name,
         prompt,
+        state.image.negative_prompt,
         state.image.width,
         state.image.height
       )
@@ -212,6 +236,10 @@ defmodule CoverGen.Worker.Creator do
     Media.update_image(image, %{final_prompt: prompt})
   end
 
+  defp save_negative_prompt(image, prompt) do
+    Media.update_image(image, %{negative_prompt: prompt})
+  end
+
   defp mutate_description(image) when image.lit_ai == true do
     {:ok, ideas_list} =
       OAI.description_to_cover_idea(
@@ -262,9 +290,31 @@ defmodule CoverGen.Worker.Creator do
     old_messages ++ [%{role: "user", content: state.message}]
   end
 
-  def add_composition_image(params, nil, _model_name), do: params
+  def is_english(string) do
+    string
+    |> String.codepoints()
+    |> Enum.all?(fn char -> char <= 127 end)
+  end
 
-  def add_composition_image(params, img_url, model_name) do
+  defp add_negative_prompt(params, string) do
+    Logger.info("Adding negative prompt: #{string}")
+
+    negative_prompt =
+      if is_english(string) do
+        "#{string}, " <> params.input.negative_prompt
+      else
+        string = CoverGen.OAIChat.translate(string, System.get_env("OAI_TOKEN"))
+        "#{string}, " <> params.input.negative_prompt
+      end
+
+    update_in(params.input, fn input ->
+      Map.put(input, :negative_prompt, negative_prompt)
+    end)
+  end
+
+  defp add_composition_image(params, nil, _model_name), do: params
+
+  defp add_composition_image(params, img_url, model_name) do
     update_in(params.input, fn input ->
       Map.from_struct(input)
       |> Map.put(image_field(model_name), img_url)

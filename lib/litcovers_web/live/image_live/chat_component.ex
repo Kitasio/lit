@@ -19,6 +19,14 @@ defmodule LitcoversWeb.ImageLive.ChatComponent do
           label={gettext("Preserve composition")}
           id={"comp-#{@image_id}-checkbox"}
         />
+        <.input
+          field={{f, :is_negative_prompt}}
+          type="checkbox"
+          label={
+            gettext("Deletion, check if you are removing something, instead of adding or changing")
+          }
+          id={"comp-#{@image_id}-negative-checkbox"}
+        />
         <.input field={{f, :content}} label={gettext("Message")} id={"content-#{@image_id}-input"} />
         <:actions>
           <.button><%= gettext("Send") %></.button>
@@ -40,11 +48,12 @@ defmodule LitcoversWeb.ImageLive.ChatComponent do
   def handle_event("save", %{"user_chat_message" => chat_params}, socket) do
     message = Map.get(chat_params, "content")
     composition = Map.get(chat_params, "preserve_composition")
+    negative = Map.get(chat_params, "is_negative_prompt")
 
     socket =
       push_navigate(socket,
         to:
-          ~p"/#{socket.assigns.locale}/images/new/#{socket.assigns.image_id}/correct?message=#{message}&composition=#{composition}"
+          ~p"/#{socket.assigns.locale}/images/new/#{socket.assigns.image_id}/correct?message=#{message}&composition=#{composition}&negative=#{negative}"
       )
 
     {:noreply, socket}

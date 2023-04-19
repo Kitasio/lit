@@ -20,12 +20,12 @@ msgstr ""
 msgid "close"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:570
+#: lib/litcovers_web/live/image_live/new.ex:577
 #, elixir-autogen, elixir-format
 msgid "Female"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:581
+#: lib/litcovers_web/live/image_live/new.ex:588
 #, elixir-autogen, elixir-format
 msgid "Male"
 msgstr ""
@@ -41,7 +41,7 @@ msgstr ""
 msgid "You must log in to access this page."
 msgstr ""
 
-#: lib/cover_gen/replicate/model.ex:154
+#: lib/cover_gen/replicate/model.ex:155
 #, elixir-autogen, elixir-format
 msgid "Setting"
 msgstr ""
@@ -52,7 +52,7 @@ msgid "Title"
 msgstr ""
 
 #: lib/litcovers_web/components/ui_components.ex:85
-#: lib/litcovers_web/live/image_live/new.ex:66
+#: lib/litcovers_web/live/image_live/new.ex:67
 #, elixir-autogen, elixir-format
 msgid "Create"
 msgstr ""
@@ -72,12 +72,12 @@ msgstr ""
 msgid "Favorites"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:555
+#: lib/litcovers_web/live/image_live/new.ex:562
 #, elixir-autogen, elixir-format
 msgid "Generate"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:460
+#: lib/litcovers_web/live/image_live/new.ex:467
 #, elixir-autogen, elixir-format
 msgid "Image dimensions"
 msgstr ""
@@ -118,14 +118,14 @@ msgstr ""
 msgid "Locked image, dissapears after 24 hours"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:221
-#: lib/litcovers_web/live/image_live/new.ex:227
-#: lib/litcovers_web/live/image_live/new.ex:233
+#: lib/litcovers_web/live/image_live/new.ex:228
+#: lib/litcovers_web/live/image_live/new.ex:234
+#: lib/litcovers_web/live/image_live/new.ex:240
 #, elixir-autogen, elixir-format
 msgid "Something went wrong"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:212
+#: lib/litcovers_web/live/image_live/new.ex:219
 #, elixir-autogen, elixir-format
 msgid "Timeout"
 msgstr ""
@@ -426,7 +426,7 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/chat_component.ex:24
+#: lib/litcovers_web/live/image_live/chat_component.ex:32
 #: lib/litcovers_web/live/image_live/form_component.ex:22
 #: lib/litcovers_web/live/user_confirmation_instructions_live.ex:66
 #, elixir-autogen, elixir-format
@@ -666,7 +666,7 @@ msgstr ""
 msgid "Current password"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:461
+#: lib/litcovers_web/live/image_live/new.ex:468
 #, elixir-autogen, elixir-format
 msgid "Choose what dimensions the image will have"
 msgstr ""
@@ -691,7 +691,7 @@ msgstr ""
 msgid "Step 1. "
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:460
+#: lib/litcovers_web/live/image_live/new.ex:467
 #, elixir-autogen, elixir-format
 msgid "Step 2. "
 msgstr ""
@@ -713,7 +713,7 @@ msgstr ""
 
 #: lib/litcovers_web/live/cover_live/index.ex:74
 #: lib/litcovers_web/live/image_live/index.ex:59
-#: lib/litcovers_web/live/image_live/new.ex:75
+#: lib/litcovers_web/live/image_live/new.ex:76
 #: lib/litcovers_web/live/image_live/show.ex:52
 #, elixir-autogen, elixir-format
 msgid "Begin!"
@@ -734,12 +734,12 @@ msgstr ""
 msgid "Text overlay"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:71
+#: lib/litcovers_web/live/image_live/new.ex:72
 #, elixir-autogen, elixir-format
 msgid "Toggle switch LIT.AI disables our idea generator, giving you the opportunity to accurately describe the desired image"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/new.ex:68
+#: lib/litcovers_web/live/image_live/new.ex:69
 #, elixir-autogen, elixir-format
 msgid "We're here! At the first step, you will be able to enter a description of the desired image or an annotation of the book in text, then select the aspect ratio and finally determine the most appropriate styles."
 msgstr ""
@@ -877,12 +877,12 @@ msgstr ""
 msgid "Edit the image"
 msgstr ""
 
-#: lib/cover_gen/replicate/model.ex:163
+#: lib/cover_gen/replicate/model.ex:164
 #, elixir-autogen, elixir-format
 msgid "Faces"
 msgstr ""
 
-#: lib/cover_gen/replicate/model.ex:164
+#: lib/cover_gen/replicate/model.ex:165
 #, elixir-autogen, elixir-format
 msgid "Good for depiction of a portrait or a couple"
 msgstr ""
@@ -957,12 +957,12 @@ msgstr ""
 msgid "Watercolor illustration"
 msgstr ""
 
-#: lib/cover_gen/replicate/model.ex:155
+#: lib/cover_gen/replicate/model.ex:156
 #, elixir-autogen, elixir-format
 msgid "Works best with landscapes, buildings, and other objects"
 msgstr ""
 
-#: lib/litcovers_web/live/image_live/chat_component.ex:22
+#: lib/litcovers_web/live/image_live/chat_component.ex:30
 #, elixir-autogen, elixir-format
 msgid "Message"
 msgstr ""
@@ -970,4 +970,9 @@ msgstr ""
 #: lib/litcovers_web/live/image_live/chat_component.ex:19
 #, elixir-autogen, elixir-format
 msgid "Preserve composition"
+msgstr ""
+
+#: lib/litcovers_web/live/image_live/chat_component.ex:26
+#, elixir-autogen, elixir-format
+msgid "Deletion, check if you are removing something, instead of adding or changing"
 msgstr ""

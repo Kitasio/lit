@@ -70,6 +70,7 @@ defmodule CoverGen.Create do
            Model.get_params(
              image.model_name,
              prompt,
+             image.negative_prompt,
              image.width,
              image.height
            ),

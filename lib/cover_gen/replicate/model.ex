@@ -84,14 +84,15 @@ defmodule CoverGen.Replicate.Model do
     end
   end
 
-  def get_params(model_name, prompt, width, height) do
+  def get_params(model_name, prompt, neg_prompt, width, height) do
     model = Model.new(model_name)
 
     update_in(model.input, fn _input ->
       %Input{
         width: width,
         height: height,
-        prompt: prompt
+        prompt: prompt,
+        negative_prompt: neg_prompt || Input.universal_neg_prompt()
       }
     end)
   end

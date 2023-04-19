@@ -19,6 +19,34 @@ defmodule CoverGen.OAIChat do
     {endpoint, headers, options}
   end
 
+  def translate(words, oai_token) when is_bitstring(words) do
+    {endpoint, headers, options} = endpoint_settings(oai_token)
+
+    messages = [
+      %{
+        role: "user",
+        content: "Translate to English if needed, answer only with the translation\n\n#{words}"
+      }
+    ]
+
+    oai_params = %OAIChat{messages: messages, temperature: 0.1}
+    body = Jason.encode!(oai_params)
+
+    # Send the post request
+    case HTTPoison.post(endpoint, body, headers, options) do
+      {:ok, %Response{body: res_body}} ->
+        message = oai_response_chat(res_body) || ""
+
+        %{"content" => content} = message
+        content
+
+      {:error, reason} ->
+        IO.inspect(reason)
+        Logger.error("Open AI gen idea failed")
+        {:error, :oai_failed}
+    end
+  end
+
   def send(messages, oai_token, :creation) do
     {endpoint, headers, options} = endpoint_settings(oai_token)
 

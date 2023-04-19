@@ -1,4 +1,5 @@
 defmodule LitcoversWeb.ImageLive.New do
+  alias CoverGen.Replicate.Input
   alias Litcovers.Accounts.Feedback
   alias Litcovers.Accounts
   alias CoverGen.Replicate
@@ -110,7 +111,8 @@ defmodule LitcoversWeb.ImageLive.New do
           %CoverGen.Replicate.Input{
             width: image.width,
             height: image.height,
-            prompt: image.final_prompt
+            prompt: image.final_prompt,
+            negative_prompt: image.negative_prompt || Input.universal_neg_prompt()
           }
         end)
 
@@ -121,7 +123,8 @@ defmodule LitcoversWeb.ImageLive.New do
         character_gender: image.character_gender,
         final_prompt: image.final_prompt,
         parent_image_id: image.id,
-        model_name: image.model_name
+        model_name: image.model_name,
+        negative_prompt: image.negative_prompt || Input.universal_neg_prompt()
       }
 
       {:ok, new_image} = Media.create_image(socket.assigns.current_user, image_params)
@@ -153,6 +156,7 @@ defmodule LitcoversWeb.ImageLive.New do
   defp apply_action(socket, :correct, params) do
     message = Map.get(params, "message")
     composition = Map.get(params, "composition") |> String.to_atom()
+    negative = Map.get(params, "negative") |> String.to_atom()
     image_id = Map.get(params, "image_id")
     image = Media.get_image_preload_all!(image_id)
 
@@ -164,7 +168,8 @@ defmodule LitcoversWeb.ImageLive.New do
         character_gender: image.character_gender,
         final_prompt: image.final_prompt,
         parent_image_id: image.id,
-        model_name: image.model_name
+        model_name: image.model_name,
+        negative_prompt: image.negative_prompt
       }
 
       {:ok, new_image} = Media.create_image(socket.assigns.current_user, image_params)
@@ -180,9 +185,11 @@ defmodule LitcoversWeb.ImageLive.New do
           nil
         end
 
+      stage = if negative, do: :oai_negative, else: :oai_chat
+
       CoverGen.create_new(
         image: new_image,
-        stage: :oai_chat,
+        stage: stage,
         message: message,
         composition_image: composition_image
       )
