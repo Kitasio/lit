@@ -1,9 +1,11 @@
 <div class="w-full flex justify-center my-10">
   <.h1>Image metadata</.h1>
 </div>
-<div class="flex gap-10 mt-10 max-w-screen-2xl mx-auto">
-  <img src={@image.url} class="object-cover max-w-md" />
-  <div>
+<div class="flex gap-10 my-10 max-w-screen-2xl mx-auto">
+  <div class="w-1/4">
+    <img src={@image.url} class="object-cover w-full" />
+  </div>
+  <div class="w-3/4">
     <.back navigate={~p"/en/admin/user/#{@image.user_id}"}>Back to user</.back>
     <h1 class="mt-5 text-xl font-bold">Image ideas</h1>
     <div class="mt-3 space-y-2">
@@ -27,6 +29,22 @@
 
     <h1 class="mt-5 text-xl font-bold">Final prompt</h1>
     <%= @image.final_prompt %>
+
+    <div class="mt-10 mb-5 flex gap-3 items-center">
+      <.h1 :if={!Enum.empty?(@image.chats)} class="text-xl font-bold">Chat</.h1>
+      <.back
+        :if={@image.parent_image_id}
+        navigate={~p"/en/admin/images/#{@image.parent_image_id}"}
+      >
+        Back to parent image
+      </.back>
+    </div>
+    <div class="flex flex-col gap-5">
+      <div :for={chat <- @image.chats}>
+        <span class="font-bold mr-2"><%= chat.role %>:</span>
+        <span class="font-light"><%= chat.content %></span>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -38,4 +56,3 @@
     </div>
   </div>
 </div>
-
