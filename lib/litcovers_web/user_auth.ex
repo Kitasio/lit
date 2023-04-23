@@ -163,6 +163,24 @@ defmodule LitcoversWeb.UserAuth do
     end
   end
 
+  def on_mount(:subscribed_or_has_litcoins, %{"locale" => locale}, session, socket) do
+    socket = mount_current_user(session, socket)
+
+    subscribed_or_has_litcoins =
+      socket.assigns.current_user.subscribed || socket.assigns.current_user.litcoins > 0
+
+    if socket.assigns.current_user && subscribed_or_has_litcoins do
+      {:cont, socket}
+    else
+      socket =
+        socket
+        |> Phoenix.LiveView.put_flash(:error, "You need to be subscribed to access this page.")
+        |> Phoenix.LiveView.redirect(to: ~p"/#{locale}/payment_options")
+
+      {:halt, socket}
+    end
+  end
+
   def on_mount(:enabled_user, _params, session, socket) do
     socket = mount_current_user(session, socket)
 
@@ -309,6 +327,20 @@ defmodule LitcoversWeb.UserAuth do
       |> put_flash(:error, gettext("Your account is not active."))
       |> maybe_store_return_to()
       |> redirect(to: "/#{conn.assigns.locale}/users/settings")
+      |> halt()
+    end
+  end
+
+  def subscribed_or_has_litcoins(conn, _opts) do
+    has_litcoins = conn.assigns[:current_user].litcoins > 0
+
+    if conn.assigns[:current_user].subscribed or has_litcoins do
+      conn
+    else
+      conn
+      |> put_flash(:error, gettext("You need to be subscribed to access this page."))
+      |> maybe_store_return_to()
+      |> redirect(to: "/#{conn.assigns.locale}/payment_options")
       |> halt()
     end
   end

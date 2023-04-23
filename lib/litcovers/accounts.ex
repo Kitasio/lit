@@ -116,6 +116,12 @@ defmodule Litcovers.Accounts do
     |> Repo.update!()
   end
 
+  def update_subscribed(user, attrs) do
+    user
+    |> User.subscription_changeset(attrs)
+    |> Repo.update!()
+  end
+
   @doc """
   Gets a user by email and password.
 
@@ -157,7 +163,7 @@ defmodule Litcovers.Accounts do
   end
 
   defp order_images_query do
-  	from(i in Litcovers.Media.Image, order_by: {:desc, i.id})
+    from(i in Litcovers.Media.Image, order_by: {:desc, i.id})
   end
 
   ## User registration
