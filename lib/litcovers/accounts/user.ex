@@ -17,6 +17,8 @@ defmodule Litcovers.Accounts.User do
     field :relaxed_mode_till, :naive_datetime
     field :discount, :float, default: 1.0
     field :referer, :string
+    field :subscribed, :boolean, default: false
+    field :subscription_expires_at, :naive_datetime
 
     has_many :images, Litcovers.Media.Image
     has_many :covers, Litcovers.Media.Cover
@@ -69,6 +71,11 @@ defmodule Litcovers.Accounts.User do
     |> cast(attrs, [:enabled])
   end
 
+  def subscription_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:subscribed, :subscription_expires_at])
+  end
+
   def litcoins_changeset(user, attrs) do
     user
     |> cast(attrs, [:litcoins])
@@ -87,8 +94,12 @@ defmodule Litcovers.Accounts.User do
   defp validate_email(changeset, opts) do
     changeset
     |> validate_required([:email])
-    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: gettext("must have the @ sign and no spaces"))
-    |> validate_format(:email, ~r/^(?!.*\bmail\.ru\b).*$/, message: gettext("mail.ru not supported, use another provider"))
+    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/,
+      message: gettext("must have the @ sign and no spaces")
+    )
+    |> validate_format(:email, ~r/^(?!.*\bmail\.ru\b).*$/,
+      message: gettext("mail.ru not supported, use another provider")
+    )
     |> validate_length(:email, max: 160)
     |> maybe_validate_unique_email(opts)
   end
