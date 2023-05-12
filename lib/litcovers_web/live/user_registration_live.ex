@@ -24,10 +24,11 @@ defmodule LitcoversWeb.UserRegistrationLive do
     %{
       title: "rugram",
       banner_url: "https://ik.imagekit.io/soulgenesis/ban_rugram.jpg",
-      header: "Крепкое партнёрство",
+      header: "Новый проект Rugram и Litcovers!",
       text: [
-        "Мы верим в силу сотворчества и понимаем насколько важно экспериментировать!",
-        "Для всех авторов издательской платформы Rugram мы подготовили специальные условия: приоритет в выдаче генераций и самые низкие цены в индустрии.",
+        "Экспериментируем, внедряем новые технологии и развиваем сервисы для авторов вместе с издательской платформой Rugram!",
+        "Для авторов  Rugram Litcovers подготовили специальные условия:<br>
+самые низкие цены в индустрии и удобный сервис!",
         "Время создавать и удивлять!"
       ],
       button: "Начать!"
@@ -76,7 +77,7 @@ defmodule LitcoversWeb.UserRegistrationLive do
     >
       <:title><%= @current_tut.header %></:title>
       <div class="flex text-xs sm:text-sm font-light sm:font-normal text-zinc-300 flex-col gap-2">
-        <p :for={text <- @current_tut.text}><%= text %></p>
+        <p :for={text <- @current_tut.text}><%= raw text %></p>
       </div>
       <:confirm><%= @current_tut.button %></:confirm>
     </.modal>
