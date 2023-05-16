@@ -107,6 +107,11 @@ defmodule LitcoversWeb.Router do
       live "/images/favorites", ImageLive.Index, :favorites
       live "/images/all", ImageLive.Index, :all
 
+      live "/images/new", ImageLive.New, :index
+      live "/images/new/feedback", ImageLive.New, :feedback
+      live "/images/new/:image_id/redo", ImageLive.New, :redo
+      live "/images/new/:image_id/correct", ImageLive.New, :correct
+
       live "/covers", CoverLive.Index, :index
 
       live "/payment_options", TransactionLive.Index, :index
@@ -125,10 +130,6 @@ defmodule LitcoversWeb.Router do
 
     live_session :subscribed_or_has_litcoins,
       on_mount: [{LitcoversWeb.UserAuth, :subscribed_or_has_litcoins}] do
-      live "/images/new", ImageLive.New, :index
-      live "/images/new/feedback", ImageLive.New, :feedback
-      live "/images/new/:image_id/redo", ImageLive.New, :redo
-      live "/images/new/:image_id/correct", ImageLive.New, :correct
     end
   end
 
