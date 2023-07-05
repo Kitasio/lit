@@ -62,6 +62,7 @@ defmodule CoverGen.Worker.Creator do
         state.image.width,
         state.image.height
       )
+    Logger.info("params: #{inspect(params)}")
 
     # Updating the state
     new_state = %{state | params: params, stage: :sdxl_request}

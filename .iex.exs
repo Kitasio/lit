@@ -10,8 +10,8 @@ sdxl_test_params = %{
   ],
   cfg_scale: 10,
   clip_guidance_preset: "FAST_BLUE",
-  height: 768,
-  width: 512,
+  height: 1216,
+  width: 812,
   samples: 1,
   steps: 45
 }

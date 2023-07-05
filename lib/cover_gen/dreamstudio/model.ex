@@ -41,12 +41,12 @@ defmodule CoverGen.Dreamstudio.Model do
           text: prompt
         }
       ],
-      cfg_scale: 3..10 |> Enum.random(),
+      cfg_scale: 3..7 |> Enum.random(),
       clip_guidance_preset: "FAST_BLUE",
       height: height,
       width: width,
       samples: 1,
-      steps: 20..45 |> Enum.random(),
+      steps: 20..40 |> Enum.random(),
     }
   end
 end

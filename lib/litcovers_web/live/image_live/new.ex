@@ -41,8 +41,8 @@ defmodule LitcoversWeb.ImageLive.New do
        aspect_ratio: "cover",
        gender: :female,
        placeholder: random_placeholder(locale, false),
-       width: 512,
-       height: 768,
+       width: 832,
+       height: 1216,
        image: %Image{},
        gen_error: nil,
        is_generating: socket.assigns.current_user.is_generating,
@@ -433,18 +433,18 @@ defmodule LitcoversWeb.ImageLive.New do
   end
 
   defp get_width_and_height("cover") do
-    {512, 768}
+    {832, 1216}
   end
 
   defp get_width_and_height("square") do
-    {512, 512}
+    {832, 832}
   end
 
-  defp get_aspect_ratio({512, 768}) do
+  defp get_aspect_ratio({832, 1216}) do
     "cover"
   end
 
-  defp get_aspect_ratio({512, 512}) do
+  defp get_aspect_ratio({832, 832}) do
     "square"
   end
 
