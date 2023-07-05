@@ -35,7 +35,8 @@ defmodule CoverGen.Worker.Creator do
       stage: stage,
       state_holder_name: state_holder_name,
       params: params,
-      image_list: []
+      image_list: [],
+      image_bytes: <<>>
     }
 
     {:ok, state, {:continue, :run}}
@@ -45,6 +46,28 @@ defmodule CoverGen.Worker.Creator do
     current_state = StateHolder.get(state.state_holder_name)
     send(self(), current_state.stage)
     {:noreply, state}
+  end
+
+  def handle_info(:oai_chat_create_sdxl, state) do
+    messages = [%{role: "user", content: state.message}]
+    {:ok, res} = OAIChat.send(messages, System.get_env("OAI_TOKEN"), :creation)
+    # decode the response
+    oai_res = %{content: res["content"], role: res["role"]}
+
+    save_final_prompt(state.image, oai_res.content)
+
+    params =
+      CoverGen.Dreamstudio.Model.get_params(
+        oai_res.content,
+        state.image.width,
+        state.image.height
+      )
+
+    # Updating the state
+    new_state = %{state | params: params, stage: :sdxl_request}
+    StateHolder.set(state.state_holder_name, new_state)
+
+    {:noreply, new_state, {:continue, :run}}
   end
 
   def handle_info(:oai_chat_create, state) do
@@ -88,6 +111,37 @@ defmodule CoverGen.Worker.Creator do
 
     # Updating the state
     new_state = %{state | params: params, stage: :sd_request}
+    StateHolder.set(state.state_holder_name, new_state)
+
+    {:noreply, new_state, {:continue, :run}}
+  end
+
+
+  def handle_info(:oai_chat_sdxl, state) do
+    # get image chats
+    chats = Metadata.list_image_chats(state.image)
+
+    # arrange the chat
+    messages = arrange_chat(chats, state)
+
+    # insert user chat to database
+    _chat = Metadata.create_chat(state.image, List.last(messages))
+
+    # send the chat to OAI
+    {:ok, res} = OAIChat.send(messages, select_gpt_model(chats), System.get_env("OAI_TOKEN"))
+
+    # decode the response
+    oai_res = %{content: res["content"], role: res["role"]}
+
+    # save the response to database
+    Metadata.create_chat(state.image, oai_res)
+
+    save_final_prompt(state.image, oai_res.content)
+
+    params = CoverGen.Dreamstudio.Model.get_params(oai_res.content, state.image.width, state.image.height)
+
+    # Updating the state
+    new_state = %{state | params: params, stage: :sdxl_request}
     StateHolder.set(state.state_holder_name, new_state)
 
     {:noreply, new_state, {:continue, :run}}
@@ -175,6 +229,36 @@ defmodule CoverGen.Worker.Creator do
     StateHolder.set(state.state_holder_name, new_state)
 
     {:noreply, new_state, {:continue, :run}}
+  end
+
+  def handle_info(:sdxl_request, state) do
+    {:ok, image_bytes} =
+      CoverGen.Dreamstudio.Model.diffuse(
+        state.params,
+        System.get_env("DREAMSTUDIO_TOKEN")
+      )
+
+    new_state = %{state | image_bytes: image_bytes, stage: :spaces_save_bytes_request}
+    StateHolder.set(state.state_holder_name, new_state)
+
+    {:noreply, new_state, {:continue, :run}}
+  end
+
+  def handle_info(:spaces_save_bytes_request, state) do
+    image_url = Spaces.save_bytes(state.image_bytes)
+    image_params = %{url: image_url, completed: true}
+    ai_update_image(state.image, image_params)
+    {:ok, user} = release_user(state.image.user_id)
+    {:ok, user} = Accounts.inc_recent_generations(user)
+
+    if user.recent_generations >= user.litcoins * 10 + 10 do
+      broadcast(state.image.user_id, state.image.id, :relaxed_mode)
+    else
+      broadcast(state.image.user_id, state.image.id, :gen_complete)
+    end
+
+    GenServer.stop(state.state_holder_name)
+    {:stop, :normal, state}
   end
 
   def handle_info(:spaces_request, state) do

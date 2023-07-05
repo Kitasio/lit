@@ -347,6 +347,7 @@ defmodule LitcoversWeb.CoreComponents do
   attr :prompt, :string, default: nil, doc: "the prompt for select inputs"
   attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
   attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
+  attr :class, :string, default: nil
   attr :rest, :global, include: ~w(autocomplete cols disabled form max maxlength min minlength
                                    pattern placeholder readonly required rows size step)
   slot :inner_block
@@ -368,7 +369,7 @@ defmodule LitcoversWeb.CoreComponents do
     assigns = assign_new(assigns, :checked, fn -> input_equals?(assigns.value, "true") end)
 
     ~H"""
-    <label phx-feedback-for={@name} class="flex items-center gap-4 text-xs leading-6 text-zinc-400">
+    <label phx-feedback-for={@name} class={["flex items-center gap-4 text-xs leading-6 text-zinc-400", @class]}>
       <input type="hidden" name={@name} value="false" />
       <input
         type="checkbox"

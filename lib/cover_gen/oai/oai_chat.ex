@@ -119,10 +119,6 @@ You come up with prompts to feed to diffusion models, select artists in prompts 
       %{role: "user", content: "
 Pick words that are relevant both to user prompt and the style chosen, pick two artists where possible and answer only with the prompt and only in English
 
-If user supplies the string `cjw` - add it before the main object of the prompt and convert it to close up portrait where possible
-
-If user describes two persons - use the words `cjw couple`
-
 A good prompt needs to be detailed and specific. A good process is to look through a list of keyword categories and decide whether you want to use any of them.
 
 The keyword categories are
@@ -138,10 +134,10 @@ The keyword categories are
     Lighting
 
 
-A a young woman with red hair, a powerful mysterious sorceress, casting lightning magic => Digital painting cjw
+A a young woman with red hair, a powerful mysterious sorceress, casting lightning magic => Digital painting
     "},
       %{role: "assistant", content: "
-A cjw close up portrait of a young woman with red hair, a powerful mysterious sorceress, casting lightning magic, detailed clothing, digital painting, hyperrealistic, fantasy, Surrealist, full body, by Stanley Artgerm Lau and Alphonse Mucha, artstation, highly detailed, sharp focus, sci-fi, stunningly beautiful, dystopian, iridescent gold, cinematic lighting, dark
+A young woman with red hair, a powerful mysterious sorceress, casting lightning magic, detailed clothing, digital painting, hyperrealistic, fantasy, Surrealist, full body, by Stanley Artgerm Lau and Alphonse Mucha, artstation, highly detailed, sharp focus, sci-fi, stunningly beautiful, dystopian, iridescent gold, cinematic lighting, dark
      "},
       %{role: "user", content: "
 Магический кабинет с зельями, артефактами, склянками, книгами, черным котом => Flat Illustration
@@ -150,16 +146,16 @@ A cjw close up portrait of a young woman with red hair, a powerful mysterious so
 A magical cabinet, filled with various bottles, potions, books, and a curious black cat, flat illustration, minimalistic, modern design, by Mary Blair and Charley Harper, behance, clean lines, simple shapes, vibrant colors, whimsical, playful, mysterious, well-organized, limited color palette, soft lighting, slightly abstract
      "},
       %{role: "user", content: "
-a red-haired young lady noblewoman in the palace of the Russian Empire at the beginning of the 19th century => Oil on canvas cjw
+A red-haired young lady noblewoman in the palace of the Russian Empire at the beginning of the 19th century => Oil on canvas
     "},
       %{role: "assistant", content: "
-A cjw close up portrait of red-haired young lady noblewoman, elegantly dressed, standing in the grand palace of the Russian Empire at the beginning of the 19th century, oil on canvas, exquisite detail, historical, Romanticism, by Ilya Repin and Ivan Aivazovsky, fineartamerica, full-length portrait, sumptuous interior, luxurious fabrics, intricate patterns, rich colors, dramatic lighting, regal bearing
+A red-haired young lady noblewoman, elegantly dressed, standing in the grand palace of the Russian Empire at the beginning of the 19th century, oil on canvas, exquisite detail, historical, Romanticism, by Ilya Repin and Ivan Aivazovsky, fineartamerica, full-length portrait, sumptuous interior, luxurious fabrics, intricate patterns, rich colors, dramatic lighting, regal bearing
      "},
       %{role: "user", content: "
-Девушка с каштановыми волсами и сером платье на коленях стоит в пещере. Рядом с ней мужчина злой маг в черном плаще и красными глазами. => Digital art cjw
+Девушка с каштановыми волсами и сером платье на коленях стоит в пещере. Рядом с ней мужчина злой маг в черном плаще и красными глазами. => Digital art
     "},
       %{role: "assistant", content: "
-A cjw close up portrait of a couple, girl with chestnut hair, wearing a knee-length gray dress, standing in a dimly lit cave, accompanied by a sinister male sorcerer in a black cloak and red eyes, digital art, fantasy, dark atmosphere, by H.R. Giger and Gerald Brom, artstation, contrasting characters, detailed textures, tension-filled, cold color scheme, eerie lighting, ominous presence
+A girl with chestnut hair, wearing a knee-length gray dress, standing in a dimly lit cave, accompanied by a sinister male sorcerer in a black cloak and red eyes, digital art, fantasy, dark atmosphere, by H.R. Giger and Gerald Brom, artstation, contrasting characters, detailed textures, tension-filled, cold color scheme, eerie lighting, ominous presence
      "},
       %{role: "user", content: "
 писатель - родственник дьявола. один желает получить душу, другой жаждет внимания. и неизвестно, чья одержимость сильнее => Arcane (League of Legends)
@@ -179,8 +175,6 @@ A man standing with a shadow of a demon with horns, digital art, inspired by Lea
       Adjust the artists if user is looking for style changes
 
       If the user asks to emphasize something or says he doesn't get it in the image - rearrange your response putting the desired object at the start of the sentence 
-
-      If user supplies the string `cjw` - add it before the main object of the prompt
 
       If the user says something that doesen't make sense - ignore it and return the prompt without changes, answer only with the prompt and only in English
 

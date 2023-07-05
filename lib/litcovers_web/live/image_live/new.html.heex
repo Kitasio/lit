@@ -124,26 +124,6 @@
         </div>
 
         <div>
-          <h2 class="mt-3 text-lg text-zinc-200"><%= gettext("AI model") %></h2>
-          <div class="flex gap-3 mt-3">
-            <div :for={model <- @models} :if={model.enabled}>
-              <div
-                class={
-                  if @selected_model.name == model.name do
-                    "text-center px-4 py-2.5 cursor-pointer rounded-xl border-2 border-accent-main bg-tag-main hover:border-accent-main transition"
-                  else
-                    "text-center px-4 py-2.5 cursor-pointer rounded-xl border-2 border-stroke-main bg-tag-main hover:border-accent-main transition"
-                  end
-                }
-                phx-click="select-model"
-                phx-value-model={model.name}
-              >
-                <p><%= model.label %></p>
-              </div>
-            </div>
-          </div>
-          <p class="mt-2 text-xs text-zinc-400"><%= @selected_model.description %></p>
-
           <h2 class="mt-8 text-lg text-zinc-200"><%= gettext("Styles") %></h2>
           <div class="mt-2 gap-5 grid grid-cols-3 sm:grid-cols-4">
             <div

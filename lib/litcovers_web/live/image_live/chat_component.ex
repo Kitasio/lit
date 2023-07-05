@@ -15,12 +15,14 @@ defmodule LitcoversWeb.ImageLive.ChatComponent do
       <.simple_form :let={f} for={@form} phx-target={@myself} phx-change="validate" phx-submit="save">
         <.input
           field={{f, :preserve_composition}}
+          class="hidden"
           type="checkbox"
           label={gettext("Preserve composition")}
           id={"comp-#{@image_id}-checkbox"}
         />
         <.input
           field={{f, :is_negative_prompt}}
+          class="hidden"
           type="checkbox"
           label={
             gettext("Deletion, check if you are removing something, instead of adding or changing")

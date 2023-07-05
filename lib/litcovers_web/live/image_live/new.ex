@@ -1,7 +1,5 @@
 defmodule LitcoversWeb.ImageLive.New do
-  alias CoverGen.Replicate.Input
   alias Litcovers.Accounts.Feedback
-  alias Litcovers.Accounts
   alias CoverGen.Replicate
   alias Litcovers.Payments.Yookassa
   alias Litcovers.Payments
@@ -104,17 +102,7 @@ defmodule LitcoversWeb.ImageLive.New do
 
     unless socket.assigns.current_user.is_generating or socket.assigns.current_user.relaxed_mode or
              image.final_prompt == nil do
-      model_params = Replicate.Model.new(image.model_name)
-
-      model_params =
-        update_in(model_params.input, fn _input ->
-          %CoverGen.Replicate.Input{
-            width: image.width,
-            height: image.height,
-            prompt: image.final_prompt,
-            negative_prompt: image.negative_prompt || Input.universal_neg_prompt()
-          }
-        end)
+      model_params = CoverGen.Dreamstudio.Model.get_params(image.final_prompt, image.width, image.height)
 
       image_params = %{
         description: image.description,
@@ -124,7 +112,7 @@ defmodule LitcoversWeb.ImageLive.New do
         final_prompt: image.final_prompt,
         parent_image_id: image.id,
         model_name: image.model_name,
-        negative_prompt: image.negative_prompt || Input.universal_neg_prompt()
+        negative_prompt: ""
       }
 
       {:ok, new_image} = Media.create_image(socket.assigns.current_user, image_params)
@@ -133,7 +121,7 @@ defmodule LitcoversWeb.ImageLive.New do
         Metadata.create_chat(new_image, %{content: chat.content, role: chat.role})
       end
 
-      CoverGen.create_new(image: new_image, params: model_params, stage: :sd_request)
+      CoverGen.create_new(image: new_image, params: model_params, stage: :sdxl_request)
 
       for i <- image.ideas do
         Media.create_idea(new_image, %{idea: i.idea})
@@ -155,8 +143,8 @@ defmodule LitcoversWeb.ImageLive.New do
 
   defp apply_action(socket, :correct, params) do
     message = Map.get(params, "message")
-    composition = Map.get(params, "composition") |> String.to_atom()
-    negative = Map.get(params, "negative") |> String.to_atom()
+    # composition = Map.get(params, "composition") |> String.to_atom()
+    # negative = Map.get(params, "negative") |> String.to_atom()
     image_id = Map.get(params, "image_id")
     image = Media.get_image_preload_all!(image_id)
 
@@ -178,14 +166,16 @@ defmodule LitcoversWeb.ImageLive.New do
         Metadata.create_chat(new_image, %{content: chat.content, role: chat.role})
       end
 
-      composition_image =
-        if composition do
-          image.url
-        else
-          nil
-        end
+      # composition_image =
+      #   if composition do
+      #     image.url
+      #   else
+      #     nil
+      #   end
+      composition_image = nil
 
-      stage = if negative, do: :oai_negative, else: :oai_chat
+      # stage = if negative, do: :oai_negative, else: :oai_chat
+      stage = :oai_chat_sdxl
 
       CoverGen.create_new(
         image: new_image,
@@ -332,7 +322,7 @@ defmodule LitcoversWeb.ImageLive.New do
           description = Map.get(image_params, "description")
           style = Map.get(image_params, "style")
           message = "#{description} => #{style} #{cjw_model(model_name)}"
-          CoverGen.create_new(image: image, message: message, stage: :oai_chat_create)
+          CoverGen.create_new(image: image, message: message, stage: :oai_chat_create_sdxl)
 
           socket = socket |> assign(image: image, is_generating: true, gen_error: nil)
 
