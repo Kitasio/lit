@@ -128,7 +128,7 @@
           <div class="mt-2 gap-5 grid grid-cols-3 sm:grid-cols-4">
             <div
               :for={style <- @styles}
-              phx-click={JS.push("select-style", value: %{style: style.name})}
+              phx-click={JS.push("select-style", value: %{style: style.name, style_preset: style.preset})}
             >
               <div class={
                 if @style == style.name do
@@ -161,6 +161,7 @@
 
         <div>
           <.input field={{f, :character_gender}} value={@gender} type="hidden" />
+          <.input field={{f, :style_preset}} value={@style_preset} type="hidden" />
           <.input field={{f, :style}} value={@style} type="hidden" />
           <.input field={{f, :width}} value={@width} type="hidden" />
           <.input field={{f, :height}} value={@height} type="hidden" />

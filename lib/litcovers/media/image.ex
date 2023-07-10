@@ -17,6 +17,7 @@ defmodule Litcovers.Media.Image do
     field :final_prompt, :string
     field :parent_image_id, :integer, default: nil
     field :negative_prompt, :string
+    field :style_preset, :string
 
     belongs_to :user, Litcovers.Accounts.User
     belongs_to :prompt, Litcovers.Metadata.Prompt
@@ -45,7 +46,8 @@ defmodule Litcovers.Media.Image do
       :lit_ai,
       :final_prompt,
       :parent_image_id,
-      :negative_prompt
+      :negative_prompt,
+      :style_preset
     ])
     |> validate_required([
       :description,

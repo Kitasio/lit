@@ -53,6 +53,7 @@ defmodule LitcoversWeb.ImageLive.New do
        current_tut: nil,
        user_tuts: Metadata.list_user_tutorials(socket.assigns.current_user),
        style: nil,
+       style_preset: nil,
        styles: Metadata.Style.list_all()
      )}
   end
@@ -102,7 +103,7 @@ defmodule LitcoversWeb.ImageLive.New do
 
     unless socket.assigns.current_user.is_generating or socket.assigns.current_user.relaxed_mode or
              image.final_prompt == nil do
-      model_params = CoverGen.Dreamstudio.Model.get_params(image.final_prompt, image.width, image.height)
+      model_params = CoverGen.Dreamstudio.Model.get_params(image.final_prompt, image.width, image.height, image.style_preset)
 
       image_params = %{
         description: image.description,
@@ -316,6 +317,7 @@ defmodule LitcoversWeb.ImageLive.New do
     unless socket.assigns.current_user.is_generating or socket.assigns.current_user.relaxed_mode do
       model_name = socket.assigns.selected_model.name
       image_params = %{image_params | "model_name" => model_name}
+      image_params = %{image_params | "style_preset" => socket.assigns.style_preset}
 
       case Media.create_image(socket.assigns.current_user, image_params) do
         {:ok, image} ->
@@ -372,8 +374,8 @@ defmodule LitcoversWeb.ImageLive.New do
     {:noreply, socket}
   end
 
-  def handle_event("select-style", %{"style" => style}, socket) do
-    socket = assign(socket, style: style)
+  def handle_event("select-style", %{"style" => style, "style_preset" => style_preset}, socket) do
+    socket = assign(socket, style: style, style_preset: style_preset)
     {:noreply, socket}
   end
 

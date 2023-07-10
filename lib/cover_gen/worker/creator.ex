@@ -60,8 +60,10 @@ defmodule CoverGen.Worker.Creator do
       CoverGen.Dreamstudio.Model.get_params(
         oai_res.content,
         state.image.width,
-        state.image.height
+        state.image.height,
+        state.image.style_preset
       )
+
     Logger.info("params: #{inspect(params)}")
 
     # Updating the state
@@ -117,7 +119,6 @@ defmodule CoverGen.Worker.Creator do
     {:noreply, new_state, {:continue, :run}}
   end
 
-
   def handle_info(:oai_chat_sdxl, state) do
     # get image chats
     chats = Metadata.list_image_chats(state.image)
@@ -139,7 +140,14 @@ defmodule CoverGen.Worker.Creator do
 
     save_final_prompt(state.image, oai_res.content)
 
-    params = CoverGen.Dreamstudio.Model.get_params(oai_res.content, state.image.width, state.image.height)
+    params =
+      CoverGen.Dreamstudio.Model.get_params(
+        oai_res.content,
+        state.image.width,
+        state.image.height,
+        state.image.style_preset
+      )
+    Logger.info("params: #{inspect(params)}")
 
     # Updating the state
     new_state = %{state | params: params, stage: :sdxl_request}

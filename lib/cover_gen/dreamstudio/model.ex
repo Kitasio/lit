@@ -34,7 +34,7 @@ defmodule CoverGen.Dreamstudio.Model do
     end
   end
 
-  def get_params(prompt, width, height) do
+  def get_params(prompt, width, height, style_preset) do
     %{
       text_prompts: [
         %{
@@ -47,6 +47,7 @@ defmodule CoverGen.Dreamstudio.Model do
       width: width,
       samples: 1,
       steps: 20..40 |> Enum.random(),
+      style_preset: style_preset,
     }
   end
 end
