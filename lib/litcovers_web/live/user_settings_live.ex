@@ -17,7 +17,7 @@ defmodule LitcoversWeb.UserSettingsLive do
         changeEmail: false,
         changePassword: false
       }"
-      class="bg-main my-10 rounded-xl px-7 w-96 max-w-md mx-auto"
+      class="bg-main my-10 rounded-xl w-full px-7 max-w-screen-sm mx-auto"
     >
       <.simple_form
         :let={f}
@@ -46,7 +46,7 @@ defmodule LitcoversWeb.UserSettingsLive do
         </:actions>
       </.simple_form>
 
-      <.header class="mt-5"><%= gettext("Change Password") %></.header>
+      <.header class="mt-10"><%= gettext("Change Password") %></.header>
 
       <.simple_form
         :let={f}
@@ -83,6 +83,13 @@ defmodule LitcoversWeb.UserSettingsLive do
           <.button phx-disable-with="Changing..."><%= gettext("Change Password") %></.button>
         </:actions>
       </.simple_form>
+
+      <.header class="mt-10"><%= gettext("API Tokens") %></.header>
+      <div class="my-5 w-full flex flex-col items-start">
+        <.button phx-click="create_user_api_token" phx-disable-with="Creating..."><%= gettext("Create API Token") %></.button>
+        <pre class="mt-5"><%= @api_token %></pre>
+      </div>
+
       <div class="my-10 w-full flex justify-center">
         <.link href={~p"/#{@locale}/users/log_out"} method="delete">
           <%= gettext("Log out") %>
@@ -120,8 +127,14 @@ defmodule LitcoversWeb.UserSettingsLive do
       |> assign(:password_changeset, Accounts.change_user_password(user))
       |> assign(:trigger_submit, false)
       |> assign(:locale, locale)
+      |> assign(:api_token, nil)
 
     {:ok, socket}
+  end
+
+  def handle_event("create_user_api_token", _params, socket) do
+    socket = assign(socket, api_token: Accounts.create_user_api_token(socket.assigns.current_user))
+    {:noreply, socket}
   end
 
   def handle_event("validate_email", params, socket) do
