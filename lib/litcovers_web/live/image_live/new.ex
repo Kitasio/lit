@@ -103,7 +103,7 @@ defmodule LitcoversWeb.ImageLive.New do
 
     unless socket.assigns.current_user.is_generating or socket.assigns.current_user.relaxed_mode or
              image.final_prompt == nil do
-      model_params = CoverGen.Dreamstudio.Model.get_params(image.final_prompt, image.width, image.height, image.style_preset)
+      model_params = CoverGen.Dreamstudio.Model.get_params(image.final_prompt, image.width, image.height)
 
       image_params = %{
         description: image.description,

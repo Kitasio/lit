@@ -34,20 +34,31 @@ defmodule CoverGen.Dreamstudio.Model do
     end
   end
 
-  def get_params(prompt, width, height, style_preset) do
+  def get_params(prompt, width, height, model \\ "sd3") do
     %{
-      text_prompts: [
-        %{
-          text: prompt
-        }
-      ],
-      cfg_scale: 3..7 |> Enum.random(),
-      clip_guidance_preset: "FAST_BLUE",
-      height: height,
-      width: width,
-      samples: 1,
-      steps: 20..40 |> Enum.random(),
-      style_preset: style_preset,
+      "prompt" => prompt,
+      "model" => model,
+      "aspect_ratio" => calculate_aspect_ratio(width, height),
     }
   end
+
+  defp gcd(a, b) when b == 0, do: a
+  defp gcd(a, b), do: gcd(b, rem(a, b))
+
+  # Function to calculate the aspect ratio
+  defp calculate_aspect_ratio(width, height) do
+    gcd_value = gcd(width, height)
+    aspect_ratio_width = div(width, gcd_value)
+    aspect_ratio_height = div(height, gcd_value)
+    valid_or_default_ar("#{aspect_ratio_width}:#{aspect_ratio_height}")
+  end
+
+  defp valid_or_default_ar("16:9"), do: "16:9"
+  defp valid_or_default_ar("1:1"), do: "1:1"
+  defp valid_or_default_ar("3:2"), do: "3:2"
+  defp valid_or_default_ar("4:5"), do: "4:5"
+  defp valid_or_default_ar("5:4"), do: "5:4"
+  defp valid_or_default_ar("9:16"), do: "9:16"
+  defp valid_or_default_ar("9:21"), do: "9:21"
+  defp valid_or_default_ar(_), do: "2:3"
 end

@@ -37,7 +37,7 @@ defmodule LitcoversWeb.V1.ImageController do
 
       conn
       |> put_status(:created)
-      |> put_resp_header("location", ~p"/api/v1/generations/#{updated_image}")
+      |> put_resp_header("location", ~p"/api/v1/images/#{updated_image}")
       |> render(:show, image: updated_image)
     end
   end
@@ -51,19 +51,17 @@ defmodule LitcoversWeb.V1.ImageController do
     IO.inspect(res["content"], label: "updating final_prompt with OAI res content")
     {:ok, image} = Media.update_image(image, %{final_prompt: res["content"]})
 
-    # TODO: params
-    # params =
-    #   CoverGen.Dreamstudio.Model.get_params(
-    #     res["content"],
-    #     image.width,
-    #     image.height,
-    #     image.style_preset
-    #   )
-    # IO.inspect(params, label: "Dreamstudio params")
+    params =
+      CoverGen.Dreamstudio.Model.get_params(
+        res["content"],
+        image.width,
+        image.height
+      )
+    IO.inspect(params, label: "Dreamstudio params")
 
     {:ok, image_bytes} =
       CoverGen.Dreamstudio.Model.diffuse(
-        %{"prompt" => res["content"], "model" => "sd3", "aspect_ratio" => "2:3"},
+        params,
         System.get_env("DREAMSTUDIO_TOKEN")
       )
     image_url = Spaces.save_bytes(image_bytes)
