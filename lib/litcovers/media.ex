@@ -272,6 +272,12 @@ defmodule Litcovers.Media do
   """
   def get_image!(id), do: Repo.get!(Image, id)
 
+  def get_user_image!(%Accounts.User{} = user, id) do
+    Image
+    |> user_images_query(user)
+    |> Repo.get!(id)
+  end
+
   def get_image_preload_ideas!(id) do
     Image
     |> Repo.get!(id)

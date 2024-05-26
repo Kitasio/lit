@@ -3,19 +3,18 @@ defmodule LitcoversWeb.V1.ImageController do
   alias CoverGen.OAIChat
   alias Litcovers.Repo
   alias Litcovers.Media.Image
-  alias Litcovers.Accounts
   alias Litcovers.Media
   use LitcoversWeb, :controller
 
   action_fallback LitcoversWeb.FallbackController
 
   def index(conn, _params) do
-    images = Media.list_images()
+    images = Media.list_user_images(conn.assigns[:current_user])
     render(conn, :index, images: images)
   end
 
   def show(conn, %{"id" => id}) do
-    image = Media.get_image!(id)
+    image = Media.get_user_image!(conn.assigns[:current_user], id)
     render(conn, :show, image: image)
   end
 
