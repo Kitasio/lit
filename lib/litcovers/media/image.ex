@@ -18,6 +18,7 @@ defmodule Litcovers.Media.Image do
     field :parent_image_id, :integer, default: nil
     field :negative_prompt, :string
     field :style_preset, :string
+    field :aspect_ratio, :string
 
     belongs_to :user, Litcovers.Accounts.User
     belongs_to :prompt, Litcovers.Metadata.Prompt
@@ -47,15 +48,27 @@ defmodule Litcovers.Media.Image do
       :final_prompt,
       :parent_image_id,
       :negative_prompt,
-      :style_preset
+      :style_preset,
+      :aspect_ratio
     ])
     |> validate_required([
-      :description,
-      :width,
-      :height,
-      :character_gender
+      :description
     ])
     |> validate_length(:description, max: 600)
+    |> validate_length(:style_preset, max: 50)
+    |> validate_inclusion(:aspect_ratio, ["16:9", "1:1", "21:9", "2:3", "3:2", "4:5", "5:4", "9:16", "9:21"])
+  end
+
+  def api_changeset(image, attrs) do
+    image
+    |> cast(attrs, [:description, :style_preset, :model_name, :aspect_ratio])
+    |> validate_required([
+      :description,
+      :style_preset
+    ])
+    |> validate_length(:description, max: 600)
+    |> validate_length(:style_preset, max: 50)
+    |> validate_inclusion(:aspect_ratio, ["16:9", "1:1", "21:9", "2:3", "3:2", "4:5", "5:4", "9:16", "9:21"])
   end
 
   def ai_changeset(image, attrs) do

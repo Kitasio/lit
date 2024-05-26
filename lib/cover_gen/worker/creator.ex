@@ -60,7 +60,8 @@ defmodule CoverGen.Worker.Creator do
       CoverGen.Dreamstudio.Model.get_params(
         oai_res.content,
         state.image.width,
-        state.image.height
+        state.image.height,
+        "sd3"
       )
 
     Logger.info("params: #{inspect(params)}")
@@ -143,7 +144,8 @@ defmodule CoverGen.Worker.Creator do
       CoverGen.Dreamstudio.Model.get_params(
         oai_res.content,
         state.image.width,
-        state.image.height
+        state.image.height,
+        "sd3"
       )
     Logger.info("params: #{inspect(params)}")
 

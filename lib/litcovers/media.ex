@@ -329,6 +329,13 @@ defmodule Litcovers.Media do
     |> Repo.insert()
   end
 
+  def create_image_from_api(%Accounts.User{} = user, attrs) do
+    %Image{}
+    |> Image.api_changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:user, user)
+    |> Repo.insert()
+  end
+
   @doc """
   Updates a image.
 

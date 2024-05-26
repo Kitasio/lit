@@ -22,16 +22,13 @@ defmodule LitcoversWeb.V1.ImageController do
     IO.inspect(request_params, label: "request_params")
     image_params = %{
       description: request_params["prompt"],
-      width: request_params["width"],
-      height: request_params["height"],
-      character_gender: "female",
-      final_prompt: "",
-      model_name: "stable-diffusion",
-      negative_prompt: ""
+      style_preset: request_params["style"],
+      model_name: request_params["model"] || "sd3",
+      aspect_ratio: request_params["aspect_ratio"] || "2:3"
     }
     IO.inspect(image_params, label: "image_params")
-    with {:ok, %Image{} = image} <- Media.create_image(conn.assigns[:current_user], image_params) do
-      updated_image = generate_image(image, request_params["style"])
+    with {:ok, %Image{} = image} <- Media.create_image_from_api(conn.assigns[:current_user], image_params) do
+      updated_image = generate_image(image)
 
       conn
       |> put_status(:created)
@@ -40,8 +37,8 @@ defmodule LitcoversWeb.V1.ImageController do
     end
   end
 
-  defp generate_image(%Image{} = image, style) do
-    message = "#{image.description} => #{style}"
+  defp generate_image(%Image{} = image) do
+    message = "#{image.description} => #{image.style_preset}"
     messages = [%{role: "user", content: message}]
     {:ok, res} = OAIChat.send(messages, System.get_env("OAI_TOKEN"), :creation)
     IO.inspect(res, label: "OAI res")
@@ -52,8 +49,8 @@ defmodule LitcoversWeb.V1.ImageController do
     params =
       CoverGen.Dreamstudio.Model.get_params(
         res["content"],
-        image.width,
-        image.height
+        image.aspect_ratio,
+        image.model_name
       )
     IO.inspect(params, label: "Dreamstudio params")
 

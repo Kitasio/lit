@@ -34,7 +34,15 @@ defmodule CoverGen.Dreamstudio.Model do
     end
   end
 
-  def get_params(prompt, width, height, model \\ "sd3") do
+  def get_params(prompt, aspect_ratio, model) do
+    %{
+      "prompt" => prompt,
+      "model" => model,
+      "aspect_ratio" => aspect_ratio,
+    }
+  end
+
+  def get_params(prompt, width, height, model) do
     %{
       "prompt" => prompt,
       "model" => model,
