@@ -419,12 +419,12 @@ defmodule CoverGen.Worker.Creator do
   defp image_field(_model_name), do: :init_image
 
   defp select_gpt_model([]) do
-    "gpt-4"
+    "gpt-4o"
   end
 
   defp select_gpt_model(chat_list) when is_list(chat_list) do
     if Enum.count(chat_list) < 4 do
-      "gpt-4"
+      "gpt-4o"
     else
       "gpt-3.5-turbo"
     end
