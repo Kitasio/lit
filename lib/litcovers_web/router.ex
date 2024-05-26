@@ -28,6 +28,17 @@ defmodule LitcoversWeb.Router do
     plug :accepts, ["json"]
   end
 
+  # API
+  scope "/api", LitcoversWeb do
+    pipe_through :api
+
+    scope "/v1", V1, as: :v1 do
+      post "/images", ImageController, :create
+      get "/images", ImageController, :index
+      get "/images/:id", ImageController, :show
+    end
+  end
+
   # Admin dashboard
   scope "/en/admin" do
     pipe_through [:browser, :require_authenticated_admin]
