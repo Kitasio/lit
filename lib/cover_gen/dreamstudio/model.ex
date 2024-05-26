@@ -2,32 +2,32 @@ defmodule CoverGen.Dreamstudio.Model do
   alias HTTPoison.Response
   require Elixir.Logger
 
+  @endpoint "https://api.stability.ai/v2beta/stable-image/generate/sd3"
+
   # Returns a list of image links
   def diffuse(_params, nil),
     do:
       raise("DREAMSTUDIO_TOKEN was not set\nVisit https://beta.dreamstudio.ai/account to get it")
 
   def diffuse(params, dreamstudio_token) do
-    body = Jason.encode!(params)
+    params = Map.put(params, "output_format", "jpeg")
 
     headers = [
-      Authorization: "Bearer #{dreamstudio_token}",
-      "Content-Type": "application/json",
-      Accept: "image/png"
+      {"Accept", "image/*"},
+      {"Authorization", "Bearer #{dreamstudio_token}"}
     ]
 
     options = [timeout: 50_000, recv_timeout: 165_000]
 
-    endpoint =
-      "https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v0-9/text-to-image"
-
     Logger.info("Generating image")
 
-    case HTTPoison.post(endpoint, body, headers, options) do
+    body = {:multipart, Map.to_list(params)}
+
+    case HTTPoison.post(@endpoint, body, headers, options) do
       {:ok, response} ->
         %Response{body: image_bytes} = response
         {:ok, image_bytes}
-
+    
       {:error, reason} ->
         Logger.error("Post request to replicate failed: #{inspect(reason)}")
         {:error, :sdxl_failed, "failed post request"}
