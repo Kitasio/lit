@@ -31,8 +31,7 @@ defmodule LitcoversWeb.V1.ImageController do
       negative_prompt: ""
     }
     IO.inspect(image_params, label: "image_params")
-    user = Accounts.get_user!(2)
-    with {:ok, %Image{} = image} <- Media.create_image(user, image_params) do
+    with {:ok, %Image{} = image} <- Media.create_image(conn.assigns[:current_user], image_params) do
       updated_image = generate_image(image, request_params["style"])
 
       conn
