@@ -147,6 +147,7 @@ defmodule CoverGen.Worker.Creator do
         state.image.height,
         "sd3"
       )
+
     Logger.info("params: #{inspect(params)}")
 
     # Updating the state
@@ -254,7 +255,7 @@ defmodule CoverGen.Worker.Creator do
   end
 
   def handle_info(:spaces_save_bytes_request, state) do
-    image_url = Spaces.save_bytes(state.image_bytes)
+    {:ok, image_url} = Spaces.save_bytes(state.image_bytes)
     image_params = %{url: image_url, completed: true}
     ai_update_image(state.image, image_params)
     {:ok, user} = release_user(state.image.user_id)

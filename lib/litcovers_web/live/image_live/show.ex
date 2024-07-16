@@ -111,7 +111,7 @@ defmodule LitcoversWeb.ImageLive.Show do
       |> List.last()
       |> Base.decode64!()
 
-    img_url = CoverGen.Spaces.save_bytes(image_bytes)
+    {:ok, img_url} = CoverGen.Spaces.save_bytes(image_bytes)
     params = %{url: img_url}
 
     case Media.create_cover(socket.assigns.image, socket.assigns.current_user, params) do

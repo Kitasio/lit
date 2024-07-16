@@ -29,8 +29,15 @@ defmodule CoverGen.Spaces do
     bucket = Application.get_env(:litcovers, :bucket)
     filename = "#{Ecto.UUID.generate()}.png"
 
-    ExAws.S3.put_object(bucket, filename, image_bytes) |> ExAws.request!()
-    Path.join(imagekit_url, filename)
+    case ExAws.S3.put_object(bucket, filename, image_bytes) |> ExAws.request() do
+      {:ok, _} ->
+        image_url = Path.join(imagekit_url, filename)
+        {:ok, image_url}
+
+      {:error, reason} ->
+        Logger.error(reason, label: "S3 error")
+        {:error, reason}
+    end
   end
 
   def delete_object(url) do
