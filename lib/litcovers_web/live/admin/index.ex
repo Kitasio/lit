@@ -12,14 +12,14 @@ defmodule LitcoversWeb.AdminLive.Index do
   @impl true
   def handle_event("add-litcoin", %{"id" => id}, socket) do
     user = Accounts.get_user!(id)
-    Accounts.add_litcoins(user, 1)
+    Accounts.add_litcoins(user, 10)
     {:noreply, assign(socket, users: Accounts.list_regular_users())}
   end
 
   @impl true
   def handle_event("remove-litcoin", %{"id" => id}, socket) do
     user = Accounts.get_user!(id)
-    Accounts.remove_litcoins(user, 1)
+    Accounts.remove_litcoins(user, 10)
     {:noreply, assign(socket, users: Accounts.list_regular_users())}
   end
 
