@@ -1,5 +1,6 @@
 defmodule LitcoversWeb.V1.AccountJSON do
   alias Litcovers.Accounts.User
+  alias CoverGen.Models
 
   @doc """
   Renders an account.
@@ -11,8 +12,8 @@ defmodule LitcoversWeb.V1.AccountJSON do
   defp data(%User{} = user) do
     %{
       email: user.email,
-      id: user.id,
       litcoins: user.litcoins,
+      models: Models.all_with_price(user)
     }
   end
 end
