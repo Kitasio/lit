@@ -1,13 +1,5 @@
 <div class="pt-10 max-w-screen-xl mx-auto">
   <div class="space-y-3 justify-start items-start flex flex-col">
-    <button phx-click={JS.push("toggle-dripping_machine")}>
-      <%= if @drip_machine do %>
-        Stop Dripping
-      <% else %>
-        Start Dripping
-      <% end %>
-    </button>
-
     <button>
       <.link navigate={~p"/en/admin/dashboard"}>Dashboard</.link>
     </button>
