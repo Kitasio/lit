@@ -87,7 +87,7 @@ defmodule Litcovers.Payments.Yookassa.Helpers do
         :pending
 
       unknown ->
-        Logger.warn("Transaction #{transaction.id} has #{unknown} status")
+        Logger.warning("Transaction #{transaction.id} has #{unknown} status")
         :unknown
     end
   end
