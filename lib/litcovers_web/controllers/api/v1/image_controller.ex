@@ -1,10 +1,13 @@
 defmodule LitcoversWeb.V1.ImageController do
+  alias Litcovers.Accounts
   alias CoverGen.Spaces
   alias CoverGen.OAIChat
   alias Litcovers.Repo
   alias Litcovers.Media.Image
   alias Litcovers.Media
   use LitcoversWeb, :controller
+
+  require Logger
 
   action_fallback LitcoversWeb.FallbackController
 
@@ -29,11 +32,9 @@ defmodule LitcoversWeb.V1.ImageController do
       |> render(:"402")
     end
 
-    IO.inspect(request_params, label: "request_params")
-
     image_params = %{
       description: request_params["description"],
-      style_preset: request_params["style_preset"],
+      style_preset: request_params["style_preset"] || "photographic",
       model_name: model_name,
       aspect_ratio: request_params["aspect_ratio"] || "2:3"
     }
@@ -44,6 +45,9 @@ defmodule LitcoversWeb.V1.ImageController do
            Media.create_image_from_api(conn.assigns[:current_user], image_params) do
       case generate_image(image) do
         {:ok, updated_image} ->
+          Logger.info("removing #{floor(price_for_model)} litcoins")
+          Accounts.remove_litcoins(conn.assigns[:current_user], floor(price_for_model))
+
           conn
           |> put_status(:created)
           |> put_resp_header("location", ~p"/api/v1/images/#{updated_image}")
@@ -63,7 +67,8 @@ defmodule LitcoversWeb.V1.ImageController do
            CoverGen.Dreamstudio.Model.get_params(
              res["content"],
              image.aspect_ratio,
-             image.model_name
+             image.model_name,
+             image.style_preset
            ),
          _ <- IO.inspect(params, label: "Dreamstudio params"),
          {:ok, image_bytes} <-
