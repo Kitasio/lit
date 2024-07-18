@@ -61,7 +61,8 @@ defmodule CoverGen.Worker.Creator do
         oai_res.content,
         state.image.width,
         state.image.height,
-        "sd3"
+        "sd3",
+        state.image.style_preset
       )
 
     Logger.info("params: #{inspect(params)}")
@@ -145,7 +146,8 @@ defmodule CoverGen.Worker.Creator do
         oai_res.content,
         state.image.width,
         state.image.height,
-        "sd3"
+        "sd3",
+        state.image.style_preset
       )
 
     Logger.info("params: #{inspect(params)}")
