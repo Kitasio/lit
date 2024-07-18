@@ -16,46 +16,54 @@ defmodule LitcoversWeb.ImageLive.New do
 
   @impl true
   def mount(%{"locale" => locale}, _session, socket) do
-    if connected?(socket), do: CoverGen.Worker.Creator.subscribe(socket.assigns.current_user.id)
-    Gettext.put_locale(locale)
+    # NOTE: Temporary hack to not let free generations
+    if socket.assigns.current_user.litcoins <= 30 do
+      {:ok,
+       socket
+       |> put_flash(:error, gettext("You don't have enough litcoins to generate images"))
+       |> redirect(to: ~p"/en/users/settings")}
+    else
+      if connected?(socket), do: CoverGen.Worker.Creator.subscribe(socket.assigns.current_user.id)
+      Gettext.put_locale(locale)
 
-    check_new_payments(socket, self())
+      check_new_payments(socket, self())
 
-    socket =
-      if socket.assigns.current_user.relaxed_mode do
-        relaxed_mode_releaser(socket.assigns.current_user, self())
+      socket =
+        if socket.assigns.current_user.relaxed_mode do
+          relaxed_mode_releaser(socket.assigns.current_user, self())
 
-        push_event(socket, "init-relaxed-mode-timer", %{
-          id: "relaxed-timer-user-#{socket.assigns.current_user.id}",
-          relaxed_till: relaxed_mode_till(socket.assigns.current_user)
-        })
-      else
-        socket
-      end
+          push_event(socket, "init-relaxed-mode-timer", %{
+            id: "relaxed-timer-user-#{socket.assigns.current_user.id}",
+            relaxed_till: relaxed_mode_till(socket.assigns.current_user)
+          })
+        else
+          socket
+        end
 
-    {:ok,
-     assign(socket,
-       changeset: Media.change_image(%Image{}),
-       locale: locale,
-       lit_ai: false,
-       aspect_ratio: "cover",
-       gender: :female,
-       placeholder: random_placeholder(locale, false),
-       width: 832,
-       height: 1216,
-       image: %Image{},
-       gen_error: nil,
-       is_generating: socket.assigns.current_user.is_generating,
-       has_images: has_images?(socket.assigns.current_user),
-       has_new_images: has_new_images?(socket.assigns.current_user),
-       models: Replicate.Model.list_all(),
-       selected_model: Replicate.Model.list_all() |> List.first(),
-       current_tut: nil,
-       user_tuts: Metadata.list_user_tutorials(socket.assigns.current_user),
-       style: nil,
-       style_preset: nil,
-       styles: Metadata.Style.list_all()
-     )}
+      {:ok,
+       assign(socket,
+         changeset: Media.change_image(%Image{}),
+         locale: locale,
+         lit_ai: false,
+         aspect_ratio: "cover",
+         gender: :female,
+         placeholder: random_placeholder(locale, false),
+         width: 832,
+         height: 1216,
+         image: %Image{},
+         gen_error: nil,
+         is_generating: socket.assigns.current_user.is_generating,
+         has_images: has_images?(socket.assigns.current_user),
+         has_new_images: has_new_images?(socket.assigns.current_user),
+         models: Replicate.Model.list_all(),
+         selected_model: Replicate.Model.list_all() |> List.first(),
+         current_tut: nil,
+         user_tuts: Metadata.list_user_tutorials(socket.assigns.current_user),
+         style: nil,
+         style_preset: nil,
+         styles: Metadata.Style.list_all()
+       )}
+    end
   end
 
   defp tutorials do
