@@ -8,6 +8,12 @@ defmodule Litcovers.Accounts do
 
   alias Litcovers.Accounts.{User, UserToken, UserNotifier}
 
+  def update_discount(%User{} = user, discount) when is_float(discount) do
+    user
+    |> User.discount_changeset(%{discount: discount})
+    |> Repo.update()
+  end
+
   def add_litcoins(%User{} = user, amount) do
     user
     |> User.litcoins_changeset(%{litcoins: user.litcoins + amount})

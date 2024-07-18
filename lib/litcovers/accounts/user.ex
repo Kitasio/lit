@@ -57,6 +57,7 @@ defmodule Litcovers.Accounts.User do
     |> cast(attrs, [:email, :password, :discount, :referer])
     |> validate_email(opts)
     |> validate_password(opts)
+    |> validate_number(:discount, greater_than_or_equal_to: 0.3, less_than_or_equal_to: 1.0)
   end
 
   def admin_registration_changeset(user, attrs, opts \\ []) do
@@ -64,6 +65,12 @@ defmodule Litcovers.Accounts.User do
     |> cast(attrs, [:email, :password, :is_admin])
     |> validate_email(opts)
     |> validate_password(opts)
+  end
+
+  def discount_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:discount])
+    |> validate_number(:discount, greater_than_or_equal_to: 0.3, less_than_or_equal_to: 1.0)
   end
 
   def enabled_changeset(user, attrs) do
