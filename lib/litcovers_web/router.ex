@@ -37,6 +37,7 @@ defmodule LitcoversWeb.Router do
       post "/images", ImageController, :create
       get "/images", ImageController, :index
       get "/images/:id", ImageController, :show
+      get "/accounts", AccountController, :index
     end
   end
 
@@ -58,6 +59,7 @@ defmodule LitcoversWeb.Router do
     pipe_through [:browser, :set_locale]
 
     live "/", PageLive.Index, :index
+    live "/docs", DocsLive.Index
   end
 
   # Authenticated routes
