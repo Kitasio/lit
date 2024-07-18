@@ -103,7 +103,14 @@ defmodule LitcoversWeb.ImageLive.New do
 
     unless socket.assigns.current_user.is_generating or socket.assigns.current_user.relaxed_mode or
              image.final_prompt == nil do
-      model_params = CoverGen.Dreamstudio.Model.get_params(image.final_prompt, image.width, image.height, "sd3")
+      model_params =
+        CoverGen.Dreamstudio.Model.get_params(
+          image.final_prompt,
+          image.width,
+          image.height,
+          "sd3",
+          "photographic"
+        )
 
       image_params = %{
         description: image.description,
@@ -353,7 +360,10 @@ defmodule LitcoversWeb.ImageLive.New do
     toggle = if toggle == "1", do: true, else: false
 
     {:noreply,
-     assign(socket, lit_ai: toggle, placeholder: random_placeholder(socket.assigns.locale, toggle))}
+     assign(socket,
+       lit_ai: toggle,
+       placeholder: random_placeholder(socket.assigns.locale, toggle)
+     )}
   end
 
   def handle_event("toggle-favorite", %{"image_id" => image_id}, socket) do
