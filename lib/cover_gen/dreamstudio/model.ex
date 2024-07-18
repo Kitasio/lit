@@ -2,7 +2,10 @@ defmodule CoverGen.Dreamstudio.Model do
   alias HTTPoison.Response
   require Elixir.Logger
 
-  @endpoint "https://api.stability.ai/v2beta/stable-image/generate/sd3"
+  @sd3_endpoint "https://api.stability.ai/v2beta/stable-image/generate/sd3"
+  @core_endpoint "https://api.stability.ai/v2beta/stable-image/generate/core"
+  @ultra_endpoint "https://api.stability.ai/v2beta/stable-image/generate/ultra"
+  @options [timeout: 50_000, recv_timeout: 165_000]
 
   # Returns a list of image links
   def diffuse(_params, nil),
@@ -10,43 +13,44 @@ defmodule CoverGen.Dreamstudio.Model do
       raise("DREAMSTUDIO_TOKEN was not set\nVisit https://beta.dreamstudio.ai/account to get it")
 
   def diffuse(params, dreamstudio_token) do
-    params = Map.put(params, "output_format", "jpeg")
-
     headers = [
       {"Accept", "image/*"},
       {"Authorization", "Bearer #{dreamstudio_token}"}
     ]
 
-    options = [timeout: 50_000, recv_timeout: 165_000]
-
-    Logger.info("Generating image")
-
     body = {:multipart, Map.to_list(params)}
 
-    case HTTPoison.post(@endpoint, body, headers, options) do
-      {:ok, response} ->
-        %Response{body: image_bytes} = response
-        {:ok, image_bytes}
-    
+    case HTTPoison.post(endpoint(params["model"]), body, headers, @options) do
+      {:ok, %Response{status_code: status_code, body: body}}
+      when status_code in 200..299 ->
+        Logger.info("DREAMSTUDIO Response: #{inspect(body)}")
+        {:ok, body}
+
+      {:ok, %Response{status_code: status_code, body: body}} ->
+        Logger.error("Unexpected status code (#{status_code}): #{inspect(body)}")
+        {:error, "Unexpected status code: #{status_code}"}
+
       {:error, reason} ->
-        Logger.error("Post request to replicate failed: #{inspect(reason)}")
-        {:error, :sdxl_failed, "failed post request"}
+        Logger.error("Post request to dreamstudio failed: #{inspect(reason)}")
+        {:error, "failed post request"}
     end
   end
 
-  def get_params(prompt, aspect_ratio, model) do
+  def get_params(prompt, aspect_ratio, model, style_preset) do
     %{
       "prompt" => prompt,
       "model" => model,
       "aspect_ratio" => aspect_ratio,
+      "style_preset" => style_preset
     }
   end
 
-  def get_params(prompt, width, height, model) do
+  def get_params(prompt, width, height, model, style_preset) do
     %{
       "prompt" => prompt,
       "model" => model,
       "aspect_ratio" => calculate_aspect_ratio(width, height),
+      "style_preset" => style_preset
     }
   end
 
@@ -69,4 +73,8 @@ defmodule CoverGen.Dreamstudio.Model do
   defp valid_or_default_ar("9:16"), do: "9:16"
   defp valid_or_default_ar("9:21"), do: "9:21"
   defp valid_or_default_ar(_), do: "2:3"
+
+  defp endpoint("core"), do: @core_endpoint
+  defp endpoint("ultra"), do: @ultra_endpoint
+  defp endpoint(_model), do: @sd3_endpoint
 end
