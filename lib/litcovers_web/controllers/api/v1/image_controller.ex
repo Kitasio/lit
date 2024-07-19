@@ -23,6 +23,14 @@ defmodule LitcoversWeb.V1.ImageController do
 
   def create(conn, request_params) do
     model_name = request_params["model"] || "sd3"
+
+    if model_name not in CoverGen.Models.all() do
+      conn
+      |> put_status(:bad_request)
+      |> put_view(LitcoversWeb.ErrorJSON)
+      |> render(:"400")
+    end
+
     price_for_model = CoverGen.Models.price(conn.assigns[:current_user], model_name)
 
     if conn.assigns[:current_user].litcoins < price_for_model do
