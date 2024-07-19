@@ -21,10 +21,10 @@ defmodule LitcoversWeb.V1.ImageJSON do
       completed: image.completed,
       url: image.url,
       final_prompt: image.final_prompt,
-      prompt: image.description,
-      style: image.style_preset,
+      description: image.description,
+      style_preset: image.style_preset,
       aspect_ratio: image.aspect_ratio,
-      model: image.model_name
+      model_name: image.model_name
     }
   end
 end
