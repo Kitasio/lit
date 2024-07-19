@@ -1,51 +1,64 @@
-<div>Docs page, locale: <%= @locale %></div>
-    <div class="max-w-4xl mx-auto rounded-lg p-6">
-        <h1 class="text-4xl font-bold mb-4">API Documentation</h1>
-        
-        <!-- API Endpoint -->
-        <section class="my-10">
-            <h2 class="text-2xl font-semibold mb-2">GET /api/v1/images</h2>
-            <p class="text-gray-700 mb-4">Returns all generated images of the user.</p>
-            
-            <!-- Parameters -->
-            <!-- <h3 class="text-xl font-semibold mb-2">Parameters</h3> -->
-            <!-- <table class="table-auto w-full mb-4"> -->
-            <!--     <thead> -->
-            <!--         <tr> -->
-            <!--             <th class="px-4 py-2">Name</th> -->
-            <!--             <th class="px-4 py-2">Type</th> -->
-            <!--             <th class="px-4 py-2">Description</th> -->
-            <!--         </tr> -->
-            <!--     </thead> -->
-            <!--     <tbody> -->
-            <!--         <tr class="bg-gray-100"> -->
-            <!--             <td class="border px-4 py-2">id</td> -->
-            <!--             <td class="border px-4 py-2">string</td> -->
-            <!--             <td class="border px-4 py-2">The unique identifier for the example resource.</td> -->
-            <!--         </tr> -->
-            <!--         <tr> -->
-            <!--             <td class="border px-4 py-2">filter</td> -->
-            <!--             <td class="border px-4 py-2">string (optional)</td> -->
-            <!--             <td class="border px-4 py-2">A filter to apply to the example resource.</td> -->
-            <!--         </tr> -->
-            <!--     </tbody> -->
-            <!-- </table> -->
-            
-            <!-- Example using curl -->
-            <h3 class="text-xl font-semibold mb-2">Example</h3>
-            <div class="bg-neutral-900 text-neutral-100 p-6 rounded-lg">
-              <code
-                  class="text-sm sm:text-base inline-flex text-left items-center space-x-4 bg-gray-800 text-white rounded-lg p-4 pl-6">
-                  <span class="flex gap-4">
-                      <span class="flex-1">
-                          <span>
-                                curl https://litcovers.com/api/v1/images \
-                                <br> -H "Accept: application/json" \
-                                <br> -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
-                          </span>
-                      </span>
+<.navbar
+  locale={@locale}
+  request_path={"/#{@locale}/docs"}
+  current_user={@current_user}
+  show_bottom_links={false}
+/>
+<div class="max-w-4xl mx-auto rounded-lg p-6">
+  <h1 class="text-4xl font-bold mb-4">API Documentation</h1>
+  <!-- API Endpoint -->
+  <div class="divide-y divide-dashed">
+    <section :for={endpoint <- @endpoints} class="py-14 flex flex-col gap-8">
+      <div>
+        <h2 class="text-2xl font-semibold mb-2"><%= endpoint.method %> <%= endpoint.path %></h2>
+        <p class="text-gray-700 mb-4"><%= endpoint.description %></p>
+      </div>
+      <!-- Parameters -->
+      <div :if={length(endpoint.params) > 0}>
+        <h3 class="text-xl font-semibold mb-2">Parameters</h3>
+        <table class="table-auto w-full mb-4 overflow-x-auto">
+          <thead>
+            <tr>
+              <th class="py-2">Name</th>
+              <th class="py-2">Type</th>
+              <th class="py-2">Location</th>
+              <th class="py-2">Default</th>
+              <th class="py-2">Example</th>
+              <th class="py-2">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr :for={param <- endpoint.params} class="bg-gray-100">
+              <td class="border px-4 py-2"><%= param.name %></td>
+              <td class="border px-4 py-2"><%= param.type %></td>
+              <td class="border px-4 py-2"><%= param.location %></td>
+              <td class="border px-4 py-2"><%= param.default %></td>
+              <td class="border px-4 py-2"><%= param.example %></td>
+              <td class="border px-4 py-2"><%= param.description %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- Example using curl -->
+      <div>
+        <h3 class="text-xl font-semibold mb-2">Example</h3>
+        <div class="bg-neutral-900 text-neutral-100 p-6 rounded-lg">
+          <code class="text-sm sm:text-base inline-flex text-left items-center space-x-4 bg-gray-800 text-white rounded-lg p-4 pl-6">
+            <span class="flex gap-4">
+              <span class="flex-1">
+                <span>
+                  curl -X <%= endpoint.method %> https://litcovers.com<%= endpoint.path %> \
+                  <br /> -H "Content-Type: application/json" \ <br />
+                  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+                  <span :if={endpoint.method == "POST"}>
+                    -d '{"description": "A cute brown cat in a tailored space suit", "style_preset": "concept-art", "model": "ultra", "aspect_ratio": "1:1"}'
                   </span>
-              </code>
-            </div>
-        </section>
-    </div>
+                </span>
+              </span>
+            </span>
+          </code>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
