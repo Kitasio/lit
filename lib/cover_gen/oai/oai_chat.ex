@@ -5,7 +5,7 @@ defmodule CoverGen.OAIChat do
 
   @derive Jason.Encoder
   defstruct max_tokens: 255,
-            model: "gpt-3.5-turbo",
+            model: "gpt-4o-mini",
             temperature: 1,
             messages: []
 

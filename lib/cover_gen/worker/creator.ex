@@ -429,7 +429,7 @@ defmodule CoverGen.Worker.Creator do
     if Enum.count(chat_list) < 4 do
       "gpt-4o"
     else
-      "gpt-3.5-turbo"
+      "gpt-4o-mini"
     end
   end
 end
