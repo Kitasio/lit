@@ -11,6 +11,9 @@
     <button>
       <.link navigate={~p"/en/admin/images_feed"}>Feed</.link>
     </button>
+    <button>
+      <div phx-click="next-page">next</div>
+    </button>
   </div>
 
   <.table id="users" rows={@users}>
@@ -34,6 +37,12 @@
           -
         </button>
       </div>
+    </:col>
+    <:col :let={user} label="Confirmed">
+      <.link :if={!user.confirmed_at} phx-click={JS.push("confirm-user", value: %{id: user.id})}>
+        Confirm
+      </.link>
+      <%= user.confirmed_at %>
     </:col>
   </.table>
 </div>

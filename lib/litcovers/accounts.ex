@@ -108,6 +108,23 @@ defmodule Litcovers.Accounts do
     |> Repo.all()
   end
 
+  def list_regular_users(limit, offset) do
+    User
+    |> limit_query(limit)
+    |> offset_query(offset)
+    |> list_not_admins_query()
+    |> order_by_id_query()
+    |> Repo.all()
+  end
+
+  def limit_query(query, limit) do
+    from(u in query, limit: ^limit)
+  end
+
+  def offset_query(query, offset) do
+    from(u in query, offset: ^offset)
+  end
+
   def order_by_id_query(query) do
     from(u in query, order_by: [desc: u.id])
   end
@@ -414,6 +431,11 @@ defmodule Litcovers.Accounts do
     else
       _ -> :error
     end
+  end
+
+  def admin_confirm_user(user) do
+    {:ok, %{user: user}} = Repo.transaction(confirm_user_multi(user))
+    {:ok, user}
   end
 
   defp confirm_user_multi(user) do
