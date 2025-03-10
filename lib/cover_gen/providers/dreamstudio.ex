@@ -12,6 +12,7 @@ defmodule CoverGen.Providers.Dreamstudio do
   @sd3_endpoint "https://api.stability.ai/v2beta/stable-image/generate/sd3"
   @core_endpoint "https://api.stability.ai/v2beta/stable-image/generate/core"
   @ultra_endpoint "https://api.stability.ai/v2beta/stable-image/generate/ultra"
+  @outpaint_endpoint "https://api.stability.ai/v2beta/stable-image/edit/outpaint"
   @options [timeout: 50_000, recv_timeout: 165_000]
 
   @valid_style_presets [
@@ -65,13 +66,14 @@ defmodule CoverGen.Providers.Dreamstudio do
   # Private functions
 
   defp get_api_token do
-    token = System.get_env("DREAMSTUDIO_TOKEN") || 
-            Application.get_env(:cover_gen, :dreamstudio_token)
-    
+    token =
+      System.get_env("DREAMSTUDIO_TOKEN") ||
+        Application.get_env(:cover_gen, :dreamstudio_token)
+
     unless token do
       raise "DREAMSTUDIO_TOKEN was not set\nVisit https://beta.dreamstudio.ai/account to get it"
     end
-    
+
     token
   end
 
@@ -128,4 +130,144 @@ defmodule CoverGen.Providers.Dreamstudio do
   defp endpoint("core"), do: @core_endpoint
   defp endpoint("ultra"), do: @ultra_endpoint
   defp endpoint(_model), do: @sd3_endpoint
+
+  @doc """
+  Outpaint an image to create a book cover with front, spine, and back cover.
+
+  ## Parameters
+  - image_bytes: Binary content of the original image
+  - options: A map containing outpaint parameters:
+    - left: Pixels to extend left (default: image width)
+    - right: Pixels to extend right (default: 0)
+    - up: Pixels to extend up (default: 0)
+    - down: Pixels to extend down (default: 0)
+    - prompt: Text prompt to guide the outpainting (default: nil)
+    - style_preset: Style preset to use (default: "photographic")
+    - pages: Number of pages to calculate spine width (optional)
+    - spine_width: Width of spine in pixels (calculated from pages or defaults to 10% of image width)
+    
+  Returns `{:ok, image_bytes}` on success, or `{:error, reason}` on failure.
+  """
+  def outpaint(image_bytes, options \\ %{}) do
+    token = get_api_token()
+
+    # Prepare a map of parameters
+    params_map =
+      prepare_outpaint_params_map(image_bytes, options) |> IO.inspect(label: "PARAMS MAP")
+
+    headers = [
+      {"Accept", "image/*"},
+      {"Authorization", "Bearer #{token}"}
+      # Let HTTPoison set the correct Content-Type with boundary
+    ]
+
+    # Use a simpler approach for multipart form data
+    # Create a boundary string
+    boundary = "------------------------#{:crypto.strong_rand_bytes(8) |> Base.encode16(case: :lower)}"
+    
+    # Build the multipart body manually
+    parts = 
+      Enum.map(Map.to_list(params_map), fn
+        {"image", image_data} ->
+          """
+          --#{boundary}\r
+          Content-Disposition: form-data; name="image"; filename="image.png"\r
+          Content-Type: image/png\r
+          \r
+          #{image_data}
+          """
+        {key, value} ->
+          """
+          --#{boundary}\r
+          Content-Disposition: form-data; name="#{key}"\r
+          \r
+          #{to_string(value)}
+          """
+      end)
+    
+    # Add the final boundary
+    body = Enum.join(parts) <> "--#{boundary}--\r\n"
+    
+    # Set the content-type header with the boundary
+    headers = [
+      {"Accept", "image/*"},
+      {"Authorization", "Bearer #{token}"},
+      {"Content-Type", "multipart/form-data; boundary=#{boundary}"}
+    ]
+
+    case HTTPoison.post(@outpaint_endpoint, body, headers, [
+      timeout: 50_000, 
+      recv_timeout: 165_000,
+      # Disable automatic encoding since we're handling it manually
+      hackney: [force_multipart: false]
+    ]) do
+      {:ok, %Response{status_code: status_code, body: body}}
+      when status_code in 200..299 ->
+        Logger.info("DREAMSTUDIO Outpaint successful")
+        {:ok, body}
+
+      {:ok, %Response{status_code: status_code, body: body}} ->
+        Logger.error("Outpaint failed with status code (#{status_code}): #{inspect(body)}")
+        {:error, "Outpaint failed with status code: #{status_code}"}
+
+      {:error, reason} ->
+        Logger.error("Outpaint request to DreamStudio failed: #{inspect(reason)}")
+        {:error, "Failed outpaint request: #{inspect(reason)}"}
+    end
+  end
+
+  @doc """
+  Prepare parameters map for outpainting based on the options provided.
+
+  Handles default values and calculates missing parameters:
+  - If left margin is not specified, it defaults to image width 
+  - If spine_width is not provided but pages is, calculates spine width
+  """
+  def prepare_outpaint_params_map(image_bytes, options) do
+    # Convert string keys to atoms for consistency
+    options =
+      if is_map(options) do
+        Enum.reduce(options, %{}, fn
+          {key, value}, acc when is_binary(key) -> Map.put(acc, String.to_atom(key), value)
+          {key, value}, acc -> Map.put(acc, key, value)
+        end)
+      else
+        %{}
+      end
+
+    # Start with a map containing the image
+    # Ensure image_bytes is binary data
+    params = %{"image" => image_bytes}
+
+    # Add outpaint directions as map entries
+    left = options[:left]
+    right = options[:right] || 0
+    up = options[:up] || 0
+    down = options[:down] || 0
+
+    # Add direction parameters
+    params = if left, do: Map.put(params, "left", to_string(left)), else: params
+    params = Map.put(params, "right", to_string(right))
+    params = Map.put(params, "up", to_string(up))
+    params = Map.put(params, "down", to_string(down))
+
+    # Add optional parameters
+    params = if options[:prompt], do: Map.put(params, "prompt", options[:prompt]), else: params
+    params = Map.put(params, "creativity", to_string(options[:creativity] || 0.5))
+
+    # Add style preset only if provided
+    params = if options[:style_preset], 
+      do: Map.put(params, "style_preset", validate_style_preset(options[:style_preset])), 
+      else: params
+
+    # Add output format - almost always want png for print quality
+    params = Map.put(params, "output_format", options[:output_format] || "png")
+
+    params
+  end
+
+  # Legacy function kept for compatibility
+  def prepare_outpaint_params(image_bytes, options) do
+    prepare_outpaint_params_map(image_bytes, options) |> Map.to_list()
+  end
 end

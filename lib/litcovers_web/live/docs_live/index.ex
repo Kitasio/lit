@@ -102,6 +102,78 @@ defmodule LitcoversWeb.DocsLive.Index do
               "When set to true, the service will use your description exactly as provided, without AI enhancement. This allows you to have full control over the final prompt sent to the image generation model."
           }
         ]
+      },
+      %{
+        title: "Create a book cover from an image",
+        path: "/api/v1/images/{id}/covers",
+        method: "POST",
+        description: "Converts a simple generated image into a book cover. If outpainting API is available, it will extend the original image to create front cover, spine, and back cover. Otherwise, it will generate a new book cover based on the provided prompt or original image prompt.",
+        params: [
+          %{
+            name: "id",
+            type: "integer",
+            location: "path",
+            default: "",
+            example: "123",
+            description: "The ID of the source image to convert to a book cover"
+          },
+          %{
+            name: "left",
+            type: "integer (optional)",
+            location: "body",
+            default: "image width",
+            example: "512",
+            description: "Number of pixels to extend the image to the left (for back cover). Defaults to the original image width."
+          },
+          %{
+            name: "right",
+            type: "integer (optional)",
+            location: "body",
+            default: "0",
+            example: "50",
+            description: "Number of pixels to extend the image to the right (bleed area)"
+          },
+          %{
+            name: "up",
+            type: "integer (optional)",
+            location: "body",
+            default: "0",
+            example: "50",
+            description: "Number of pixels to extend the image upward (bleed area)"
+          },
+          %{
+            name: "down",
+            type: "integer (optional)",
+            location: "body",
+            default: "0",
+            example: "50",
+            description: "Number of pixels to extend the image downward (bleed area)"
+          },
+          %{
+            name: "prompt",
+            type: "string (optional)",
+            location: "body",
+            default: "original image prompt",
+            example: "A fantasy book cover with a dark castle and mountains",
+            description: "Text prompt to guide the outpainting. Defaults to the original image's prompt if not provided."
+          },
+          %{
+            name: "style_preset",
+            type: "string (optional)",
+            location: "body",
+            default: "photographic",
+            example: "concept-art",
+            description: "The style preset to apply to the outpainting. Should match the original image's style."
+          },
+          %{
+            name: "pages",
+            type: "integer (optional)",
+            location: "body",
+            default: "",
+            example: "300",
+            description: "Number of pages in the book, can be used to calculate spine width."
+          }
+        ]
       }
     ]
   end

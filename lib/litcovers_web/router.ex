@@ -37,6 +37,7 @@ defmodule LitcoversWeb.Router do
       post "/images", ImageController, :create
       get "/images", ImageController, :index
       get "/images/:id", ImageController, :show
+      post "/images/:id/covers", ImageController, :create_cover
       get "/accounts", AccountController, :index
     end
   end
