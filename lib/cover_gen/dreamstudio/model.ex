@@ -7,6 +7,26 @@ defmodule CoverGen.Dreamstudio.Model do
   @ultra_endpoint "https://api.stability.ai/v2beta/stable-image/generate/ultra"
   @options [timeout: 50_000, recv_timeout: 165_000]
 
+  @valid_style_presets [
+    "3d-model",
+    "analog-film",
+    "anime",
+    "cinematic",
+    "comic-book",
+    "digital-art",
+    "enhance",
+    "fantasy-art",
+    "isometric",
+    "line-art",
+    "low-poly",
+    "modeling-compound",
+    "neon-punk",
+    "origami",
+    "photographic",
+    "pixel-art",
+    "tile-texture"
+  ]
+
   # Returns a list of image links
   def diffuse(_params, nil),
     do:
@@ -41,7 +61,7 @@ defmodule CoverGen.Dreamstudio.Model do
       "prompt" => prompt,
       "model" => model,
       "aspect_ratio" => aspect_ratio,
-      "style_preset" => style_preset
+      "style_preset" => validate_style_preset(style_preset)
     }
   end
 
@@ -50,9 +70,14 @@ defmodule CoverGen.Dreamstudio.Model do
       "prompt" => prompt,
       "model" => model,
       "aspect_ratio" => calculate_aspect_ratio(width, height),
-      "style_preset" => style_preset
+      "style_preset" => validate_style_preset(style_preset)
     }
   end
+
+  defp validate_style_preset(style_preset) when style_preset in @valid_style_presets,
+    do: style_preset
+
+  defp validate_style_preset(_), do: "enhance"
 
   defp gcd(a, b) when b == 0, do: a
   defp gcd(a, b), do: gcd(b, rem(a, b))
