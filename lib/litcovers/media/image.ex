@@ -73,7 +73,7 @@ defmodule Litcovers.Media.Image do
 
   def ai_changeset(image, attrs) do
     image
-    |> cast(attrs, [:completed, :url, :model_name])
+    |> cast(attrs, [:completed, :url, :model_name, :final_prompt])
   end
 
   def unlocked_changeset(image, attrs) do
