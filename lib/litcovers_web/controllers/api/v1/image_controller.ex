@@ -1,7 +1,6 @@
 defmodule LitcoversWeb.V1.ImageController do
   alias Litcovers.Accounts
-  alias CoverGen.Spaces
-  alias CoverGen.OAIChat
+  alias CoverGen.Generator
   alias Litcovers.Repo
   alias Litcovers.Media.Image
   alias Litcovers.Media
@@ -24,22 +23,30 @@ defmodule LitcoversWeb.V1.ImageController do
   def create(conn, request_params) do
     model_name = request_params["model"] || "sd3"
 
-    if model_name not in CoverGen.Models.all() do
-      conn
-      |> put_status(:bad_request)
-      |> put_view(LitcoversWeb.ErrorJSON)
-      |> render(:"400")
+    # Validate the model exists
+    unless CoverGen.Models.all() |> Enum.member?(model_name) do
+      return = conn
+        |> put_status(:bad_request)
+        |> put_view(LitcoversWeb.ErrorJSON)
+        |> render(:"400")
+      
+      # Need to return to exit the function
+      return
     end
 
+    # Check user has enough coins for the selected model
     price_for_model = CoverGen.Models.price(conn.assigns[:current_user], model_name)
-
     if conn.assigns[:current_user].litcoins < price_for_model do
-      conn
-      |> put_status(:payment_required)
-      |> put_view(LitcoversWeb.ErrorJSON)
-      |> render(:"402")
+      return = conn
+        |> put_status(:payment_required)
+        |> put_view(LitcoversWeb.ErrorJSON)
+        |> render(:"402")
+      
+      # Need to return to exit the function
+      return
     end
 
+    # Create initial image params
     image_params = %{
       description: request_params["description"],
       style_preset: request_params["style_preset"] || "photographic",
@@ -47,51 +54,65 @@ defmodule LitcoversWeb.V1.ImageController do
       aspect_ratio: request_params["aspect_ratio"] || "2:3"
     }
 
-    IO.inspect(image_params, label: "image_params")
+    Logger.info("Creating image with params: #{inspect(image_params)}")
 
-    with {:ok, %Image{} = image} <-
-           Media.create_image_from_api(conn.assigns[:current_user], image_params) do
-      case generate_image(image) do
-        {:ok, updated_image} ->
-          Logger.info("removing #{floor(price_for_model)} litcoins")
-          Accounts.remove_litcoins(conn.assigns[:current_user], floor(price_for_model))
+    # Create the image record and generate the actual image
+    with {:ok, %Image{} = image} <- Media.create_image_from_api(conn.assigns[:current_user], image_params),
+         {:ok, updated_image} <- generate_image(image) do
+      
+      # Deduct litcoins after successful generation
+      Logger.info("Removing #{floor(price_for_model)} litcoins")
+      Accounts.remove_litcoins(conn.assigns[:current_user], floor(price_for_model))
 
-          conn
-          |> put_status(:created)
-          |> put_resp_header("location", ~p"/api/v1/images/#{updated_image}")
-          |> render(:show, image: updated_image)
-      end
+      # Return the created image
+      conn
+      |> put_status(:created)
+      |> put_resp_header("location", ~p"/api/v1/images/#{updated_image}")
+      |> render(:show, image: updated_image)
+    else
+      {:error, :payment_required} ->
+        conn
+        |> put_status(:payment_required)
+        |> put_view(LitcoversWeb.ErrorJSON)
+        |> render(:"402")
+        
+      {:error, reason} ->
+        Logger.error("Failed to create image: #{inspect(reason)}")
+        conn
+        |> put_status(:unprocessable_entity)
+        |> put_view(LitcoversWeb.ErrorJSON)
+        |> render(:"422", errors: %{detail: "Failed to generate image: #{inspect(reason)}"})
     end
   end
 
+  # Private function to generate the image using our new Generator module
   defp generate_image(%Image{} = image) do
-    with message <- "#{image.description} => #{image.style_preset}",
-         messages <- [%{role: "user", content: message}],
-         {:ok, res} <- OAIChat.send(messages, System.get_env("OAI_TOKEN"), :creation),
-         _ <- IO.inspect(res, label: "OAI res"),
-         {:ok, image} <- Media.update_image(image, %{final_prompt: res["content"]}),
-         _ <- IO.inspect(res["content"], label: "updating final_prompt with OAI res content"),
-         params <-
-           CoverGen.Dreamstudio.Model.get_params(
-             res["content"],
-             image.aspect_ratio,
-             image.model_name,
-             image.style_preset
-           ),
-         _ <- IO.inspect(params, label: "Dreamstudio params"),
-         {:ok, image_bytes} <-
-           CoverGen.Dreamstudio.Model.diffuse(params, System.get_env("DREAMSTUDIO_TOKEN")),
-         {:ok, img_url} <- Spaces.save_bytes(image_bytes),
-         _ <- IO.inspect(img_url, label: "image_url"),
-         image_params <- %{url: img_url, completed: true},
-         _ <- IO.inspect(image_params, label: "image_params"),
-         changeset <- Image.ai_changeset(image, image_params),
-         {:ok, updated_image} <- Repo.update(changeset),
-         _ <- IO.inspect(updated_image, label: "updated_image") do
-      {:ok, updated_image}
-    else
+    # Prepare options for the generator
+    generation_options = %{
+      model_name: image.model_name,
+      style_preset: image.style_preset,
+      aspect_ratio: image.aspect_ratio
+    }
+    
+    # Call the generator to create the image
+    case Generator.generate_image(image.description, generation_options) do
+      {:ok, result} ->
+        # Update the image record with the result
+        image_params = %{
+          url: result.url, 
+          final_prompt: result.final_prompt,
+          completed: true
+        }
+        
+        Logger.info("Generated image successful: #{result.url}")
+        
+        # Update the image record in the database
+        changeset = Image.ai_changeset(image, image_params)
+        Repo.update(changeset)
+        
       {:error, reason} ->
-        IO.inspect(reason, label: "Error occurred while generating, deleting image")
+        # Clean up the image record on failure
+        Logger.error("Error occurred while generating, deleting image: #{inspect(reason)}")
         Media.delete_image(image)
         {:error, reason}
     end
