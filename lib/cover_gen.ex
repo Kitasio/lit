@@ -51,6 +51,8 @@ defmodule CoverGen do
     - down: Pixels to extend down (default: 0)
     - prompt: Text prompt to guide the outpainting (default: uses original image prompt)
     - pages: Number of pages to calculate spine width (optional)
+    - spine_width: Width of spine in pixels (optional, calculated from pages if not provided)
+    - bleed: Add bleed margin as percentage (default: 5%)
     
   Returns `{:ok, url}` on success, or `{:error, reason}` on failure.
   """
@@ -75,7 +77,7 @@ defmodule CoverGen do
   # Fetch image data from the database
   defp get_image(image_id) do
     try do
-      image = Litcovers.Media.get_image!(image_id)
+      image = Litcovers.Media.get_image_preload_all!(image_id)
       {:ok, image}
     rescue
       Ecto.NoResultsError -> {:error, :not_found}
@@ -98,24 +100,100 @@ defmodule CoverGen do
   
   # Enhance the options with information from the image
   defp enrich_options(image, options) do
+    # Convert string keys to atoms for consistency
+    options = normalize_options(options)
+    
+    # Get image dimensions from the image metadata or estimate them
+    {width, height} = get_image_dimensions(image)
+    
     # If left margin is not set, use the image width as default
     # This creates a balanced book cover where the back cover is the same width as the front
-    options = cond do
-      # Use image width if available
-      is_nil(options["left"]) && is_nil(options[:left]) && not is_nil(image.width) ->
-        Map.put(options, :left, image.width)
-      
-      # Set a reasonable default if image width is not available
-      is_nil(options["left"]) && is_nil(options[:left]) && is_nil(image.width) ->
-        Map.put(options, :left, 512)  # Standard size
-        
-      true ->
-        options
+    options = if is_nil(options[:left]) do
+      Map.put(options, :left, width)
+    else
+      options
     end
     
+    # Add spine width if not provided but pages is
+    options = add_spine_width(options, width)
+    
+    # Add bleed margin if requested (default 5%)
+    options = add_bleed_margin(options, width, height)
+    
     # Use the original prompt if no prompt is provided
-    if is_nil(options["prompt"]) && is_nil(options[:prompt]) && !is_nil(image.final_prompt) do
+    if is_nil(options[:prompt]) && !is_nil(image.final_prompt) do
       Map.put(options, :prompt, image.final_prompt)
+    else
+      options
+    end
+  end
+  
+  # Convert string keys to atom keys for consistency
+  defp normalize_options(options) do
+    Enum.reduce(options, %{}, fn
+      {key, value}, acc when is_binary(key) -> Map.put(acc, String.to_atom(key), value)
+      {key, value}, acc -> Map.put(acc, key, value)
+    end)
+  end
+  
+  # Get image dimensions from metadata or estimate based on aspect ratio
+  defp get_image_dimensions(image) do
+    cond do
+      # Use actual dimensions if available
+      not is_nil(image.width) and not is_nil(image.height) ->
+        {image.width, image.height}
+        
+      # Estimate from aspect ratio
+      not is_nil(image.aspect_ratio) ->
+        case image.aspect_ratio do
+          "2:3" -> {512, 768}
+          "3:2" -> {768, 512}
+          "1:1" -> {512, 512}
+          "16:9" -> {768, 432}
+          "9:16" -> {432, 768}
+          _ -> {512, 768}  # Default to 2:3
+        end
+        
+      # Default dimensions
+      true ->
+        {512, 768}
+    end
+  end
+  
+  # Calculate spine width based on pages or set default
+  defp add_spine_width(options, image_width) do
+    cond do
+      # Use provided spine width
+      not is_nil(options[:spine_width]) ->
+        options
+        
+      # Calculate from pages
+      not is_nil(options[:pages]) ->
+        pages = options[:pages]
+        # Formula: 0.0025 inches per page * DPI (300)
+        spine_width = max(round(pages * 0.0025 * 300), 30)
+        Map.put(options, :spine_width, spine_width)
+        
+      # Default to 10% of image width
+      true ->
+        Map.put(options, :spine_width, max(round(image_width * 0.1), 30))
+    end
+  end
+  
+  # Add bleed margins to all sides if requested
+  defp add_bleed_margin(options, width, height) do
+    bleed_percent = options[:bleed] || 5
+    
+    if bleed_percent > 0 do
+      bleed_x = round(width * bleed_percent / 100)
+      bleed_y = round(height * bleed_percent / 100)
+      
+      # Add bleed to all sides
+      options
+      |> Map.update(:left, bleed_x, &(&1 + bleed_x))
+      |> Map.update(:right, bleed_x, &(&1 + bleed_x))
+      |> Map.update(:up, bleed_y, &(&1 + bleed_y))
+      |> Map.update(:down, bleed_y, &(&1 + bleed_y))
     else
       options
     end

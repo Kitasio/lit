@@ -34,44 +34,51 @@ defmodule LitcoversWeb.V1.ImageController do
       # Get outpaint params from request
       outpaint_params = Map.drop(params, ["id"])
       
-      Logger.info("Creating cover for image #{id} with params: #{inspect(outpaint_params)}")
-      
-      # Call the service to generate the cover
-      case CoverGen.generate_cover(id, outpaint_params) do
-        {:ok, %{url: cover_url}} ->
-          # Get the image to associate with the cover
-          image = Media.get_user_image!(conn.assigns[:current_user], id)
-          
-          # Create the cover record in the database
-          with {:ok, cover} <- Media.create_cover(image, conn.assigns[:current_user], %{url: cover_url, seen: false}) do
-            # Deduct litcoins for the cover generation
-            Accounts.remove_litcoins(conn.assigns[:current_user], cost)
-            
-            # Return the created cover
-            conn
-            |> put_status(:created)
-            |> render(:cover, cover: cover)
-          else
-            {:error, changeset} ->
-              Logger.error("Failed to save cover: #{inspect(changeset)}")
-              conn
-              |> put_status(:unprocessable_entity)
-              |> put_view(LitcoversWeb.ErrorJSON)
-              |> render(:"422", errors: changeset)
-          end
-          
-        {:error, :not_found} ->
+      # Validate the image belongs to the user
+      case Media.get_user_image(conn.assigns[:current_user], id) do
+        nil ->
           conn
           |> put_status(:not_found)
           |> put_view(LitcoversWeb.ErrorJSON)
           |> render(:"404")
           
-        {:error, reason} ->
-          Logger.error("Failed to generate cover: #{inspect(reason)}")
-          conn
-          |> put_status(:unprocessable_entity)
-          |> put_view(LitcoversWeb.ErrorJSON)
-          |> render(:"422", errors: %{detail: "Failed to generate cover: #{inspect(reason)}"})
+        image ->
+          Logger.info("Creating cover for image #{id} with params: #{inspect(outpaint_params)}")
+          
+          # Call the service to generate the cover
+          case CoverGen.generate_cover(id, outpaint_params) do
+            {:ok, %{url: cover_url}} ->
+              # Create the cover record in the database
+              with {:ok, cover} <- Media.create_cover(image, conn.assigns[:current_user], %{url: cover_url, seen: false}) do
+                # Deduct litcoins for the cover generation
+                Accounts.remove_litcoins(conn.assigns[:current_user], cost)
+                
+                # Return the created cover
+                conn
+                |> put_status(:created)
+                |> render(:cover, cover: cover)
+              else
+                {:error, changeset} ->
+                  Logger.error("Failed to save cover: #{inspect(changeset)}")
+                  conn
+                  |> put_status(:unprocessable_entity)
+                  |> put_view(LitcoversWeb.ErrorJSON)
+                  |> render(:"422", errors: changeset)
+              end
+            
+            {:error, :not_found} ->
+              conn
+              |> put_status(:not_found)
+              |> put_view(LitcoversWeb.ErrorJSON)
+              |> render(:"404")
+              
+            {:error, reason} ->
+              Logger.error("Failed to generate cover: #{inspect(reason)}")
+              conn
+              |> put_status(:unprocessable_entity)
+              |> put_view(LitcoversWeb.ErrorJSON)
+              |> render(:"422", errors: %{detail: "Failed to generate cover: #{inspect(reason)}"})
+          end
       end
     end
   end

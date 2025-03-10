@@ -145,6 +145,7 @@ defmodule CoverGen.Providers.Dreamstudio do
     - style_preset: Style preset to use (default: "photographic")
     - pages: Number of pages to calculate spine width (optional)
     - spine_width: Width of spine in pixels (calculated from pages or defaults to 10% of image width)
+    - bleed: Percentage of bleed margin to add to all sides (default: 0)
     
   Returns `{:ok, image_bytes}` on success, or `{:error, reason}` on failure.
   """
@@ -155,18 +156,13 @@ defmodule CoverGen.Providers.Dreamstudio do
     params_map =
       prepare_outpaint_params_map(image_bytes, options) |> IO.inspect(label: "PARAMS MAP")
 
-    headers = [
-      {"Accept", "image/*"},
-      {"Authorization", "Bearer #{token}"}
-      # Let HTTPoison set the correct Content-Type with boundary
-    ]
-
     # Use a simpler approach for multipart form data
     # Create a boundary string
-    boundary = "------------------------#{:crypto.strong_rand_bytes(8) |> Base.encode16(case: :lower)}"
-    
+    boundary =
+      "------------------------#{:crypto.strong_rand_bytes(8) |> Base.encode16(case: :lower)}"
+
     # Build the multipart body manually
-    parts = 
+    parts =
       Enum.map(Map.to_list(params_map), fn
         {"image", image_data} ->
           """
@@ -176,6 +172,7 @@ defmodule CoverGen.Providers.Dreamstudio do
           \r
           #{image_data}
           """
+
         {key, value} ->
           """
           --#{boundary}\r
@@ -184,10 +181,10 @@ defmodule CoverGen.Providers.Dreamstudio do
           #{to_string(value)}
           """
       end)
-    
+
     # Add the final boundary
     body = Enum.join(parts) <> "--#{boundary}--\r\n"
-    
+
     # Set the content-type header with the boundary
     headers = [
       {"Accept", "image/*"},
@@ -195,12 +192,12 @@ defmodule CoverGen.Providers.Dreamstudio do
       {"Content-Type", "multipart/form-data; boundary=#{boundary}"}
     ]
 
-    case HTTPoison.post(@outpaint_endpoint, body, headers, [
-      timeout: 50_000, 
-      recv_timeout: 165_000,
-      # Disable automatic encoding since we're handling it manually
-      hackney: [force_multipart: false]
-    ]) do
+    case HTTPoison.post(@outpaint_endpoint, body, headers,
+           timeout: 50_000,
+           recv_timeout: 165_000,
+           # Disable automatic encoding since we're handling it manually
+           hackney: [force_multipart: false]
+         ) do
       {:ok, %Response{status_code: status_code, body: body}}
       when status_code in 200..299 ->
         Logger.info("DREAMSTUDIO Outpaint successful")
@@ -256,9 +253,10 @@ defmodule CoverGen.Providers.Dreamstudio do
     params = Map.put(params, "creativity", to_string(options[:creativity] || 0.5))
 
     # Add style preset only if provided
-    params = if options[:style_preset], 
-      do: Map.put(params, "style_preset", validate_style_preset(options[:style_preset])), 
-      else: params
+    params =
+      if options[:style_preset],
+        do: Map.put(params, "style_preset", validate_style_preset(options[:style_preset])),
+        else: params
 
     # Add output format - almost always want png for print quality
     params = Map.put(params, "output_format", options[:output_format] || "png")
