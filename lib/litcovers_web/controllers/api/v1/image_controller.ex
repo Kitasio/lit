@@ -46,6 +46,9 @@ defmodule LitcoversWeb.V1.ImageController do
       return
     end
 
+    # Extract use_custom_prompt flag
+    use_custom_prompt = request_params["use_custom_prompt"] || false
+    
     # Create initial image params
     image_params = %{
       description: request_params["description"],
@@ -55,10 +58,11 @@ defmodule LitcoversWeb.V1.ImageController do
     }
 
     Logger.info("Creating image with params: #{inspect(image_params)}")
+    Logger.info("Use custom prompt: #{use_custom_prompt}")
 
     # Create the image record and generate the actual image
     with {:ok, %Image{} = image} <- Media.create_image_from_api(conn.assigns[:current_user], image_params),
-         {:ok, updated_image} <- generate_image(image) do
+         {:ok, updated_image} <- generate_image(image, %{use_custom_prompt: use_custom_prompt}) do
       
       # Deduct litcoins after successful generation
       Logger.info("Removing #{floor(price_for_model)} litcoins")
@@ -86,12 +90,13 @@ defmodule LitcoversWeb.V1.ImageController do
   end
 
   # Private function to generate the image using our new Generator module
-  defp generate_image(%Image{} = image) do
+  defp generate_image(%Image{} = image, options) do
     # Prepare options for the generator
     generation_options = %{
       model_name: image.model_name,
       style_preset: image.style_preset,
-      aspect_ratio: image.aspect_ratio
+      aspect_ratio: image.aspect_ratio,
+      use_custom_prompt: Map.get(options, :use_custom_prompt, false)
     }
     
     # Call the generator to create the image

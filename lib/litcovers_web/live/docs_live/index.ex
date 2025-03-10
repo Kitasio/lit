@@ -80,8 +80,8 @@ defmodule LitcoversWeb.DocsLive.Index do
             type: "string (optional)",
             location: "body",
             default: "sd3",
-            example: "ultra",
-            description: "The model name, to view all available models, see /api/v1/accounts"
+            example: "flux",
+            description: "The model name, to view all available models, see /api/v1/accounts. Available models include: 'sd3', 'flux', 'ultra', and others."
           },
           %{
             name: "aspect_ratio",
@@ -91,6 +91,15 @@ defmodule LitcoversWeb.DocsLive.Index do
             example: "1:1",
             description:
               "The aspect ratio of the image, can be one of 16:9 1:1 21:9 2:3 3:2 4:5 5:4 9:16 9:21"
+          },
+          %{
+            name: "use_custom_prompt",
+            type: "boolean (optional)",
+            location: "body",
+            default: "false",
+            example: "true",
+            description:
+              "When set to true, the service will use your description exactly as provided, without AI enhancement. This allows you to have full control over the final prompt sent to the image generation model."
           }
         ]
       }

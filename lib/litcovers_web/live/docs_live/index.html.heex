@@ -51,7 +51,7 @@
                   <br /> -H "Content-Type: application/json" \ <br />
                   -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
                   <span :if={endpoint.method == "POST"}>
-                    -d '{"description": "A cute brown cat in a tailored space suit", "style_preset": "concept-art", "model": "ultra", "aspect_ratio": "1:1"}'
+                    -d '{"description": "A cute brown cat in a tailored space suit", "style_preset": "concept-art", "model": "flux", "aspect_ratio": "1:1", "use_custom_prompt": false}'
                   </span>
                 </span>
               </span>
