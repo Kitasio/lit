@@ -255,6 +255,20 @@ defmodule CoverGen.Replicate.Model do
     }
   end
 
+  def create_model("flux-ultra") do
+    %Model{
+      model: "black-forest-labs/flux-1.1-pro-ultra",
+      input: %{
+        prompt: "",
+        aspect_ratio: "1:1",
+        output_format: "webp",
+        output_quality: 80,
+        safety_tolerance: 2,
+        prompt_upsampling: true
+      }
+    }
+  end
+
   def create_model("couple5") do
     %Model{
       version: "41aa15ac9c83035da10c7b4472cabd7638964b1f47f39e8c7d6132d9e1b80e7f",
@@ -314,6 +328,15 @@ defmodule CoverGen.Replicate.Model do
         model: "black-forest-labs/flux-1.1-pro",
         label: gettext("Flux Pro"),
         description: gettext("High quality image generation with excellent composition")
+      },
+      %{
+        name: "flux-ultra",
+        enabled: true,
+        img: "https://replicate.delivery/pbxt/4JkBvuGSgJkOlQFMveiwGWC3Vw8JrWLjV6Vf7FqrZGzYeQHIA/output.webp",
+        link: "https://replicate.com/black-forest-labs/flux-1.1-pro-ultra",
+        model: "black-forest-labs/flux-1.1-pro-ultra",
+        label: gettext("Flux Ultra"),
+        description: gettext("Enhanced version of Flux Pro with higher quality and more detailed outputs")
       },
       %{
         name: "stable-diffusion",

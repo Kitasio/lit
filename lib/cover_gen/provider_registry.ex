@@ -8,15 +8,35 @@ defmodule CoverGen.ProviderRegistry do
 
   require Logger
 
+  # Define providers to check
+  @providers [
+    CoverGen.Providers.Replicate,
+    CoverGen.Providers.Dreamstudio
+  ]
+
   @doc """
   Get the provider module for a given model name.
 
-  Returns `{:ok, provider_module}` if found, or `{:error, :unknown_model}` if not found.
+  Returns `{:ok, provider_module}` if found, or `{:error, :unsupported_model}` if not found.
   """
   def get_provider_for_model(model_name) do
-    case Enum.find(provider_mapping(), fn {_provider, models} -> model_name in models end) do
-      {provider, _models} -> {:ok, provider}
-      nil -> {:error, :unknown_model}
+    Logger.info("Looking for provider for model: #{model_name}")
+    
+    provider =
+      @providers
+      |> Enum.find(fn provider -> 
+        supports = provider.supports_model?(model_name)
+        Logger.debug("Provider #{inspect(provider)} supports #{model_name}: #{supports}")
+        supports
+      end)
+
+    case provider do
+      nil -> 
+        Logger.error("No provider found for model: #{model_name}")
+        {:error, :unsupported_model}
+      provider -> 
+        Logger.info("Found provider for #{model_name}: #{inspect(provider)}")
+        {:ok, provider}
     end
   end
 
@@ -26,8 +46,8 @@ defmodule CoverGen.ProviderRegistry do
   Returns a list of model names.
   """
   def list_all_models do
-    provider_mapping()
-    |> Enum.flat_map(fn {_provider, models} -> models end)
+    @providers
+    |> Enum.flat_map(fn provider -> provider.list_models() end)
     |> Enum.uniq()
   end
 
@@ -46,15 +66,6 @@ defmodule CoverGen.ProviderRegistry do
   Returns a list of provider modules.
   """
   def list_providers do
-    provider_mapping()
-    |> Enum.map(fn {provider, _models} -> provider end)
-  end
-
-  # Map providers to their supported models
-  def provider_mapping do
-    [
-      {CoverGen.Providers.Dreamstudio, ["sd3", "core", "ultra"]},
-      {CoverGen.Providers.Replicate, ["flux"]}
-    ]
+    @providers
   end
 end

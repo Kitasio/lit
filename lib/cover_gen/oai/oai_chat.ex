@@ -69,6 +69,28 @@ defmodule CoverGen.OAIChat do
     end
   end
 
+  def send(messages, oai_token, :outpaint) do
+    {endpoint, headers, options} = endpoint_settings(oai_token)
+
+    messages = outpaint_messages() ++ messages
+
+    oai_params = %OAIChat{messages: messages}
+    body = Jason.encode!(oai_params)
+
+    # Send the post request
+    case HTTPoison.post(endpoint, body, headers, options) do
+      {:ok, %Response{body: res_body}} ->
+        message = oai_response_chat(res_body) || ""
+
+        {:ok, message}
+
+      {:error, reason} ->
+        IO.inspect(reason)
+        Logger.error("Open AI gen idea failed")
+        {:error, :oai_failed}
+    end
+  end
+
   def send(messages, model, oai_token) do
     {endpoint, headers, options} = endpoint_settings(oai_token)
 
@@ -109,6 +131,26 @@ defmodule CoverGen.OAIChat do
         Logger.error("decode oai response body error: #{inspect(reason)}")
         nil
     end
+  end
+
+  defp outpaint_messages do
+    [
+      %{
+        role: "system",
+        content:
+          "Modify the given image generation prompt. Exclude any characters or main subjects, have a slightly dimmed and less vibrant color palette, maintain the general theme, style, and color scheme. Return only the modified text in your response."
+      },
+      %{
+        role: "user",
+        content:
+          "A cute couple in the main room of a gothic castle, a pretty woman sitting gracefully on a plush red chair, intricate stonework and dark wood surroundings, inspired by Elden Ring, digital art, fantasy, by Maarten Verhoeven and FromSoftware Art Team, artstation, atmospheric lighting, romantic tension, captivating detail, rich textures, moody ambiance, lush colors"
+      },
+      %{
+        role: "assistant",
+        content:
+          "A dimly lit main room of a gothic castle, adorned with intricate architecture and rich medieval fantasy details. The atmosphere is dark yet whimsical. Dust particles drift through the air, illuminated by flickering candlelight. The background is slightly blurred. Inspired by *Elden Ring*, blending rich textures and atmospheric storytelling."
+      }
+    ]
   end
 
   defp creation_messages do

@@ -119,12 +119,11 @@ defmodule CoverGen do
     # Add bleed margin if requested (default 5%)
     options = add_bleed_margin(options, width, height)
 
-    # Use the original prompt if no prompt is provided
-    if is_nil(options[:prompt]) && !is_nil(image.final_prompt) do
-      Map.put(options, :prompt, image.final_prompt)
-    else
-      options
-    end
+    # Process the prompt with OAI.send using :outpaint atom
+    options = process_outpaint_prompt(options, image)
+
+    # Return the enriched options
+    options
   end
 
   # Convert string keys to atom keys for consistency
@@ -177,6 +176,35 @@ defmodule CoverGen do
       |> Map.update(:down, bleed_y, &(&1 + bleed_y))
     else
       options
+    end
+  end
+
+  # Process the prompt with OAI.send using :outpaint atom
+  defp process_outpaint_prompt(options, image) do
+    original_prompt =
+      if is_nil(options[:prompt]) && !is_nil(image.final_prompt) do
+        image.final_prompt
+      else
+        options[:prompt]
+      end
+
+    if is_nil(original_prompt) do
+      # No prompt available, return options as is
+      options
+    else
+      # Process the prompt with OAI.send using :outpaint atom
+      messages = [%{role: "user", content: original_prompt}]
+
+      case CoverGen.OAIChat.send(messages, System.get_env("OAI_TOKEN"), :outpaint) do
+        {:ok, response} ->
+          # Update the prompt with the processed version
+          Map.put(options, :prompt, response["content"])
+
+        {:error, reason} ->
+          Logger.error("Failed to process outpaint prompt: #{inspect(reason)}")
+          # Fall back to original prompt
+          Map.put(options, :prompt, original_prompt)
+      end
     end
   end
 end

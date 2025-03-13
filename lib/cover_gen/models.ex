@@ -20,6 +20,7 @@ defmodule CoverGen.Models do
   
   # Replicate models
   def price(%User{} = user, "flux"), do: floor(15 * user.discount)
+  def price(%User{} = user, "flux-ultra"), do: floor(25 * user.discount)
   def price(%User{} = user, "couple5"), do: floor(10 * user.discount)
   def price(%User{} = user, "portraitplus"), do: floor(10 * user.discount)
   def price(%User{} = user, "openjourney"), do: floor(8 * user.discount)

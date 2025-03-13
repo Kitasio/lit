@@ -15,9 +15,10 @@ defmodule CoverGen.Providers.Replicate do
 
   @supported_models [
     "flux",
-    "couple5", 
-    "portraitplus", 
-    "openjourney", 
+    "flux-ultra",
+    "couple5",
+    "portraitplus",
+    "openjourney",
     "stable-diffusion"
   ]
 
@@ -29,13 +30,13 @@ defmodule CoverGen.Providers.Replicate do
     case do_generate(params) do
       {:ok, %{"output" => output}} when is_binary(output) ->
         download_image(output)
-      
+
       {:ok, %{"output" => [output | _]}} when is_binary(output) ->
         download_image(output)
-        
+
       {:error, type, message} ->
         {:error, "#{type}: #{message}"}
-        
+
       other ->
         {:error, "Unexpected response format: #{inspect(other)}"}
     end
@@ -47,9 +48,9 @@ defmodule CoverGen.Providers.Replicate do
     aspect_ratio = Map.get(options, :aspect_ratio, "2:3")
     negative_prompt = Map.get(options, :negative_prompt, @universal_neg_prompt)
     style_preset = Map.get(options, :style_preset)
-    
+
     {width, height} = dimensions_from_aspect_ratio(aspect_ratio)
-    
+
     create_model_params(model_name, prompt, negative_prompt, width, height, style_preset)
   end
 
@@ -63,10 +64,10 @@ defmodule CoverGen.Providers.Replicate do
 
   defp do_generate(params) do
     token = get_api_token()
-    
+
     # Format the request body based on the endpoint type
     {endpoint, formatted_params} = format_request(params)
-    
+
     body = Jason.encode!(formatted_params)
     headers = request_headers(token)
 
@@ -74,30 +75,29 @@ defmodule CoverGen.Providers.Replicate do
     Logger.debug("Request params: #{inspect(formatted_params, pretty: true)}")
 
     with {:ok, response} <- HTTPoison.post(endpoint, body, headers, @request_options),
-          {:ok, data} <- Jason.decode(response.body) do
-      
+         {:ok, data} <- Jason.decode(response.body) do
       case extract_generation_url(data) do
-        {:ok, nil, direct_output} -> 
+        {:ok, nil, direct_output} ->
           # Direct output URL in the response
           Logger.info("Generation completed immediately with direct output")
           {:ok, %{"output" => direct_output, "status" => "succeeded"}}
-          
-        {:ok, generation_url} -> 
+
+        {:ok, generation_url} ->
           # Need to poll for results
           poll_for_results(generation_url, headers)
-          
-        {:error, reason} -> 
+
+        {:error, reason} ->
           {:error, :generation_failed, reason}
       end
     else
       {:error, %HTTPoison.Error{} = error} ->
         Logger.error("Request to Replicate failed: #{inspect(error)}")
         {:error, :api_request_failed, "Failed to connect to Replicate API"}
-      
+
       {:error, %Jason.DecodeError{} = error} ->
         Logger.error("Failed to decode Replicate response: #{inspect(error)}")
         {:error, :invalid_response, "Invalid response from Replicate API"}
-      
+
       {:error, reason} ->
         {:error, :generation_failed, reason}
     end
@@ -105,14 +105,14 @@ defmodule CoverGen.Providers.Replicate do
 
   defp download_image(url) do
     options = [timeout: 30_000, recv_timeout: 30_000]
-    
+
     case HTTPoison.get(url, [], options) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
         {:ok, body}
-        
+
       {:ok, %HTTPoison.Response{status_code: status_code}} ->
         {:error, "Failed to download image, status code: #{status_code}"}
-        
+
       {:error, %HTTPoison.Error{reason: reason}} ->
         {:error, "Failed to download image: #{inspect(reason)}"}
     end
@@ -121,10 +121,14 @@ defmodule CoverGen.Providers.Replicate do
   defp extract_generation_url(%{"urls" => %{"get" => url}}), do: {:ok, url}
   defp extract_generation_url(%{"output" => url}) when is_binary(url), do: {:ok, nil, url}
   defp extract_generation_url(%{"output" => [url | _]}) when is_binary(url), do: {:ok, nil, url}
-  defp extract_generation_url(%{"id" => id}) when is_binary(id), do: {:ok, "#{@base_url}/predictions/#{id}"}
+
+  defp extract_generation_url(%{"id" => id}) when is_binary(id),
+    do: {:ok, "#{@base_url}/predictions/#{id}"}
+
   defp extract_generation_url(%{"error" => error}) when not is_nil(error), do: {:error, error}
-  defp extract_generation_url(response), do: 
-    {:error, "Missing generation URL in response: #{inspect(response, pretty: true)}"}
+
+  defp extract_generation_url(response),
+    do: {:error, "Missing generation URL in response: #{inspect(response, pretty: true)}"}
 
   defp poll_for_results(generation_url, headers) do
     case HTTPoison.get(generation_url, headers, @request_options) do
@@ -180,24 +184,25 @@ defmodule CoverGen.Providers.Replicate do
   end
 
   defp get_api_token do
-    token = System.get_env("REPLICATE_TOKEN") || 
-            Application.get_env(:cover_gen, :replicate_token)
-    
+    token =
+      System.get_env("REPLICATE_TOKEN") ||
+        Application.get_env(:cover_gen, :replicate_token)
+
     unless token do
       raise "REPLICATE_TOKEN was not set\nVisit https://replicate.com/account to get it"
     end
-    
+
     token
   end
 
   defp request_headers(token) do
     [
-      Authorization: "Token #{token}", 
+      Authorization: "Token #{token}",
       "Content-Type": "application/json",
       Accept: "application/json"
     ]
   end
-  
+
   # Format the request based on the model type (official vs versioned)
   defp format_request(params) do
     case {params[:model], params[:version]} do
@@ -213,12 +218,12 @@ defmodule CoverGen.Providers.Replicate do
           endpoint = "#{@base_url}/predictions"
           {endpoint, params}
         end
-        
+
       {nil, version} when is_binary(version) ->
         # Legacy versioned model
         endpoint = "#{@base_url}/predictions"
         {endpoint, params}
-        
+
       _ ->
         # Default case
         endpoint = "#{@base_url}/predictions"
@@ -234,8 +239,24 @@ defmodule CoverGen.Providers.Replicate do
       input: %{
         prompt: prompt,
         aspect_ratio: aspect_ratio_from_dimensions(width, height),
-        output_format: "webp",
-        output_quality: 80,
+        # output_format: "webp",
+        # output_quality: 80,
+        safety_tolerance: 2,
+        prompt_upsampling: true,
+        negative_prompt: neg_prompt || @universal_neg_prompt
+      }
+    }
+  end
+
+  defp create_model_params("flux-ultra", prompt, neg_prompt, width, height, _style_preset) do
+    # Flux Ultra model has similar parameters to Flux but with a different model ID
+    %{
+      model: "black-forest-labs/flux-1.1-pro-ultra",
+      input: %{
+        prompt: prompt,
+        aspect_ratio: aspect_ratio_from_dimensions(width, height),
+        # output_format: "webp",
+        # output_quality: 80,
         safety_tolerance: 2,
         prompt_upsampling: true,
         negative_prompt: neg_prompt || @universal_neg_prompt
@@ -306,9 +327,12 @@ defmodule CoverGen.Providers.Replicate do
       {w, h} when h > w and h / w == 4 / 3 -> "3:4"
       {w, h} when w > h and w / h == 3 / 2 -> "3:2"
       {w, h} when h > w and h / w == 3 / 2 -> "2:3"
-      {w, h} when w > h -> "16:9"  # Default to 16:9 for landscape
-      {w, h} when h > w -> "9:16"  # Default to 9:16 for portrait
-      _ -> "1:1"  # Default to square
+      # Default to 16:9 for landscape
+      {w, h} when w > h -> "16:9"
+      # Default to 9:16 for portrait
+      {w, h} when h > w -> "9:16"
+      # Default to square
+      _ -> "1:1"
     end
   end
 
@@ -322,7 +346,8 @@ defmodule CoverGen.Providers.Replicate do
       "3:4" -> {480, 640}
       "3:2" -> {768, 512}
       "2:3" -> {512, 768}
-      _ -> {512, 768}  # Default
+      # Default
+      _ -> {512, 768}
     end
   end
 
@@ -332,11 +357,23 @@ defmodule CoverGen.Providers.Replicate do
       %{
         name: "flux",
         enabled: true,
-        img: "https://replicate.delivery/pbxt/4JkBvuGSgJkOlQFMveiwGWC3Vw8JrWLjV6Vf7FqrZGzYeQHIA/output.webp",
+        img:
+          "https://replicate.delivery/pbxt/4JkBvuGSgJkOlQFMveiwGWC3Vw8JrWLjV6Vf7FqrZGzYeQHIA/output.webp",
         link: "https://replicate.com/black-forest-labs/flux-1.1-pro",
         model: "black-forest-labs/flux-1.1-pro",
         label: gettext("Flux Pro"),
         description: gettext("High quality image generation with excellent composition")
+      },
+      %{
+        name: "flux-ultra",
+        enabled: true,
+        img:
+          "https://replicate.delivery/pbxt/4JkBvuGSgJkOlQFMveiwGWC3Vw8JrWLjV6Vf7FqrZGzYeQHIA/output.webp",
+        link: "https://replicate.com/black-forest-labs/flux-1.1-pro-ultra",
+        model: "black-forest-labs/flux-1.1-pro-ultra",
+        label: gettext("Flux Ultra"),
+        description:
+          gettext("Enhanced version of Flux Pro with higher quality and more detailed outputs")
       },
       %{
         name: "stable-diffusion",
