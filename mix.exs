@@ -63,7 +63,8 @@ defmodule Litcovers.MixProject do
       {:bcrypt_elixir, "~> 3.0"},
       {:vega_lite, "~> 0.1.7"},
       {:kino_vega_lite, "~> 0.1.7"},
-      {:kino, "~> 0.9.0"}
+      {:kino, "~> 0.9.0"},
+      {:ex_image_info, "~> 0.2.7"}
     ]
   end
 

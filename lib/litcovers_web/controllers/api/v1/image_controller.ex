@@ -19,12 +19,14 @@ defmodule LitcoversWeb.V1.ImageController do
     image = Media.get_user_image!(conn.assigns[:current_user], id)
     render(conn, :show, image: image)
   end
-  
+
   def create_cover(conn, %{"id" => id} = params) do
     require Logger
-    
+
     # Check user has enough coins for cover generation
-    cost = 2  # Set cover generation cost
+    # Set cover generation cost
+    cost = 2
+
     if conn.assigns[:current_user].litcoins < cost do
       conn
       |> put_status(:payment_required)
@@ -33,7 +35,7 @@ defmodule LitcoversWeb.V1.ImageController do
     else
       # Get outpaint params from request
       outpaint_params = Map.drop(params, ["id"])
-      
+
       # Validate the image belongs to the user
       case Media.get_user_image(conn.assigns[:current_user], id) do
         nil ->
@@ -41,18 +43,22 @@ defmodule LitcoversWeb.V1.ImageController do
           |> put_status(:not_found)
           |> put_view(LitcoversWeb.ErrorJSON)
           |> render(:"404")
-          
+
         image ->
           Logger.info("Creating cover for image #{id} with params: #{inspect(outpaint_params)}")
-          
+
           # Call the service to generate the cover
           case CoverGen.generate_cover(id, outpaint_params) do
             {:ok, %{url: cover_url}} ->
               # Create the cover record in the database
-              with {:ok, cover} <- Media.create_cover(image, conn.assigns[:current_user], %{url: cover_url, seen: false}) do
+              with {:ok, cover} <-
+                     Media.create_cover(image, conn.assigns[:current_user], %{
+                       url: cover_url,
+                       seen: false
+                     }) do
                 # Deduct litcoins for the cover generation
                 Accounts.remove_litcoins(conn.assigns[:current_user], cost)
-                
+
                 # Return the created cover
                 conn
                 |> put_status(:created)
@@ -60,20 +66,22 @@ defmodule LitcoversWeb.V1.ImageController do
               else
                 {:error, changeset} ->
                   Logger.error("Failed to save cover: #{inspect(changeset)}")
+
                   conn
                   |> put_status(:unprocessable_entity)
                   |> put_view(LitcoversWeb.ErrorJSON)
                   |> render(:"422", errors: changeset)
               end
-            
+
             {:error, :not_found} ->
               conn
               |> put_status(:not_found)
               |> put_view(LitcoversWeb.ErrorJSON)
               |> render(:"404")
-              
+
             {:error, reason} ->
               Logger.error("Failed to generate cover: #{inspect(reason)}")
+
               conn
               |> put_status(:unprocessable_entity)
               |> put_view(LitcoversWeb.ErrorJSON)
@@ -88,30 +96,33 @@ defmodule LitcoversWeb.V1.ImageController do
 
     # Validate the model exists
     unless CoverGen.Models.all() |> Enum.member?(model_name) do
-      return = conn
+      return =
+        conn
         |> put_status(:bad_request)
         |> put_view(LitcoversWeb.ErrorJSON)
         |> render(:"400")
-      
+
       # Need to return to exit the function
       return
     end
 
     # Check user has enough coins for the selected model
     price_for_model = CoverGen.Models.price(conn.assigns[:current_user], model_name)
+
     if conn.assigns[:current_user].litcoins < price_for_model do
-      return = conn
+      return =
+        conn
         |> put_status(:payment_required)
         |> put_view(LitcoversWeb.ErrorJSON)
         |> render(:"402")
-      
+
       # Need to return to exit the function
       return
     end
 
     # Extract use_custom_prompt flag
     use_custom_prompt = request_params["use_custom_prompt"] || false
-    
+
     # Create initial image params
     image_params = %{
       description: request_params["description"],
@@ -124,9 +135,9 @@ defmodule LitcoversWeb.V1.ImageController do
     Logger.info("Use custom prompt: #{use_custom_prompt}")
 
     # Create the image record and generate the actual image
-    with {:ok, %Image{} = image} <- Media.create_image_from_api(conn.assigns[:current_user], image_params),
+    with {:ok, %Image{} = image} <-
+           Media.create_image_from_api(conn.assigns[:current_user], image_params),
          {:ok, updated_image} <- generate_image(image, %{use_custom_prompt: use_custom_prompt}) do
-      
       # Deduct litcoins after successful generation
       Logger.info("Removing #{floor(price_for_model)} litcoins")
       Accounts.remove_litcoins(conn.assigns[:current_user], floor(price_for_model))
@@ -142,9 +153,10 @@ defmodule LitcoversWeb.V1.ImageController do
         |> put_status(:payment_required)
         |> put_view(LitcoversWeb.ErrorJSON)
         |> render(:"402")
-        
+
       {:error, reason} ->
         Logger.error("Failed to create image: #{inspect(reason)}")
+
         conn
         |> put_status(:unprocessable_entity)
         |> put_view(LitcoversWeb.ErrorJSON)
@@ -161,23 +173,23 @@ defmodule LitcoversWeb.V1.ImageController do
       aspect_ratio: image.aspect_ratio,
       use_custom_prompt: Map.get(options, :use_custom_prompt, false)
     }
-    
+
     # Call the generator to create the image
     case Generator.generate_image(image.description, generation_options) do
       {:ok, result} ->
         # Update the image record with the result
         image_params = %{
-          url: result.url, 
+          url: result.url,
           final_prompt: result.final_prompt,
           completed: true
         }
-        
+
         Logger.info("Generated image successful: #{result.url}")
-        
+
         # Update the image record in the database
         changeset = Image.ai_changeset(image, image_params)
         Repo.update(changeset)
-        
+
       {:error, reason} ->
         # Clean up the image record on failure
         Logger.error("Error occurred while generating, deleting image: #{inspect(reason)}")
