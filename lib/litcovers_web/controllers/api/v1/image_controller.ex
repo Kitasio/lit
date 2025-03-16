@@ -92,7 +92,7 @@ defmodule LitcoversWeb.V1.ImageController do
   end
 
   def create(conn, request_params) do
-    model_name = request_params["model"] || "sd3"
+    model_name = request_params["model_name"] || "sd3"
 
     # Validate the model exists
     unless CoverGen.Models.all() |> Enum.member?(model_name) do
