@@ -8,6 +8,8 @@ defmodule LitcoversWeb.V1.CoverController do
   alias LitcoversWeb.Plugs
   require Logger
 
+  action_fallback LitcoversWeb.FallbackController
+
   plug Plugs.ValidateModel, "outpaint" when action in [:create]
   plug Plugs.EnsureEnoughCoins when action in [:create]
 
