@@ -1,4 +1,7 @@
 defmodule LitcoversWeb.V1.CoverController do
+  @moduledoc """
+  Controller for handling cover generation requests.
+  """
   use LitcoversWeb, :controller
   alias Litcovers.Accounts
   alias Litcovers.Media
@@ -8,6 +11,14 @@ defmodule LitcoversWeb.V1.CoverController do
   plug Plugs.ValidateModel, "outpaint" when action in [:create]
   plug Plugs.EnsureEnoughCoins when action in [:create]
 
+  @doc """
+  Generates a book cover based on an existing image and provided options.
+
+  Expects the image ID in the `id` parameter and outpainting options in the request body.
+  Requires the user to have enough Litcoins.
+
+  Returns the created cover resource.
+  """
   def create(conn, params) do
     conn
     |> fetch_image(params)
@@ -17,11 +28,13 @@ defmodule LitcoversWeb.V1.CoverController do
     |> return_cover(params)
   end
 
+  @doc false
   defp fetch_image(conn, %{"id" => id}) do
     Media.get_user_image(conn.assigns[:current_user], id)
     |> handle_get_image(conn)
   end
 
+  @doc false
   defp handle_get_image(nil, conn) do
     conn
     |> put_status(:not_found)
@@ -34,6 +47,7 @@ defmodule LitcoversWeb.V1.CoverController do
     assign(conn, :image, image)
   end
 
+  @doc false
   defp generate_cover(conn, params) do
     outpaint_params = Map.drop(params, ["id"])
 
@@ -41,6 +55,7 @@ defmodule LitcoversWeb.V1.CoverController do
     |> handle_generate_cover_response(conn)
   end
 
+  @doc false
   defp handle_generate_cover_response({:ok, %{url: cover_url}}, conn) do
     assign(conn, :cover_url, cover_url)
   end
@@ -63,6 +78,7 @@ defmodule LitcoversWeb.V1.CoverController do
     |> halt()
   end
 
+  @doc false
   defp persist_cover(conn, _params) do
     image = conn.assigns[:image]
     current_user = conn.assigns[:current_user]
@@ -72,6 +88,7 @@ defmodule LitcoversWeb.V1.CoverController do
     |> handle_persist_cover(conn)
   end
 
+  @doc false
   defp handle_persist_cover({:ok, cover}, conn) do
     assign(conn, :cover, cover)
   end
@@ -86,11 +103,13 @@ defmodule LitcoversWeb.V1.CoverController do
     |> halt()
   end
 
+  @doc false
   defp remove_litcoins(conn, _params) do
     Accounts.remove_litcoins(conn.assigns[:current_user], conn.assigns[:cost])
     conn
   end
 
+  @doc false
   defp return_cover(conn, _params) do
     conn
     |> put_status(:created)
