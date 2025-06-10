@@ -1,7 +1,6 @@
 defmodule CoverGen.Providers.Dreamstudio do
   @moduledoc """
   Provider implementation for Stability AI's DreamStudio API.
-  Supports sd3, core, and ultra models.
   """
 
   @behaviour CoverGen.ProviderBehaviour
@@ -35,7 +34,7 @@ defmodule CoverGen.Providers.Dreamstudio do
     "tile-texture"
   ]
 
-  @supported_models ["sd3", "core", "ultra"]
+  @supported_models ["sd3", "core", "ultra", "outpaint"]
 
   @impl CoverGen.ProviderBehaviour
   def generate(params) do
